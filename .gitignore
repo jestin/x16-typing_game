@@ -1,0 +1,10 @@
+# assembled binaries
+*.prg
+
+# symbolic link to emulator
+x16emu
+
+# vim stuff
+*.swp
+*.un~
+*.swo
