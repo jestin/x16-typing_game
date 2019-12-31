@@ -4,18 +4,23 @@
 
 main:
 	jsr init
-	; jsr dump
+	ldx #5
+	ldy #20
+	jsr set_vera_xy
+	jsr write_hello
 	jsr test
-	jmp end;
+	jmp end
 
+write_hello:
+	lda #$20		;set increment to 2, high address to 0
+	sta verahi
 	ldx #0
 -	lda .string,x
 	beq +
 	sta veradat
 	inx
 	jmp -
-
-+	jmp end
++	rts
 
 init:
 	lda #0
@@ -39,6 +44,9 @@ write_char:
 	pla			;high byte of return
 	sta $1
 
+	lda #$10		;set increment to 1, high address to 0
+	sta verahi
+
 	pla			;character
 	sta veradat
 	pla 		;foreground/background color
@@ -51,18 +59,36 @@ write_char:
 	pha
 	rts
 
+;------------------------------------------------------------------------------
+; set_vera_xy
+;
+; This expects the X and Y registers to be set to the desired XY postition, and
+; then sets veralo, veramid, and verahi accordinglingly
+;------------------------------------------------------------------------------
+set_vera_xy:
+	pha			;push accumulator to the stack
+
+	tya			;transfer y to the accumulator
+	sta veramid
+	txa			;pop x from stack
+	asl
+	sta veralo	;store in vera low byte address
+
+	pla			;pop accumulator from the stack
+
+	rts
+
 test:
-	ldx #0
--	txa 		;color
+	ldx #79
+	ldy #59
+-	jsr set_vera_xy
+	lda #$01 		;color
 	pha
-	lda #$00	;character
+	lda #$00		;character
 	pha
 	jsr write_char
-	cpx #$ff
-	beq +
 	inx
-	jmp -
-+	rts
+	rts
 
 end:
 	rts
