@@ -1,23 +1,4 @@
 !macro write_string .addr {
-	; push x and a to the stack
-	pha
-	txa
-	pha
-
-	ldx #0
--	lda .addr,x
-	beq +
-	+write_char
-	inx
-	jmp -
-
-	; restore x and a
-+	pla
-	tax
-	pla
-}
-
-!macro write_partial_string .addr, .skip, .take {
 	; push x, y, and a to the stack
 	pha
 	txa
@@ -25,8 +6,8 @@
 	tya
 	pha
 
-	ldx #.skip
-	ldy #.take
+	ldx zp_skip_addr
+	ldy zp_take_addr
 -	lda .addr,x
 	beq +
 	cpy #0

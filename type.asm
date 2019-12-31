@@ -23,20 +23,36 @@ main:
 
 	lda #$01
 	sta zp_color_addr
-	+write_partial_string .str_another_string, 0, 3
+	lda #0
+	sta zp_skip_addr
+	lda #$03
+	sta zp_take_addr
+	+write_string .str_another_string
 	lda #$10
 	sta zp_color_addr
-	+write_partial_string .str_another_string, 3, 255
+	lda #$03
+	sta zp_skip_addr
+	lda #$ff
+	sta zp_take_addr
+	+write_string .str_another_string
 
 	jmp end
 
 init:
+	; init vera
 	lda #0
 	sta veractl
 	sta veralo
 	sta veramid
 	lda #$10		;set increment to 1, high address to 0
 	sta verahi
+
+	; init zero page
+	lda #0
+	sta zp_color_addr
+	sta zp_skip_addr
+	lda #$ff
+	sta zp_take_addr
 	rts
 
 ;------------------------------------------------------------------------------
