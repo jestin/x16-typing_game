@@ -97,6 +97,7 @@ ret:
 	rts
 
 end:
+	jmp *
 	rts
 
 !src "strings.inc"
