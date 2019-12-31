@@ -20,9 +20,14 @@ main:
 +	ldx #0
 	ldy #0
 	jsr set_vera_xy
-	lda #$59
+
+	lda #$01
 	sta zp_color_addr
-	+write_string .str_another_string
+	+write_partial_string .str_another_string, 0, 3
+	lda #$10
+	sta zp_color_addr
+	+write_partial_string .str_another_string, 3, 255
+
 	jmp end
 
 init:
