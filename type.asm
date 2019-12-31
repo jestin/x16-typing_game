@@ -2,25 +2,49 @@
 
 *=$1000
 
+zp_color_addr =$00
+
+!macro write_string .addr {
+	; push x and a to the stack
+	pha
+	txa
+	pha
+
+	ldx #0
+-	lda .addr,x
+	beq +
+	sta veradat
+	lda zp_color_addr
+	sta veradat
+	inx
+	jmp -
+
+	; restore x and a
++	pla
+	tax
+	pla
+}
+
 main:
 	jsr init
 	jsr clear_screen
 	ldx #5
 	ldy #20
-	jsr set_vera_xy
-	jsr write_hello
-	jmp end
-
-write_hello:
-	lda #$20		;set increment to 1, high address to 0
-	sta verahi
-	ldx #0
--	lda .string,x
+-	jsr set_vera_xy
+	lda #$01
+	sta zp_color_addr
+	+write_string .str_hello_world
+	cpy #25
 	beq +
-	sta veradat
-	inx
+	iny
 	jmp -
-+	rts
++	ldx #0
+	ldy #0
+	jsr set_vera_xy
+	lda #$59
+	sta zp_color_addr
+	+write_string .str_another_string
+	jmp end
 
 init:
 	lda #0
@@ -43,9 +67,6 @@ write_char:
 	sta $0
 	pla			;high byte of return
 	sta $1
-
-	lda #$10		;set increment to 1, high address to 0
-	sta verahi
 
 	pla			;character
 	sta veradat
@@ -104,4 +125,5 @@ ret:
 end:
 	rts
 
-.string !scr "hello, world!",0 
+.str_hello_world !scr "hello, world!",0 
+.str_another_string !scr "this is another string",0 
