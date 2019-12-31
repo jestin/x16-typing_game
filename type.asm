@@ -4,15 +4,15 @@
 
 main:
 	jsr init
+	jsr clear_screen
 	ldx #5
 	ldy #20
 	jsr set_vera_xy
 	jsr write_hello
-	jsr test
 	jmp end
 
 write_hello:
-	lda #$20		;set increment to 2, high address to 0
+	lda #$20		;set increment to 1, high address to 0
 	sta verahi
 	ldx #0
 -	lda .string,x
@@ -75,19 +75,30 @@ set_vera_xy:
 	sta veralo	;store in vera low byte address
 
 	pla			;pop accumulator from the stack
-
 	rts
 
-test:
-	ldx #79
-	ldy #59
+clear_screen:
+	pha			;push accumulator to the stack
+
+	ldx #0
+	ldy #0
 -	jsr set_vera_xy
-	lda #$01 		;color
+	lda #$00 		;color
 	pha
-	lda #$00		;character
+	lda #$20		;character
 	pha
 	jsr write_char
-	inx
+	cpx #79
+	bne +			; on 79, increment Y and reset X
+	cpy #59
+	beq ret
+	iny
+	ldx #0
+	jmp -
++	inx
+	jmp -
+ret:
+	pla			;pop accumulator from the stack
 	rts
 
 end:
