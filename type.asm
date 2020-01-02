@@ -1,6 +1,9 @@
-!src "vera.inc"
-!src "zp.inc"
-!src "macros.inc"
+!ifndef TYPE
+TYPE = 1
+
+!src "vera.asm"
+!src "zp.asm"
+!src "macros.asm"
 
 *=$1000
 

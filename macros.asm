@@ -1,3 +1,6 @@
+!ifndef MACROS
+MACROS = 1
+
 !macro write_string .addr {
 	; push x, y, and a to the stack
 	pha
