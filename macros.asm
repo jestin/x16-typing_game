@@ -1,4 +1,5 @@
-!ifndef MACROS
+!ifdef MACROS !eof
+
 MACROS = 1
 
 !macro write_string .addr {

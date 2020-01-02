@@ -1,6 +1,3 @@
-!ifndef TYPE
-TYPE = 1
-
 !src "vera.asm"
 !src "zp.asm"
 !src "macros.asm"
