@@ -16,19 +16,19 @@ main:
 	+LoadW r3, 0
 	jsr CONSOLE_init
 
-	ldx #33
+	ldx #161
 -	txa
 	clc
 	pha
 	jsr CONSOLE_put_char
 	pla
 	tax
+	cpx #255
+	beq +
 	inx
-	cpx #147
-	bne -
+	jmp -
 
-
-	jmp end
++	jmp end
 
 
 end:
