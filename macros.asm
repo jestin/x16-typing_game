@@ -1,6 +1,27 @@
 !ifdef MACROS !eof
-
 MACROS = 1
+
+!macro LoadB .dest, .value {
+	lda #.value
+	sta .dest
+}
+
+!macro LoadW .dest, .value {
+	lda #<(.value)
+	sta .dest
+	lda #>(.value)
+	sta .dest+1
+}
+
+!macro MoveB .source, .dest {
+	lda .source
+	sta .dest
+}
+
+!macro MoveW .source, .dest {
+	MoveB .source+.0, .dest+0
+	MoveB .source+1, .dest+1
+}
 
 !macro write_string .addr {
 	; push x, y, and a to the stack
