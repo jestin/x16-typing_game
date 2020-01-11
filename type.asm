@@ -1,42 +1,81 @@
 !src "vera.asm"
 !src "zp.asm"
 !src "macros.asm"
+!src "x16.asm"
 
 *=$1000
 
 main:
-	jsr init
-	jsr clear_screen
-	ldx #5
-	ldy #20
--	jsr set_vera_xy
-	lda #$01
-	sta zp_color_addr
-	+write_string .str_hello_world
-	cpy #25
-	beq +
-	iny
-	jmp -
-+	ldx #0
-	ldy #0
-	jsr set_vera_xy
+	lda #$80
+	sec
+	jsr screen_set_mode
 
-	lda #$01
-	sta zp_color_addr
-	lda #0
-	sta zp_skip_addr
-	lda #$03
-	sta zp_take_addr
-	+write_string .str_another_string
-	lda #$10
-	sta zp_color_addr
-	lda #$03
-	sta zp_skip_addr
-	lda #$ff
-	sta zp_take_addr
-	+write_string .str_another_string
+	+LoadW r0, 0
+	jsr GRAPH_init
+
+	lda #1
+	ldx #0
+	ldy #0
+	jsr GRAPH_set_colors
+	jsr GRAPH_clear
+
+	jsr draw_border
+	jmp end
+
+	; draw full pallet
+	+LoadW r0, 0
+	+LoadW r1, 0
+	+LoadW r2, 0
+	+LoadW r3, 198
+
+-	lda r0L
+	clc
+	adc #110
+	jsr GRAPH_set_colors
+	jsr GRAPH_draw_line
+	inc r0L
+	inc r2L
+	bne -
 
 	jmp end
+
+draw_border:
+	; left
+	+LoadW r0, 0
+	+LoadW r1, 0
+	+LoadW r2, 0
+	+LoadW r3, 200
+	
+-	lda r0L
+	clc
+	adc #110
+	jsr GRAPH_set_colors
+	jsr GRAPH_draw_line
+	inc r0L
+	inc r2L
+	lda r0L
+	cmp #7
+	bne -
+
+	; right
+	+LoadW r0, 312
+	+LoadW r1, 0
+	+LoadW r2, 312
+	+LoadW r3, 200
+	
+-	lda r0L
+	clc
+	adc #110
+	jsr GRAPH_set_colors
+	jsr GRAPH_draw_line
+	inc r0L
+	inc r2L
+	lda r0L
+	cmp #7
+	bne -
+
+	rts
+
 
 init:
 	; init vera
