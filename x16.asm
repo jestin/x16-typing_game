@@ -113,9 +113,11 @@ X16 = 1
 !addr GRAPH_put_char 			= $FF41 ; print a character
 
 ; Console
-!addr CONSOLE_init 				= $FEDB ; initialize console mode 
-!addr CONSOLE_put_char 			= $FEDE ; print character to console 
-!addr CONSOLE_get_char 			= $FEE1 ; get character from console
+!addr CONSOLE_init 					= $FEDB ; initialize console mode 
+!addr CONSOLE_put_char 				= $FEDE ; print character to console 
+!addr CONSOLE_put_image				= $FED8 ; draw image as if it was a character
+!addr CONSOLE_get_char 				= $FEE1 ; get character from console
+!addr CONSOLE_set_paging_message	= $FED5 ; set paging message or disable paging
 
 ; Other
 !addr memory_fill 				= $FEE4 ; fill memory region with a byte value 
