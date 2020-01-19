@@ -7,7 +7,6 @@
 
 main:
 	lda #$80
-	sec
 	jsr screen_set_mode
 
 	+LoadW r0, 0
