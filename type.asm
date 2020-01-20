@@ -80,7 +80,7 @@ draw_border:
 
 	; middle rect (fill)
 	+LoadB u1L, 0 			; loop counter
-	+LoadB u1H, 108			; color
+	+LoadB u1H, 108			; color ( +/- 7 here will change color scheme of border)
 -	lda u1H
 	jsr GRAPH_set_colors
 	+IncW r0
