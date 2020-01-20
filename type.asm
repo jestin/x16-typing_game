@@ -23,51 +23,83 @@ main:
 
 	jmp end
 
+;==================================================
+; draw_border
+; Draws the border and sets the clipping window
+;==================================================
 draw_border:
 	lda #0
 	jsr GRAPH_set_colors
 
+	; get resolution
+	jsr FB_get_info			; loads width and height into r0 and r1
+	+MoveW r0, r2			; the width and height need to be in r2
+	+MoveW r1, r3			; and r3 for the GRAPH_draw_rect subroutine
+
 	; outer rect
+	+LoadW r4, 0			; don't use a corner radius
 	; To make the outer rectangle 2 pixels wide, we draw two rectanlges
 	+LoadW r0, 0
 	+LoadW r1, 0
-	+LoadW r2, 320
-	+LoadW r3, 200
-	+LoadW r4, 0
 	jsr GRAPH_draw_rect
-	+LoadW r0, 1
-	+LoadW r1, 1
-	+LoadW r2, 318
-	+LoadW r3, 198
+	+IncW r0
+	+IncW r1
+	+DecW r2
+	+DecW r2
+	+DecW r3
+	+DecW r3
 	clc						; no reason to fill this rect
 	jsr GRAPH_draw_rect
 
 	; middle rect (fill)
-	+LoadB r4L, 0 			; loop counter
-	+LoadB r4H, 108			; color
-
--	lda r4H
+	+LoadB r7L, 0 			; loop counter (unused pseudo-register)
+	+LoadB r7H, 108			; color (unused pseudo-register)
+-	lda r7H
 	jsr GRAPH_set_colors
-	inc r0L
-	inc r1L
-	dec r2L
-	dec r2L
-	dec r3L
-	dec r3L
-	; +LoadW r0, 2
-	; +LoadW r1, 2
-	; +LoadW r2, 317
-	; +LoadW r3, 197
+	+IncW r0
+	+IncW r1
+	+DecW r2
+	+DecW r2
+	+DecW r3
+	+DecW r3
 	clc						; no reason to fill this rect
 	jsr GRAPH_draw_rect
-	inc r4L
-	dec r4H
-	lda r4L
+	inc r7L
+	dec r7H
+	lda r7L
 	cmp #7
 	beq +
 	jmp -
 
-+	rts
+	; inner rect
++	lda #0
+	jsr GRAPH_set_colors
+	+IncW r0
+	+IncW r1
+	+DecW r2
+	+DecW r2
+	+DecW r3
+	+DecW r3
+	clc						; no reason to fill this rect
+	jsr GRAPH_draw_rect
+	+IncW r0
+	+IncW r1
+	+DecW r2
+	+DecW r2
+	+DecW r3
+	+DecW r3
+	clc
+	jsr GRAPH_draw_rect
+
+	+IncW r0
+	+IncW r1
+	+DecW r2
+	+DecW r2
+	+DecW r3
+	+DecW r3
+	jsr GRAPH_set_window
+
+	rts
 
 end:
 	jmp *
