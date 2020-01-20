@@ -21,7 +21,34 @@ main:
 
 	jsr draw_border
 
+	+LoadW u0, 25
+	+LoadW u1, 25
+	+LoadW u2, .str_hello_world
+	jsr draw_string
+
 	jmp end
+
+;==================================================
+; draw_string
+; Draws a string to the screen at the specified xy
+; void draw_string(word x: u0, word y: u1, word addr: u2)
+;==================================================
+draw_string:
+	lda u0				; transfer x and y to the correct
+	sta r0				; virtual registers for GRAPH_put_char
+	lda u1
+	sta r1
+
+	lda #0				; load 0 into loop counter variable
+	sta u3
+
+-	ldy u3
+	lda (u2),y
+	beq +
+	jsr GRAPH_put_char
+	inc u3
+	jmp -
++	rts
 
 ;==================================================
 ; draw_border
@@ -52,9 +79,9 @@ draw_border:
 	jsr GRAPH_draw_rect
 
 	; middle rect (fill)
-	+LoadB r7L, 0 			; loop counter (unused pseudo-register)
-	+LoadB r7H, 108			; color (unused pseudo-register)
--	lda r7H
+	+LoadB u1L, 0 			; loop counter
+	+LoadB u1H, 108			; color
+-	lda u1H
 	jsr GRAPH_set_colors
 	+IncW r0
 	+IncW r1
@@ -64,9 +91,9 @@ draw_border:
 	+DecW r3
 	clc						; no reason to fill this rect
 	jsr GRAPH_draw_rect
-	inc r7L
-	dec r7H
-	lda r7L
+	inc u1L
+	dec u1H
+	lda u1L
 	cmp #7
 	beq +
 	jmp -
