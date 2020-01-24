@@ -129,6 +129,32 @@ X16 = 1
 !addr screen_set_mode 			= $FF5F ; set screen mode 
 !addr screen_set_charset 		= $FF62 ; activate 8x8 text mode charset
 
+; ------------------------------------------------------------ 
+; VRAM Addresses
+; ------------------------------------------------------------ 
+
+!addr VRAM_composer				= $F0000
+!addr VRAM_hscale				= VRAM_composer+1
+!addr VRAM_vscale				= VRAM_composer+2
+!addr VRAM_palette				= $F1000
+!addr VRAM_layer0				= $F2000
+!addr VRAM_layer1				= $F3000
+!addr VRAM_sprreg				= $F4000
+!addr VRAM_sprattr				= $F5000
+!addr VRAM_audio				= $F6000
+!addr VRAM_spi					= $F7000
+!addr VRAM_uart					= $F8000
+
+!addr VROM_petscii				= $1F000
+
+; ------------------------------------------------------------ 
+; IRQs
+; ------------------------------------------------------------ 
+
+!addr IRQVec					= $0314
+!addr BRKVec					= $0316
+!addr NMIVec					= $0318
+
 
 ; ------------------------------------------------------------ 
 ; Virtual registers
@@ -182,7 +208,9 @@ X16 = 1
 !addr r15L		= $20
 !addr r15H		= $21
 
+; ------------------------------------------------------------ 
 ; user virtual registers (cannot be used with BASIC or floating point)
+; ------------------------------------------------------------ 
 !addr u0		=$60
 !addr u0L		=$60
 !addr u0H		=$61

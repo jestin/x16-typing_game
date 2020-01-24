@@ -3,6 +3,8 @@
 !src "macros.asm"
 !src "x16.asm"
 
+!addr def_irq = $0000
+
 *=$1000
 
 main:
@@ -12,21 +14,77 @@ main:
 
 	+LoadW r0, 0
 	jsr GRAPH_init
-
-	; lda #1
-	; ldx #0
-	; ldy #0
-	; jsr GRAPH_set_colors
 	jsr GRAPH_clear
 
 	jsr draw_border
 
-	+LoadW u0, 25
-	+LoadW u1, 25
+	+LoadW zp_xpos, 25
+	+LoadW zp_ypos, 25
+
+	jsr init_irq
+
+;==================================================
+; mainloop
+;==================================================
+mainloop:
+   wai
+   jsr check_vsync
+   bra mainloop  ; loop forever
+
+;==================================================
+; game_tick
+;==================================================
+game_tick:
+	+MoveW zp_xpos, u0
+	+MoveW zp_ypos, u1
 	+LoadW u2, .str_hello_world
 	jsr draw_string
+	+IncW zp_ypos
 
-	jmp end
+	rts
+
+;==================================================
+; init_irq
+; Initializes interrupt vector
+;==================================================
+init_irq:
+	lda IRQVec
+	sta def_irq
+	lda IRQVec+1
+	sta def_irq+1
+	lda #<handle_irq
+	sta IRQVec
+	lda #>handle_irq
+	sta IRQVec+1
+	rts
+
+;==================================================
+; handle_irq
+; Handles VERA IRQ
+;==================================================
+handle_irq:
+	; check for VSYNC
+	lda veraisr
+	and #$01
+	beq +
+	sta zp_vsync_trig
+	; clear vera irq flag
+	sta veraisr
+
+	jmp (def_irq)
+
+;==================================================
+; check_vsync
+;==================================================
+check_vsync:
+	lda zp_vsync_trig
+	beq +
+
+	; VSYNC has occurred, handle
+	jsr game_tick
+
+	stz zp_vsync_trig
++	rts
 
 ;==================================================
 ; draw_string

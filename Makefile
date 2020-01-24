@@ -1,5 +1,5 @@
 ASSEMBLER6502	= acme
-AS_FLAGS		= -f cbm -DMACHINE_C64=0 -Wtype-mismatch
+AS_FLAGS		= -f cbm -DMACHINE_C64=0 -Wtype-mismatch --cpu w65c02
 RM				= rm
 
 PROGS			= type.prg
