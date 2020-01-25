@@ -18,8 +18,16 @@ main:
 
 	jsr draw_border
 
+	lda #0
+	ldx #0
+	ldy #1
+	jsr GRAPH_set_colors
+
 	+LoadW zp_xpos, 25
-	+LoadW zp_ypos, 25
+	+LoadW zp_ypos, 20
+
+	lda #0	
+	sta zp_tick_counter
 
 	jsr init_irq
 
@@ -29,17 +37,33 @@ main:
 mainloop:
    wai
    jsr check_vsync
-   bra mainloop  ; loop forever
+   jmp mainloop  ; loop forever
 
 ;==================================================
 ; game_tick
 ;==================================================
 game_tick:
-	+MoveW zp_xpos, u0
+	lda #1							; set the color to white
+	ldx #1
+	jsr GRAPH_set_colors
+
+	+MoveW zp_xpos, u0				; "undraw" the previous string
 	+MoveW zp_ypos, u1
 	+LoadW u2, .str_hello_world
 	jsr draw_string
+
+	lda #0
+	ldx #0
+	jsr GRAPH_set_colors
+
 	+IncW zp_ypos
+	lda zp_ypos
+	cmp #185
+	bne +
+	+LoadW zp_ypos, 20
+
++	+MoveW zp_ypos, u1
+	jsr draw_string
 
 	rts
 
@@ -71,7 +95,7 @@ handle_irq:
 	; clear vera irq flag
 	sta veraisr
 
-	jmp (def_irq)
++	jmp (def_irq)
 
 ;==================================================
 ; check_vsync
