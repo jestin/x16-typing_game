@@ -116,20 +116,18 @@ check_vsync:
 ; void draw_string(word x: u0, word y: u1, word addr: u2)
 ;==================================================
 draw_string:
-	lda u0				; transfer x and y to the correct
-	sta r0				; virtual registers for GRAPH_put_char
-	lda u1
-	sta r1
+	+MoveW u0, r0		; transfer x and y to the correct
+	+MoveW u1, r1       ; virtual registers for GRAPH_put_char
 
 	lda #0				; load 0 into loop counter variable
 	sta u3
 
--	ldy u3
-	lda (u2),y
-	beq +
+-	ldy u3				; load our loop counter variable into y
+	lda (u2),y			; use zero page indirect with y addressing mode
+	beq +				; branch to end when a 0 is found
 	jsr GRAPH_put_char
-	inc u3
-	jmp -
+	inc u3				; increment our loop counter
+	jmp -				; loop back to loading y
 +	rts
 
 ;==================================================
