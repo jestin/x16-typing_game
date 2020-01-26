@@ -24,7 +24,7 @@ main:
 	jsr GRAPH_set_colors
 
 	+LoadW zp_xpos, 25
-	+LoadW zp_ypos, 20
+	+LoadW zp_ypos, 0
 
 	lda #0	
 	sta zp_tick_counter
@@ -58,9 +58,9 @@ game_tick:
 
 	+IncW zp_ypos
 	lda zp_ypos
-	cmp #185
+	cmp #200
 	bne +
-	+LoadW zp_ypos, 20
+	+LoadW zp_ypos, 0
 
 +	+MoveW zp_ypos, u1
 	jsr draw_string
