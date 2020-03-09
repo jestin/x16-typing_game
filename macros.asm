@@ -19,7 +19,7 @@ MACROS = 1
 }
 
 !macro MoveW .source, .dest {
-	+MoveB .source+.0, .dest+0
+	+MoveB .source+0, .dest+0
 	+MoveB .source+1, .dest+1
 }
 
@@ -67,4 +67,16 @@ MACROS = 1
 	lda .dest+1				; add 0 without clearing the carry bit
 	sbc #0					; if c is set, it will decrement the high order byte
 	sta .dest+1
+}
+
+!macro LsrW .dest {
+	clc
+	lsr .dest+1
+	ror .dest
+}
+
+!macro AslW .dest {
+	clc
+	asl .dest
+	rol .dest+1
 }
