@@ -24,9 +24,36 @@ VERA = 1
 !addr vreg_spr  = $F4000
 !addr vreg_sprd = $F5000
 
-AUTO_INC_1 = $100000
+AUTO_INC_0 		= $000000
+AUTO_INC_1 		= $100000
+AUTO_INC_2 		= $200000
+AUTO_INC_4 		= $300000
+AUTO_INC_8 		= $400000
+AUTO_INC_16		= $500000
+AUTO_INC_32		= $600000
+AUTO_INC_64		= $700000
+AUTO_INC_128	= $800000
+AUTO_INC_256	= $900000
+AUTO_INC_512	= $A00000
+AUTO_INC_1024	= $B00000
+AUTO_INC_2048	= $C00000
+AUTO_INC_8192	= $E00000
+AUTO_INC_16384	= $F00000
 
 !macro vset .addr {
+	lda #0
+	sta veractl
+	lda #<(.addr >> 16) | $10
+	sta verahi
+	lda #<(.addr >> 8)
+	sta veramid
+	lda #<(.addr)
+	sta veralo
+}
+
+!macro vset2 .addr {
+	lda #1
+	sta veractl
 	lda #<(.addr >> 16) | $10
 	sta verahi
 	lda #<(.addr >> 8)
@@ -42,9 +69,21 @@ AUTO_INC_1 = $100000
 	sta veradat
 }
 
+!macro vstore2 .addr {
+	pha
+	+vset .addr
+	pla
+	sta veradat2
+}
+
 !macro vload .addr {
 	+vset .addr
 	lda veradat
+}
+
+!macro vload2 .addr {
+	+vset .addr
+	lda veradat2
 }
 
 !macro sprset .offset {
@@ -73,11 +112,23 @@ AUTO_INC_1 = $100000
 	lda veradat
 }
 
+!macro sprload2 .offset {
+	+sprset .offset
+	lda veradat2
+}
+
 !macro sprstore .offset {
 	pha
 	+sprset .offset
 	pla
 	sta veradat
+}
+
+!macro sprstore2 .offset {
+	pha
+	+sprset .offset
+	pla
+	sta veradat2
 }
 
 !macro video_init {
