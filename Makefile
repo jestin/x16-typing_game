@@ -7,7 +7,7 @@ PROGS			= type.prg
 all: $(PROGS)
 
 type.prg:
-	$(ASSEMBLER6502) $(AS_FLAGS) --outfile type.prg type.asm
+	$(ASSEMBLER6502) $(AS_FLAGS) --outfile type.prg main.asm
 
 run: clean type.prg
 	./x16emu -prg type.prg -run -scale 2
