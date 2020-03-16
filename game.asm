@@ -12,6 +12,7 @@ game_init:
 	jsr GRAPH_clear
 
 	jsr draw_border
+	jsr load_sprite
 
 	lda #0
 	ldx #0
@@ -30,27 +31,21 @@ game_init:
 ; game_tick
 ;==================================================
 game_tick:
-	lda #1							; set the color to white
-	ldx #1
-	jsr GRAPH_set_colors
-
-	+MoveW zp_xpos, u0				; "undraw" the previous string
-	+MoveW zp_ypos, u1
-	+LoadW u2, .str_hello_world
-	jsr draw_string
-
-	lda #0
-	ldx #0
-	jsr GRAPH_set_colors
-
 	+IncW zp_ypos
 	lda zp_ypos
 	cmp #200
 	bne +
 	+LoadW zp_ypos, 0
 
-+	+MoveW zp_ypos, u1
-	jsr draw_string
++	txa
+	pha
+	ldx #0
+	lda zp_ypos 							; Y of 50
+	+sprstore 4
+	lda #0
+	+sprstore 5
+	pla
+	tax
 
 	rts
 
@@ -157,4 +152,44 @@ end:
 	jmp *
 	rts
 
+;==================================================
+; load_sprite
+;==================================================
+load_sprite:
+	; enable sprites
+	+vset (vreg_spr) | AUTO_INC_1
+	lda #1
+	sta veradat
+	
+	; load the sprite into vram
+	+vset $0d000 | AUTO_INC_1
+	ldx #0
+-	lda test_sprite,x
+	sta veradat
+	inx
+	cpx #32
+	bne -
+
+	ldx #0
+	; set the sprite in the register
+	lda #($0 << 6) | ($0 << 4) | 0		; height/width/paloffset
+	+sprstore 7
+	lda #3 << 2          ; z-depth=3
+	+sprstore 6
+	lda #<($0d000 >> 5)
+	+sprstore 0
+	lda #>($0d000 >> 5) | 0 << 7 ; mode=0
+	+sprstore 1
+	lda #50 							; X of 50
+	+sprstore 2
+	lda #0
+	+sprstore 3
+	lda #50 							; Y of 50
+	+sprstore 4
+	lda #0
+	+sprstore 5
+
+	rts
+
 !src "strings.inc"
+!src "sprites.asm"
