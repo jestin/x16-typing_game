@@ -165,7 +165,7 @@ load_sprite:
 	sta veradcvideo
 	
 	; load the sprite into vram
-	+vset $0d000 | AUTO_INC_1
+	+vset sprite_vram_data | AUTO_INC_1
 	ldx #0
 -	lda sprite_data,x
 	sta veradat
@@ -182,6 +182,8 @@ load_sprite:
 	
 ;==================================================
 ; set_sprite
+; Sets the sprite at the index given by x
+; void set_sprite(byte index: x)
 ;==================================================
 set_sprite:
 	; set the sprite in the register
@@ -191,16 +193,19 @@ set_sprite:
 	+sprstore 6
 	txa
 	clc
-	adc #<($0d000 >> 5)
+	adc #<(sprite_vram_data >> 5)
 	+sprstore 0
-	lda #>($0d000 >> 5) | 0 << 7 ; mode=0
+	lda #>(sprite_vram_data >> 5) | 0 << 7 ; mode=0
 	+sprstore 1
+
+	; Calculate the X position based on the index
 	txa
 	asl
 	asl
 	asl
 	clc
 	adc #50 							; X of 50
+
 	+sprstore 2
 	lda #0
 	+sprstore 3

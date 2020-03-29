@@ -8,3 +8,4 @@ ZP = 1
 !addr zp_xpos			= $34
 !addr zp_ypos			= $36
 !addr zp_tick_counter	= $38
+!addr zp_ptr			= $3a
