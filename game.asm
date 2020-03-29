@@ -157,9 +157,9 @@ end:
 ;==================================================
 load_sprite:
 	; enable sprites
-	+vset (vreg_spr) | AUTO_INC_1
-	lda #1
-	sta veradat
+	lda veradcvideo
+	ora #$70
+	sta veradcvideo
 	
 	; load the sprite into vram
 	+vset $0d000 | AUTO_INC_1
