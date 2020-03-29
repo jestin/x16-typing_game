@@ -40,10 +40,13 @@ game_tick:
 +	txa
 	pha
 	ldx #0
-	lda zp_ypos 							; Y of 50
+-	lda zp_ypos 							; Y of 50
 	+sprstore 4
 	lda #0
 	+sprstore 5
+	inx
+	cpx #4
+	bne -
 	pla
 	tax
 
@@ -164,23 +167,41 @@ load_sprite:
 	; load the sprite into vram
 	+vset $0d000 | AUTO_INC_1
 	ldx #0
--	lda test_sprite,x
+-	lda sprite_data,x
 	sta veradat
 	inx
-	cpx #32
+	cpx #128
 	bne -
 
 	ldx #0
+-	jsr set_sprite
+	inx
+	cpx #4
+	bne -
+
+	rts
+	
+;==================================================
+; set_sprite
+;==================================================
+set_sprite:
 	; set the sprite in the register
-	lda #($0 << 6) | ($0 << 4) | 0		; height/width/paloffset
+-	lda #($0 << 6) | ($0 << 4) | 0		; height/width/paloffset
 	+sprstore 7
 	lda #3 << 2          ; z-depth=3
 	+sprstore 6
-	lda #<($0d000 >> 5)
+	txa
+	clc
+	adc #<($0d000 >> 5)
 	+sprstore 0
 	lda #>($0d000 >> 5) | 0 << 7 ; mode=0
 	+sprstore 1
-	lda #50 							; X of 50
+	txa
+	asl
+	asl
+	asl
+	clc
+	adc #50 							; X of 50
 	+sprstore 2
 	lda #0
 	+sprstore 3
@@ -190,6 +211,7 @@ load_sprite:
 	+sprstore 5
 
 	rts
+
 
 !src "strings.inc"
 !src "sprites.asm"
