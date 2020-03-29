@@ -45,7 +45,7 @@ game_tick:
 	lda #0
 	+sprstore 5
 	inx
-	cpx #4
+	cpx #8
 	bne -
 	pla
 	tax
@@ -170,13 +170,12 @@ load_sprite:
 -	lda sprite_data,x
 	sta veradat
 	inx
-	cpx #128
 	bne -
 
 	ldx #0
 -	jsr set_sprite
 	inx
-	cpx #4
+	cpx #8
 	bne -
 
 	rts
