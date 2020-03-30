@@ -37,18 +37,14 @@ game_tick:
 	bne +
 	+LoadW zp_ypos, 0
 
-+	txa
-	pha
-	ldx #0
--	lda zp_ypos 							; Y of 50
++	ldx #0
+-	lda zp_ypos
 	+sprstore 4
 	lda #0
 	+sprstore 5
 	inx
 	cpx #8
 	bne -
-	pla
-	tax
 
 	rts
 
