@@ -1,4 +1,4 @@
-NUM_CHARACTERS = 12
+NUM_CHARACTERS = 26
 
 ;==================================================
 ; game_init
