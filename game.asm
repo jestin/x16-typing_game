@@ -1,3 +1,4 @@
+NUM_CHARACTERS = 12
 
 ;==================================================
 ; game_init
@@ -12,7 +13,7 @@ game_init:
 	jsr GRAPH_clear
 
 	jsr draw_border
-	jsr load_sprite
+	jsr load_sprites
 
 	lda #0
 	ldx #0
@@ -43,7 +44,7 @@ game_tick:
 	lda #0
 	+sprstore 5
 	inx
-	cpx #8
+	cpx #NUM_CHARACTERS
 	bne -
 
 	rts
@@ -152,28 +153,55 @@ end:
 	rts
 
 ;==================================================
-; load_sprite
+; load_sprites
 ;==================================================
-load_sprite:
+load_sprites:
 	; enable sprites
 	lda veradcvideo
 	ora #$70
 	sta veradcvideo
 	
-	; load the sprite into vram
+; 	; load the sprite into vram
 	+vset sprite_vram_data | AUTO_INC_1
+	+LoadW u0, sprite_data
+	lda #32
+	sta u1L
 	ldx #0
--	lda sprite_data,x
-	sta veradat
+-	jsr load_sprite
+	+AddW u0, 32
 	inx
+	cpx #NUM_CHARACTERS
 	bne -
 
+	; set the sprite in the sprite regiesters
 	ldx #0
 -	jsr set_sprite
 	inx
-	cpx #8
+	cpx #NUM_CHARACTERS
 	bne -
 
+	rts
+	
+;==================================================
+; load_sprite
+; Loads a sprite into vram at current location of
+; veradat.  This function assumes that AUTO_INC_1
+; is set.
+; void load_sprite(word addr: u0, byte size: u1L)
+;==================================================
+load_sprite:
+	tya
+	pha
+
+	ldy #0
+-	lda (u0),y
+	sta veradat
+	iny
+	cpy u1L
+	bne -
+
+	pla
+	tay
 	rts
 	
 ;==================================================

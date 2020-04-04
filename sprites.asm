@@ -80,3 +80,43 @@ sprite_data:
 	!byte $0e, $e0, $0e, $e0
 	!byte $0e, $e0, $0e, $e0
 	!byte $00, $00, $00, $00
+
+; 8 - I
+	!byte $00, $ee, $ee, $00
+	!byte $00, $0e, $e0, $00
+	!byte $00, $0e, $e0, $00
+	!byte $00, $0e, $e0, $00
+	!byte $00, $0e, $e0, $00
+	!byte $00, $0e, $e0, $00
+	!byte $00, $ee, $ee, $00
+	!byte $00, $00, $00, $00
+
+; 9 - J
+	!byte $00, $0e, $ee, $e0
+	!byte $00, $00, $ee, $00
+	!byte $00, $00, $ee, $00
+	!byte $00, $00, $ee, $00
+	!byte $00, $00, $ee, $00
+	!byte $0e, $e0, $ee, $00
+	!byte $00, $ee, $e0, $00
+	!byte $00, $00, $00, $00
+
+; 10 - K
+	!byte $0e, $e0, $0e, $e0
+	!byte $0e, $e0, $ee, $00
+	!byte $0e, $ee, $e0, $00
+	!byte $0e, $ee, $00, $00
+	!byte $0e, $ee, $e0, $00
+	!byte $0e, $e0, $ee, $00
+	!byte $0e, $e0, $0e, $e0
+	!byte $00, $00, $00, $00
+
+; 11 - L
+	!byte $0e, $e0, $00, $00
+	!byte $0e, $e0, $00, $00
+	!byte $0e, $e0, $00, $00
+	!byte $0e, $e0, $00, $00
+	!byte $0e, $e0, $00, $00
+	!byte $0e, $e0, $00, $00
+	!byte $0e, $ee, $ee, $e0
+	!byte $00, $00, $00, $00
