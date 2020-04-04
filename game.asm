@@ -1,5 +1,3 @@
-NUM_CHARACTERS = 26
-
 ;==================================================
 ; game_init
 ;==================================================
@@ -44,7 +42,7 @@ game_tick:
 	lda #0
 	+sprstore 5
 	inx
-	cpx #NUM_CHARACTERS
+	cpx #NUM_SPRITES
 	bne -
 
 	rts
@@ -170,14 +168,14 @@ load_sprites:
 -	jsr load_sprite
 	+AddW u0, 32
 	inx
-	cpx #NUM_CHARACTERS
+	cpx #NUM_SPRITES
 	bne -
 
 	; set the sprite in the sprite regiesters
 	ldx #0
 -	jsr set_sprite
 	inx
-	cpx #NUM_CHARACTERS
+	cpx #NUM_SPRITES
 	bne -
 
 	rts
