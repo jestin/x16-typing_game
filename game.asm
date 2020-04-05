@@ -171,7 +171,7 @@ load_sprites:
 	cpx #NUM_SPRITES
 	bne -
 
-	; set the sprite in the sprite regiesters
+	; set the sprite in the sprite registers
 	ldx #0
 -	jsr set_sprite
 	inx
@@ -209,7 +209,7 @@ load_sprite:
 ;==================================================
 set_sprite:
 	; set the sprite in the register
--	lda #($0 << 6) | ($0 << 4) | 0		; height/width/paloffset
+-	lda #(0 << 6) | (0 << 4) | 0		; height/width/paloffset
 	+sprstore 7
 	lda #3 << 2          ; z-depth=3
 	+sprstore 6
