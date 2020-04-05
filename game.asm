@@ -177,7 +177,9 @@ load_sprites:
 
 	; set the sprite in the sprite registers
 	ldx #0
--	jsr set_sprite
+-	txa				; transfer x to y, for simplicy
+	tay
+	jsr set_sprite
 	inx
 	cpx #NUM_SPRITES
 	bne -
@@ -208,8 +210,10 @@ load_sprite:
 	
 ;==================================================
 ; set_sprite
-; Sets the sprite at the index given by x
-; void set_sprite(byte index: x)
+; Sets the sprite register at the index given by x
+; to the sprite data at the index given by y.
+; void set_sprite(byte sprite_index: x,
+;					byte vram_index: y)
 ;==================================================
 set_sprite:
 	; set the sprite in the register
@@ -217,14 +221,14 @@ set_sprite:
 	+sprstore 7
 	lda #3 << 2          ; z-depth=3
 	+sprstore 6
-	txa
+	tya
 	clc
 	adc #<(sprite_vram_data >> 5)
 	+sprstore 0
 	lda #>(sprite_vram_data >> 5) | 0 << 7 ; mode=0
 	+sprstore 1
 
-	; Calculate the X position based on the index
+	; Calculate the X position based on the sprite index
 	txa
 	cmp #26
 	bmi +
@@ -235,7 +239,6 @@ set_sprite:
 	asl
 	clc
 	adc #50 							; X of 50
-
 	+sprstore 2
 	lda #0
 	+sprstore 3
