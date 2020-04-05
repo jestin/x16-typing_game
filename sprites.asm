@@ -1,5 +1,5 @@
 !addr sprite_vram_data  = $0d000
-NUM_SPRITES = 26
+NUM_SPRITES = 52
 
 sprite_data:
 ; 0 - A
@@ -259,5 +259,265 @@ sprite_data:
 	!byte $00, $0e, $e0, $00
 	!byte $00, $ee, $00, $00
 	!byte $0e, $e0, $00, $00
+	!byte $0e, $ee, $ee, $e0
+	!byte $00, $00, $00, $00
+
+; 26 - a
+	!byte $00, $00, $00, $00
+	!byte $00, $00, $00, $00
+	!byte $00, $ee, $ee, $00
+	!byte $00, $00, $0e, $e0
+	!byte $00, $ee, $ee, $e0
+	!byte $0e, $e0, $00, $e0
+	!byte $00, $ee, $ee, $e0
+	!byte $00, $00, $00, $00
+
+; 27 - b
+	!byte $00, $00, $00, $00
+	!byte $0e, $e0, $00, $00
+	!byte $0e, $e0, $00, $00
+	!byte $0e, $ee, $ee, $00
+	!byte $0e, $e0, $0e, $e0
+	!byte $0e, $e0, $0e, $e0
+	!byte $0e, $ee, $ee, $00
+	!byte $00, $00, $00, $00
+
+; 28 - c
+	!byte $00, $00, $00, $00
+	!byte $00, $00, $00, $00
+	!byte $00, $ee, $ee, $00
+	!byte $0e, $e0, $00, $00
+	!byte $0e, $e0, $00, $00
+	!byte $0e, $e0, $00, $00
+	!byte $00, $ee, $ee, $00
+	!byte $00, $00, $00, $00
+
+; 29 - d
+	!byte $00, $00, $00, $00
+	!byte $00, $00, $0e, $e0
+	!byte $00, $00, $0e, $e0
+	!byte $00, $ee, $ee, $e0
+	!byte $0e, $e0, $0e, $e0
+	!byte $0e, $e0, $0e, $e0
+	!byte $00, $ee, $ee, $e0
+	!byte $00, $00, $00, $00
+
+; 30 - e
+	!byte $00, $00, $00, $00
+	!byte $00, $00, $00, $00
+	!byte $00, $ee, $ee, $00
+	!byte $0e, $e0, $0e, $e0
+	!byte $0e, $ee, $ee, $e0
+	!byte $0e, $e0, $00, $00
+	!byte $00, $ee, $ee, $00
+	!byte $00, $00, $00, $00
+
+; 31 - f
+	!byte $00, $00, $00, $00
+	!byte $00, $00, $ee, $e0
+	!byte $00, $0e, $e0, $00
+	!byte $00, $ee, $ee, $e0
+	!byte $00, $0e, $e0, $00
+	!byte $00, $0e, $e0, $00
+	!byte $00, $0e, $e0, $00
+	!byte $00, $00, $00, $00
+
+; 32 - g
+	!byte $00, $00, $00, $00
+	!byte $00, $00, $00, $00
+	!byte $00, $ee, $ee, $e0
+	!byte $0e, $e0, $0e, $e0
+	!byte $0e, $e0, $0e, $e0
+	!byte $00, $ee, $ee, $e0
+	!byte $00, $00, $0e, $e0
+	!byte $0e, $ee, $ee, $00
+
+; 33 - h
+	!byte $00, $00, $00, $00
+	!byte $0e, $e0, $00, $00
+	!byte $0e, $e0, $00, $00
+	!byte $0e, $ee, $ee, $00
+	!byte $0e, $e0, $0e, $e0
+	!byte $0e, $e0, $0e, $e0
+	!byte $0e, $e0, $0e, $e0
+	!byte $00, $00, $00, $00
+
+; 34 - i
+	!byte $00, $00, $00, $00
+	!byte $00, $0e, $e0, $00
+	!byte $00, $00, $00, $00
+	!byte $00, $ee, $e0, $00
+	!byte $00, $0e, $e0, $00
+	!byte $00, $0e, $e0, $00
+	!byte $00, $ee, $ee, $00
+	!byte $00, $00, $00, $00
+
+; 35 - j
+	!byte $00, $00, $00, $00
+	!byte $00, $00, $0e, $e0
+	!byte $00, $00, $00, $00
+	!byte $00, $00, $0e, $e0
+	!byte $00, $00, $0e, $e0
+	!byte $00, $00, $0e, $e0
+	!byte $00, $00, $0e, $e0
+	!byte $00, $ee, $ee, $00
+
+; 36 - k
+	!byte $00, $00, $00, $00
+	!byte $0e, $e0, $00, $00
+	!byte $0e, $e0, $00, $00
+	!byte $0e, $e0, $ee, $00
+	!byte $0e, $ee, $e0, $00
+	!byte $0e, $e0, $ee, $00
+	!byte $0e, $e0, $0e, $e0
+	!byte $00, $00, $00, $00
+
+; 37 - l
+	!byte $00, $00, $00, $00
+	!byte $00, $ee, $e0, $00
+	!byte $00, $0e, $e0, $00
+	!byte $00, $0e, $e0, $00
+	!byte $00, $0e, $e0, $00
+	!byte $00, $0e, $e0, $00
+	!byte $00, $ee, $ee, $00
+	!byte $00, $00, $00, $00
+
+; 38 - m
+	!byte $00, $00, $00, $00
+	!byte $00, $00, $00, $00
+	!byte $0e, $e0, $0e, $e0
+	!byte $0e, $ee, $ee, $ee
+	!byte $0e, $ee, $ee, $ee
+	!byte $0e, $e0, $e0, $ee
+	!byte $0e, $e0, $00, $ee
+	!byte $00, $00, $00, $00
+
+; 39 - n
+	!byte $00, $00, $00, $00
+	!byte $00, $00, $00, $00
+	!byte $0e, $ee, $ee, $00
+	!byte $0e, $e0, $0e, $e0
+	!byte $0e, $e0, $0e, $e0
+	!byte $0e, $e0, $0e, $e0
+	!byte $0e, $e0, $0e, $e0
+	!byte $00, $00, $00, $00
+
+; 40 - o
+	!byte $00, $00, $00, $00
+	!byte $00, $00, $00, $00
+	!byte $00, $ee, $ee, $00
+	!byte $0e, $e0, $0e, $e0
+	!byte $0e, $e0, $0e, $e0
+	!byte $0e, $e0, $0e, $e0
+	!byte $00, $ee, $ee, $00
+	!byte $00, $00, $00, $00
+
+; 41 - p
+	!byte $00, $00, $00, $00
+	!byte $00, $00, $00, $00
+	!byte $0e, $ee, $ee, $00
+	!byte $0e, $e0, $0e, $e0
+	!byte $0e, $e0, $0e, $e0
+	!byte $0e, $ee, $ee, $00
+	!byte $0e, $e0, $00, $00
+	!byte $0e, $e0, $00, $00
+
+; 42 - q
+	!byte $00, $00, $00, $00
+	!byte $00, $00, $00, $00
+	!byte $00, $ee, $ee, $e0
+	!byte $0e, $e0, $0e, $e0
+	!byte $0e, $e0, $0e, $e0
+	!byte $00, $ee, $ee, $e0
+	!byte $00, $00, $0e, $e0
+	!byte $00, $00, $0e, $e0
+
+; 43 - r
+	!byte $00, $00, $00, $00
+	!byte $00, $00, $00, $00
+	!byte $0e, $ee, $ee, $00
+	!byte $0e, $e0, $0e, $e0
+	!byte $0e, $e0, $00, $00
+	!byte $0e, $e0, $00, $00
+	!byte $0e, $e0, $00, $00
+	!byte $00, $00, $00, $00
+
+; 44 - s
+	!byte $00, $00, $00, $00
+	!byte $00, $00, $00, $00
+	!byte $00, $ee, $ee, $e0
+	!byte $0e, $e0, $00, $00
+	!byte $00, $ee, $ee, $00
+	!byte $00, $00, $0e, $e0
+	!byte $0e, $ee, $ee, $00
+	!byte $00, $00, $00, $00
+
+; 45 - t
+	!byte $00, $00, $00, $00
+	!byte $00, $0e, $e0, $00
+	!byte $0e, $ee, $ee, $e0
+	!byte $00, $0e, $e0, $00
+	!byte $00, $0e, $e0, $00
+	!byte $00, $0e, $e0, $00
+	!byte $00, $00, $ee, $e0
+	!byte $00, $00, $00, $00
+
+; 46 - u
+	!byte $00, $00, $00, $00
+	!byte $00, $00, $00, $00
+	!byte $0e, $e0, $0e, $e0
+	!byte $0e, $e0, $0e, $e0
+	!byte $0e, $e0, $0e, $e0
+	!byte $0e, $e0, $0e, $e0
+	!byte $00, $ee, $ee, $e0
+	!byte $00, $00, $00, $00
+
+; 47 - v
+	!byte $00, $00, $00, $00
+	!byte $00, $00, $00, $00
+	!byte $0e, $e0, $0e, $e0
+	!byte $0e, $e0, $0e, $e0
+	!byte $0e, $e0, $0e, $e0
+	!byte $00, $ee, $ee, $00
+	!byte $00, $0e, $e0, $00
+	!byte $00, $00, $00, $00
+
+; 48 - w
+	!byte $00, $00, $00, $00
+	!byte $00, $00, $00, $00
+	!byte $0e, $e0, $00, $ee
+	!byte $0e, $e0, $e0, $ee
+	!byte $0e, $ee, $ee, $ee
+	!byte $00, $ee, $ee, $e0
+	!byte $00, $ee, $0e, $e0
+	!byte $00, $00, $00, $00
+
+; 49 - x
+	!byte $00, $00, $00, $00
+	!byte $00, $00, $00, $00
+	!byte $0e, $e0, $0e, $e0
+	!byte $00, $ee, $ee, $00
+	!byte $00, $0e, $e0, $00
+	!byte $00, $ee, $ee, $00
+	!byte $0e, $e0, $0e, $e0
+	!byte $00, $00, $00, $00
+
+; 50 - y
+	!byte $00, $00, $00, $00
+	!byte $00, $00, $00, $00
+	!byte $0e, $e0, $0e, $e0
+	!byte $0e, $e0, $0e, $e0
+	!byte $0e, $e0, $0e, $e0
+	!byte $00, $ee, $ee, $e0
+	!byte $00, $00, $ee, $00
+	!byte $0e, $ee, $e0, $00
+
+; 51 - z
+	!byte $00, $00, $00, $00
+	!byte $00, $00, $00, $00
+	!byte $0e, $ee, $ee, $e0
+	!byte $00, $00, $ee, $00
+	!byte $00, $0e, $e0, $00
+	!byte $00, $ee, $00, $00
 	!byte $0e, $ee, $ee, $e0
 	!byte $00, $00, $00, $00

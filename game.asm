@@ -38,7 +38,11 @@ game_tick:
 
 +	ldx #0
 -	lda zp_ypos
-	+sprstore 4
+	cpx #26
+	bpl +
+	clc
+	adc #-8
++	+sprstore 4
 	lda #0
 	+sprstore 5
 	inx
@@ -222,7 +226,11 @@ set_sprite:
 
 	; Calculate the X position based on the index
 	txa
-	asl
+	cmp #26
+	bmi +
+	clc
+	adc #-26
++	asl
 	asl
 	asl
 	clc
