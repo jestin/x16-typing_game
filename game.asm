@@ -42,9 +42,8 @@ game_tick:
 	bpl +
 	clc
 	adc #-8
-+	+sprstore 4
-	lda #0
-	+sprstore 5
++	sta u0L
+	jsr set_sprite_y_pos
 	inx
 	cpx #NUM_SPRITES
 	bne -
@@ -180,6 +179,24 @@ load_sprites:
 -	txa				; transfer x to y, for simplicy
 	tay
 	jsr set_sprite
+
+	; Calculate the X position based on the sprite index
+	txa
+	cmp #26
+	bmi +
+	clc
+	adc #-26
++	asl
+	asl
+	asl
+	clc
+	adc #50 							; X of 50
+	sta u0L
+	lda #0
+	sta u0H
+	+LoadW u1, 0
+	jsr set_sprite_pos
+
 	inx
 	cpx #NUM_SPRITES
 	bne -
@@ -228,27 +245,57 @@ set_sprite:
 	lda #>(sprite_vram_data >> 5) | 0 << 7 ; mode=0
 	+sprstore 1
 
-	; Calculate the X position based on the sprite index
-	txa
-	cmp #26
-	bmi +
-	clc
-	adc #-26
-+	asl
-	asl
-	asl
-	clc
-	adc #50 							; X of 50
-	+sprstore 2
-	lda #0
-	+sprstore 3
-	lda #50 							; Y of 50
-	+sprstore 4
-	lda #0
-	+sprstore 5
-
 	rts
 
+;==================================================
+; set_sprite_pos
+; Sets the sprite register at the index given by x
+; to the screen x,y given by u0 and u1,
+; respectively.
+; void set_sprite_pos(byte sprite_index: x,
+;					word x_position: u0,
+;					word y_position: u1)
+;==================================================
+set_sprite_pos:
+	lda u0L
+	+sprstore 2
+	lda u0H
+	+sprstore 3
+	lda u1L
+	+sprstore 4
+	lda u1H
+	+sprstore 5
+	rts
+
+;==================================================
+; set_sprite_x_pos
+; Sets the sprite register at the index given by x
+; to the screen x,y given by u0 and u1,
+; respectively.
+; void set_sprite_pos(byte sprite_index: x,
+;					word x_position: u0)
+;==================================================
+set_sprite_x_pos:
+	lda u0L
+	+sprstore 2
+	lda u0H
+	+sprstore 3
+	rts
+
+;==================================================
+; set_sprite_y_pos
+; Sets the sprite register at the index given by x
+; to the screen x,y given by u0 and u1,
+; respectively.
+; void set_sprite_pos(byte sprite_index: x,
+;					word Y_position: u0)
+;==================================================
+set_sprite_y_pos:
+	lda u0L
+	+sprstore 4
+	lda u0H
+	+sprstore 5
+	rts
 
 !src "strings.inc"
 !src "sprites.asm"
