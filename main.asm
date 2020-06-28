@@ -5,6 +5,9 @@ jmp main
 !src "macros.asm"
 !src "x16.asm"
 !src "zp.asm"
+!src "strings.inc"
+!src "sprites.asm"
+!src "sprite_helpers.asm"
 !src "game.asm"
 
 !addr def_irq = $0000
