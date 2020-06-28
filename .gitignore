@@ -8,3 +8,6 @@ x16emu
 *.swp
 *.un~
 *.swo
+
+# git stats
+stats/*
