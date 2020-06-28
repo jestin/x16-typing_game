@@ -8,6 +8,7 @@ jmp main
 !src "strings.inc"
 !src "sprites.asm"
 !src "sprite_helpers.asm"
+!src "targets.asm"
 !src "game.asm"
 
 !addr def_irq = $0000
