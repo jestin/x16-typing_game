@@ -42,6 +42,8 @@ game_tick:
 	clc
 	adc #-8
 +	sta u0L
+	lda #0
+	sta u0H
 	jsr set_sprite_y_pos
 	inx
 	cpx #NUM_SPRITES
