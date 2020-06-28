@@ -12,5 +12,4 @@ ZP = 1
 !addr zp_ypos						= $32
 !addr zp_tick_counter				= $34
 !addr zp_next_sprite_index			= $35
-
-!addr zp_next_target_string_addr	= $38
+!addr zp_next_target_string_addr	= $36

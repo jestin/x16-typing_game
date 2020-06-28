@@ -45,12 +45,15 @@ set_target_string:
 ;==================================================
 ; allocate_target_string
 ; Increments the zp_next_target_string_addr
-; register.
+; register.  This function requires the size of the
+; string (just the number of characters, without
+; terminating 0) and will return the allocated
+; address.
 ; void allocate_target_string(out addr: u0,
 ;								byte size: u1L)
 ;==================================================
 allocate_target_string
-	; Although this is address is a word, we will
+	; Although this address is a word, we will
 	; never use the high byte.  Target strings are
 	; only N+2 bytes in memory, where N is the
 	; number of characters in the string.  Since
@@ -65,5 +68,32 @@ allocate_target_string
 
 	; check if there is enough space left for the
 	; target string
+	lda #<(target_string_data_end+1)
+	sec
+	sbc zp_next_target_string_addr
+	sta u0L
+	lda #>(target_string_data_end+1)
+	sbc zp_next_target_string_addr+1
+	sta u0H
 
-+	rts
+	; At this point, u0 contains the size of the
+	; remaining space.  If the string's size
+	; plus the index and sentinel bytes is larger,
+	; then we need to return the start of the
+	; memory block.  Otherwise, we are safe to
+	; return zp_next_target_string_addr.
+	
+	lda u1L
+	clc
+	adc #2		; add 2 for the string index and sentital bytes
+	cmp u0L		; remain space should never be >256
+	bcc +		; this means remaining spaces is sufficient
+	+LoadW zp_next_target_string_addr, target_string_data
++	lda zp_next_target_string_addr	; load the current next addr
+	sta u0							; store in out variable
+	clc
+	adc u1L							; add the string length
+	adc #2							; add extra bytes
+	sta zp_next_target_string_addr	; update next address pointer
+
+	rts
