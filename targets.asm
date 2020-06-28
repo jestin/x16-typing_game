@@ -40,33 +40,33 @@ set_target:
 
 	; store the x position
 	lda u1L
-	sta (zp_targets),y
+	sta target_data,y
 	iny
 	lda u1H
-	sta (zp_targets),y
+	sta target_data,y
 	iny
 
 	; store the y position
 	lda u2L
-	sta (zp_targets),y
+	sta target_data,y
 	iny
 	lda u2H
-	sta (zp_targets),y
+	sta target_data,y
 	iny
 
 	; store the ticks per pixel
 	lda u3L
-	sta (zp_targets),y
+	sta target_data,y
 	iny
 	lda u3H
-	sta (zp_targets),y
+	sta target_data,y
 	iny
 
 	; store the string address
 	lda u0L
-	sta (zp_targets),y
+	sta target_data,y
 	iny
 	lda u0H
-	sta (zp_targets),y
+	sta target_data,y
 
 	rts

@@ -3,12 +3,14 @@ jmp main
 
 !src "vera.asm"
 !src "macros.asm"
+!src "memory.asm"
 !src "x16.asm"
 !src "zp.asm"
 !src "strings.asm"
 !src "sprites.asm"
 !src "sprite_helpers.asm"
 !src "targets.asm"
+!src "target_strings.asm"
 !src "game.asm"
 
 !addr def_irq = $0000
