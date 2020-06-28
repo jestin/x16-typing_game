@@ -20,6 +20,7 @@ game_init:
 	jsr GRAPH_set_colors
 
 	+LoadW zp_ypos, 0
+	+LoadW zp_targets, $0400
 
 	lda #0	
 	sta zp_tick_counter
