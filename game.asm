@@ -18,7 +18,6 @@ game_init:
 	ldy #1
 	jsr GRAPH_set_colors
 
-	+LoadW zp_xpos, 25
 	+LoadW zp_ypos, 0
 
 	lda #0	
