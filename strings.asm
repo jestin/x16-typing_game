@@ -2,5 +2,5 @@
 .str_another_string !pet "this is another string",0 
 
 string_map:
-!addr str_hello_world
-!addr str_another_string
+!word .str_hello_world
+!word .str_another_string
