@@ -91,3 +91,17 @@ set_sprite_y_pos:
 	lda u0H
 	+sprstore 5
 	rts
+
+;==================================================
+; inc_next_sprite_index
+; Increments the zp_next_sprite_index register
+; void inc_next_sprite_index()
+;==================================================
+inc_next_sprite_index:
+	inc zp_next_sprite_index
+	lda #128
+	cmp zp_next_sprite_index
+	bne +
+	lda #0
+	sta zp_next_sprite_index
++	rts
