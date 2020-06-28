@@ -1,5 +1,6 @@
 ;==================================================
 ; game_init
+; Initializes everything needed to run the game
 ;==================================================
 game_init:
 	lda #$80
@@ -27,6 +28,7 @@ game_init:
 
 ;==================================================
 ; game_tick
+; This is the contents of the game's main loop
 ;==================================================
 game_tick:
 	+IncW zp_ypos
