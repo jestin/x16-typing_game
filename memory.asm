@@ -15,3 +15,7 @@ MEMORY = 1
 ; value.
 !addr target_string_data		= $0440
 !addr target_string_data_end	= $053f
+
+; This is a buffer for reading string data from program memory
+!addr string_buffer				= $0540
+!addr string_buffer_end			= $055f

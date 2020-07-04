@@ -13,3 +13,6 @@ ZP = 1
 !addr zp_tick_counter				= $34
 !addr zp_next_sprite_index			= $35
 !addr zp_next_target_string_addr	= $36
+!addr zp_cur_target_string_addr		= $38
+!addr zp_string_addr				= $3a
+!addr zp_string_buffer_addr			= $3c

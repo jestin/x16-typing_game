@@ -25,10 +25,10 @@
 ; | N| Sentinel value (255 is best)              |
 ; ------------------------------------------------
 ;
-; NOTE - We will also need a special sprite index
+; TODO - We will also need a special sprite index
 ; to represent spaces.  We don't want to waste
 ; hardware sprites for blank spaces that do not
-; display.
+; display.  Currently, this does not support spaces.
 ;==================================================
 
 ;==================================================
@@ -40,6 +40,111 @@
 ;							byte string_index: x)
 ;==================================================
 set_target_string:
+	; Copy the address of the string into zp_string_addr
+	; so that we can use zp indirect addressing.  First
+	; we need to left shift x to multiply by two, since
+	; each string in the map is 2 bytes.  This limits us
+	; to 128 strings total, since x is only 8 bit.
+	txa
+	pha			; push the original x to the stack
+	asl
+	tax
+
+	; Now string_map,x is an address that points to
+	; program memory containing the string we want.
+	; We can use absolute addressing to read it.
+	lda string_map,x
+	sta zp_string_addr
+	inx
+	lda string_map,x
+	sta zp_string_addr + 1
+
+	; at this point, the address of the string we
+	; want is stored in zp_string_addr.  We can
+	; now use zp indirect y addressing to read
+	; individual bytes.
+
+	lda #0		; zero out the y register
+	tay
+
+READ_STRING_LOOP:
+-	lda zp_string_addr,y
+	cmp #0
+	beq END_READ_STRING_LOOP	; end of string
+	
+	; At this point we have an ascii code to allocate
+	; a sprite for.  The sprites are allocated as
+	; uppercase (0-25) and lowercase (26-51).  This
+	; means that for uppcase numbers we need to subtract
+	; 65 in order to get the correct index, but for
+	; lowercase we need to subtract 71 (97-26).
+
+	sec
+	sbc #65			; subtract 65 no matter what
+	cmp #26			; anything above 25 is lowercase
+	bmi +			; branch to skip right to sprite allocation
+	sec
+	sbc #6			; subtract an additional 6 for lowercase
+					; this represents the characters between
+					; upper and lower in ascii
+
+	; At this point A stores the sprite vram index.
+	
++	sta zp_string_buffer_addr,y		; store in the temp string buffer
+	tya
+	sta u1			; stash loop counter in a pseudo register
+	; load sprite vram index into y
+	lda zp_string_buffer_addr,y
+	tay
+	; load the next vera sprite index into x
+	lda zp_next_sprite_index
+	tax
+	jsr set_sprite
+	
+	lda u1			; restore the loop counter
+	tay
+
+	; At this point, the sprite has been set in the VERA
+	; but we still need to store it in the target string
+	; memory structure.  This will be done out of the loop
+	; so that we can properly allocate target string memory.
+
+	iny
+	jsr inc_next_sprite_index
+	
+	jmp READ_STRING_LOOP
+
+END_READ_STRING_LOOP:
+
+	; We need to allocate the next target string.
+	; This puts the address in u0, which is where
+	; it needs to be at the end of this subroutine.
+	tya			; should be the length of the string
+	sta u1L
+	jsr allocate_target_string
+	lda u0
+	sta zp_cur_target_string_addr
+
+	pla			; pull the original x from the stack
+	tax
+
+	; write the target string data
+	lda #0
+	tay
+	txa			; the string index
+	sta zp_cur_target_string_addr,y
+
+-	cpy u1L
+	bcs +
+	lda zp_string_buffer_addr,y
+	iny
+	sta zp_cur_target_string_addr,y
+	jmp -
+
++	lda #255		; sentinel value
+	iny
+	sta zp_cur_target_string_addr,y
+
 	rts
 
 ;==================================================

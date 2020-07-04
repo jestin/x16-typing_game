@@ -21,6 +21,7 @@ game_init:
 
 	+LoadW zp_ypos, 0
 	+LoadW zp_next_target_string_addr, target_string_data
+	+LoadW zp_string_buffer_addr, string_buffer
 	lda #0
 	sta zp_next_sprite_index
 
