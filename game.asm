@@ -13,6 +13,7 @@ game_init:
 
 	jsr draw_border
 	jsr load_sprites
+	jsr test_sprites
 
 	lda #0
 	ldx #0
@@ -162,6 +163,7 @@ end:
 
 ;==================================================
 ; load_sprites
+; Loads the sprites into VRAM
 ;==================================================
 load_sprites:
 	; enable sprites
@@ -181,6 +183,13 @@ load_sprites:
 	cpx #NUM_SPRITES
 	bne -
 
+	rts
+
+;==================================================
+; test_sprites
+; Displays all the sprites for testing purposes
+;==================================================
+test_sprites:
 	; set the sprite in the sprite registers
 	ldx #0
 -	txa				; transfer x to y, for simplicy
