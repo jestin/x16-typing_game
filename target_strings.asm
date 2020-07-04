@@ -68,7 +68,7 @@ set_target_string:
 	tay
 
 READ_STRING_LOOP:
--	lda zp_string_addr,y
+-	lda (zp_string_addr),y
 	cmp #0
 	beq END_READ_STRING_LOOP	; end of string
 	
@@ -90,11 +90,11 @@ READ_STRING_LOOP:
 
 	; At this point A stores the sprite vram index.
 	
-+	sta zp_string_buffer_addr,y		; store in the temp string buffer
++	sta (zp_string_buffer_addr),y		; store in the temp string buffer
 	tya
 	sta u1			; stash loop counter in a pseudo register
 	; load sprite vram index into y
-	lda zp_string_buffer_addr,y
+	lda (zp_string_buffer_addr),y
 	tay
 	; load the next vera sprite index into x
 	lda zp_next_sprite_index
@@ -132,18 +132,18 @@ END_READ_STRING_LOOP:
 	lda #0
 	tay
 	txa			; the string index
-	sta zp_cur_target_string_addr,y
+	sta (zp_cur_target_string_addr),y
 
 -	cpy u1L
 	bcs +
-	lda zp_string_buffer_addr,y
+	lda (zp_string_buffer_addr),y
 	iny
-	sta zp_cur_target_string_addr,y
+	sta (zp_cur_target_string_addr),y
 	jmp -
 
 +	lda #255		; sentinel value
 	iny
-	sta zp_cur_target_string_addr,y
+	sta (zp_cur_target_string_addr),y
 
 	rts
 

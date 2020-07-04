@@ -10,7 +10,7 @@ type.prg:
 	$(ASSEMBLER6502) $(AS_FLAGS) --outfile type.prg main.asm
 
 run: clean type.prg
-	./x16emu -prg type.prg -run -scale 2
+	./x16emu -prg type.prg -run -scale 2 -debug
 
 clean:
 	-$(RM) -f *.o *.tmp $(PROGS) *~ core

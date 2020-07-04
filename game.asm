@@ -13,7 +13,17 @@ game_init:
 
 	jsr draw_border
 	jsr load_sprites
+
+	ldx #0
+-	cpx #NUM_TARGETS
+	beq +
+	jsr clear_target
+	inx
+	jmp -
+
++	nop
 	jsr test_sprites
+	jsr test_target
 
 	lda #0
 	ldx #0
@@ -216,5 +226,22 @@ test_sprites:
 	inx
 	cpx #NUM_SPRITES
 	bne -
+
+	rts
+
+;==================================================
+; test_target
+; Creates a test target
+;==================================================
+test_target:
+	ldx #0
+	jsr set_target_string
+	lda #75
+	sta u1
+	lda #50
+	sta u2
+	lda #20
+	sta u3L
+	jsr set_target
 
 	rts

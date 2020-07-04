@@ -1,3 +1,4 @@
+NUM_TARGETS = 52
 ;==================================================
 ; Targets represent the text that a player needs to
 ; type in order to play the game.  The targets will
@@ -30,7 +31,7 @@
 set_target:
 	; Multiply x by 8 and store in y since
 	; that's how many bytes a target is.
-	; This allows us to use ($zp),y 
+	; This allows us to use absolute,y
 	; addressing.
 	txa
 	asl
