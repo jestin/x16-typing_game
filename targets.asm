@@ -70,3 +70,27 @@ set_target:
 	sta target_data,y
 
 	rts
+
+;==================================================
+; clear_target
+; Clears a target, by setting the string address
+; to a sentinel value.
+; void clear_target(byte target_index: x)
+;==================================================
+clear_target:
+	; Multiply x by 8 and store in y since
+	; that's how many bytes a target is.
+	; This allows us to use ($zp),y 
+	; addressing.
+	txa
+	asl
+	asl
+	asl
+	tay
+	lda #255
+	sta target_data,y
+	iny
+	sta target_data,y
+
+	rts
+
