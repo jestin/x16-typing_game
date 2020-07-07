@@ -1,5 +1,5 @@
 ; store the strings in !raw so that they are stored in ascii
-.str_test !raw "test",0
+.str_test !raw "Jestin",0
 .str_hello_world !raw "hello world",0 
 .str_another_string !raw "this is another string",0 
 

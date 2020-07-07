@@ -3,6 +3,15 @@
 ; Initializes everything needed to run the game
 ;==================================================
 game_init:
+	+LoadW zp_ypos, 0
+	+LoadW zp_next_target_string_addr, target_string_data
+	+LoadW zp_string_buffer_addr, string_buffer
+
+	lda #0
+	sta zp_next_sprite_index
+
+	lda #0	
+	sta zp_tick_counter
 	lda #$80
 	sec
 	jsr screen_set_mode
@@ -29,15 +38,6 @@ game_init:
 	ldx #0
 	ldy #1
 	jsr GRAPH_set_colors
-
-	+LoadW zp_ypos, 0
-	+LoadW zp_next_target_string_addr, target_string_data
-	+LoadW zp_string_buffer_addr, string_buffer
-	lda #0
-	sta zp_next_sprite_index
-
-	lda #0	
-	sta zp_tick_counter
 
 	rts
 
@@ -236,10 +236,8 @@ test_sprites:
 test_target:
 	ldx #0
 	jsr set_target_string
-	lda #75
-	sta u1
-	lda #50
-	sta u2
+	+LoadW u1, 75
+	+LoadW u2, 50
 	lda #20
 	sta u3L
 	jsr set_target

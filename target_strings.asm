@@ -122,8 +122,7 @@ END_READ_STRING_LOOP:
 	tya			; should be the length of the string
 	sta u1L
 	jsr allocate_target_string
-	lda u0
-	sta zp_cur_target_string_addr
+	+MoveW u0, zp_cur_target_string_addr
 
 	pla			; pull the original x from the stack
 	tax
@@ -194,11 +193,17 @@ allocate_target_string
 	cmp u0L		; remain space should never be >256
 	bcc +		; this means remaining spaces is sufficient
 	+LoadW zp_next_target_string_addr, target_string_data
-+	lda zp_next_target_string_addr	; load the current next addr
-	sta u0							; store in out variable
++	+MoveW zp_next_target_string_addr, u0	; store current in out variable
+	+MoveW zp_next_target_string_addr, u2	; use u2 as temp var
+
+	; add the string length, store in u2
+	; no reason to worry about the high byte
+	lda u2L
 	clc
-	adc u1L							; add the string length
-	adc #2							; add extra bytes
-	sta zp_next_target_string_addr	; update next address pointer
+	adc u1L
+	sta u2L
+
+	+AddW u2, 2						; add extra bytes
+	+MoveW u2, zp_next_target_string_addr	; update next address pointer
 
 	rts
