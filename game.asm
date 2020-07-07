@@ -52,7 +52,7 @@ game_tick:
 	bne +
 	+LoadW zp_ypos, 0
 
-+	ldx #0
+; +	ldx #0
 ; -	lda zp_ypos
 ; 	cpx #26
 ; 	bpl +
@@ -240,6 +240,15 @@ test_target:
 	+LoadW u2, 50
 	+LoadW u3, 20
 	ldx #0
+	jsr set_target
+	jsr set_target_pos
+
+	ldx #1
+	jsr set_target_string
+	+LoadW u1, 85
+	+LoadW u2, 60
+	+LoadW u3, 20
+	ldx #1
 	jsr set_target
 	jsr set_target_pos
 

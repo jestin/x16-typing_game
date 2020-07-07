@@ -86,7 +86,7 @@ set_target_pos:
 	phx
 -	cpx #0
 	beq +
-	+AddW zp_cur_target_addr, 2
+	+AddW zp_cur_target_addr, 8
 	dex
 	jmp -
 +	nop			; meh, I'll waste a couple cycles for readability
