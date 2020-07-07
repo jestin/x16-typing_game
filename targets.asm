@@ -1,4 +1,4 @@
-NUM_TARGETS = 52
+NUM_TARGETS = 8
 ;==================================================
 ; Targets represent the text that a player needs to
 ; type in order to play the game.  The targets will
@@ -26,7 +26,7 @@ NUM_TARGETS = 52
 ;					word string_addr: u0,
 ;					word x_position: u1,
 ;					word y_position: u2,
-;					byte ticks_per_pixel: u3L)
+;					word ticks_per_pixel: u3)
 ;==================================================
 set_target:
 	; Multiply x by 8 and store in y since
@@ -88,6 +88,8 @@ clear_target:
 	asl
 	asl
 	tay
+
+	; set the X value to $FFFF, which we will interpret as null
 	lda #255
 	sta target_data,y
 	iny

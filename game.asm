@@ -238,8 +238,8 @@ test_target:
 	jsr set_target_string
 	+LoadW u1, 75
 	+LoadW u2, 50
-	lda #20
-	sta u3L
+	+LoadW u3, 20
+	ldx #0
 	jsr set_target
 
 	rts
