@@ -73,6 +73,65 @@ set_target:
 	rts
 
 ;==================================================
+; set_target_pos
+; Update the sprite positions of the target's string.
+; void set_target_pos(byte target_index: x)
+;==================================================
+set_target_pos:
+	; First, we need to set zp_cur_target_addr
+	; We do this by successively adding two bytes to
+	; to target_data, one time for each index past 0.
+	; We push X first, so that we don't lose it.
+	+LoadW zp_cur_target_addr, target_data
+	phx
+-	cpx #0
+	beq +
+	+AddW zp_cur_target_addr, 2
+	dex
+	jmp -
++	nop			; meh, I'll waste a couple cycles for readability
+
+	; At this point, zp_cur_target_addr is set to the correct address,
+	; so we should set zp_cur_target_string_addr.
+
+	ldy #6
+	lda (zp_cur_target_addr),y
+	sta zp_cur_target_string_addr
+	iny
+	lda (zp_cur_target_addr),y
+	sta zp_cur_target_string_addr+1
+
+	; Now we read the x and y position from the data, and set the sprites
+
+	; Move the x coordinate to u0
+	ldy #0
+	lda (zp_cur_target_addr),y
+	sta u0L
+	iny
+	lda (zp_cur_target_addr),y
+	sta u0H
+	; Move the y coordinate to u1
+	iny
+	lda (zp_cur_target_addr),y
+	sta u1L
+	iny
+	lda (zp_cur_target_addr),y
+	sta u1H
+
+	ldy #1			; the sprite indices start at byte 1
+-	lda (zp_cur_target_string_addr),y
+	cmp #255		; compare to sentinel value
+	beq +
+	tax
+	jsr set_sprite_pos
+	iny
+	+AddW u0, 8
+	jmp -
+
++	plx				; restore X
+	rts
+
+;==================================================
 ; clear_target
 ; Clears a target, by setting the string address
 ; to a sentinel value.

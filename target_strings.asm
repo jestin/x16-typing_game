@@ -133,11 +133,25 @@ END_READ_STRING_LOOP:
 	txa			; the string index
 	sta (zp_cur_target_string_addr),y
 
+	; We need to write the sprite indices, but we've already
+	; incremented the next sprite counter.  So, we will
+	; subtract the length of the string from the current
+	; counter, and increment it as we write.
+
+	lda zp_next_sprite_index
+	sec
+	sbc u1L
+	bcs +
+	clc				; if carry is clear, it means we rolled over, so
+	adc #128		; add 128 to put us back in the 0-127 range
++	sta u2L
+
 -	cpy u1L
 	bcs +
-	lda (zp_string_buffer_addr),y
+	lda u2L
 	iny
 	sta (zp_cur_target_string_addr),y
+	inc u2L
 	jmp -
 
 +	lda #255		; sentinel value

@@ -31,7 +31,7 @@ game_init:
 	jmp -
 
 +	nop
-	jsr test_sprites
+	; jsr test_sprites
 	jsr test_target
 
 	lda #0
@@ -53,18 +53,18 @@ game_tick:
 	+LoadW zp_ypos, 0
 
 +	ldx #0
--	lda zp_ypos
-	cpx #26
-	bpl +
-	clc
-	adc #-8
-+	sta u0L
-	lda #0
-	sta u0H
-	jsr set_sprite_y_pos
-	inx
-	cpx #NUM_SPRITES
-	bne -
+; -	lda zp_ypos
+; 	cpx #26
+; 	bpl +
+; 	clc
+; 	adc #-8
+; +	sta u0L
+; 	lda #0
+; 	sta u0H
+; 	jsr set_sprite_y_pos
+; 	inx
+; 	cpx #NUM_SPRITES
+; 	bne -
 
 	rts
 
@@ -241,5 +241,6 @@ test_target:
 	+LoadW u3, 20
 	ldx #0
 	jsr set_target
+	jsr set_target_pos
 
 	rts
