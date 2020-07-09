@@ -1,11 +1,11 @@
 ;==================================================
-; load_sprite
-; Loads a sprite into vram at current location of
+; load_vram
+; Loads data into vram at current location of
 ; veradat.  This function assumes that AUTO_INC_1
 ; is set.
-; void load_sprite(word addr: u0, byte size: u1L)
+; void load_vram(word addr: u0, byte size: u1L)
 ;==================================================
-load_sprite:
+load_vram:
 	tya
 	pha
 

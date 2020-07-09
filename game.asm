@@ -187,7 +187,7 @@ load_sprites:
 	lda #32
 	sta u1L
 	ldx #0
--	jsr load_sprite
+-	jsr load_vram
 	+AddW u0, 32
 	inx
 	cpx #NUM_SPRITES
