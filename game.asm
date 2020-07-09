@@ -23,6 +23,15 @@ game_init:
 	jsr draw_border
 	jsr load_sprites
 
+	lda #0
+	sta u1L		; 8 pixel width
+	sta u1H		; 8 pixel height
+	lda #2
+	sta u2L		; 4bpp
+	lda #NUM_TILES
+	sta u2H		; number of tiles
+	jsr load_tiles
+
 	ldx #0
 -	cpx #NUM_TARGETS
 	beq +

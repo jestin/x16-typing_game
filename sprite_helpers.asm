@@ -4,6 +4,7 @@
 ; veradat.  This function assumes that AUTO_INC_1
 ; is set.
 ; void load_vram(word addr: u0, byte size: u1L)
+; NOTE: 0 should be use to represent a size of 256
 ;==================================================
 load_vram:
 	tya

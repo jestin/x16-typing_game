@@ -9,6 +9,8 @@ jmp main
 !src "strings.asm"
 !src "sprites.asm"
 !src "sprite_helpers.asm"
+!src "tiles.asm"
+!src "tile_helpers.asm"
 !src "targets.asm"
 !src "target_strings.asm"
 !src "game.asm"
