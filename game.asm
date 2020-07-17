@@ -21,7 +21,7 @@ game_init:
 	; jsr GRAPH_clear
 
 	; set video mode
-	lda #%01010001		; sprites and l0 enabled
+	lda #%01100001		; sprites and l1 enabled
 	sta veradcvideo
 
 	jsr load_sprites
@@ -186,7 +186,7 @@ setup_tile_map:
 					; T256C - 0
 					; bitmap mode - 0
 					; color depth (2-bits) - 2 (4bbp)
-	sta veral0config
+	sta veral1config
 
 	; messing with scaling
 	; lda #51
@@ -196,12 +196,12 @@ setup_tile_map:
 
 	; set the tile map base address
 	lda #<(tile_map_vram_data >> 9)
-	sta veral0mapbase
+	sta veral1mapbase
 
 	; set the tile base address
 	lda #(<(tile_vram_data >> 9) | %00000000 | %00000000)
 								;  height    |  width
-	sta veral0tilebase
+	sta veral1tilebase
 
 
 	; load the tiles
