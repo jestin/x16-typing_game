@@ -30,6 +30,10 @@ game_init:
 	sta u2L		; 4bpp
 	lda #NUM_TILES
 	sta u2H		; number of tiles
+	lda #<(tile_data)
+	sta u0L
+	lda #>(tile_data)
+	sta u0H
 	jsr load_tiles
 
 	ldx #0
