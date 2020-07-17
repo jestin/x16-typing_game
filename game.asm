@@ -222,7 +222,7 @@ setup_tile_map:
 	+vset tile_map_vram_data | AUTO_INC_1
 
 	; set the pallet offset
-	lda #(5 << 4)
+	lda #(9 << 4)
 	sta u0
 
 	; write a corner peice
