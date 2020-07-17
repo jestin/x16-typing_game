@@ -188,6 +188,12 @@ setup_tile_map:
 					; color depth (2-bits) - 2 (4bbp)
 	sta veral0config
 
+	; messing with scaling
+	; lda #51
+	; sta veradchscale
+	; lda #69
+	; sta veradcvscale
+
 	; set the tile map base address
 	lda #<(tile_map_vram_data >> 9)
 	sta veral0mapbase
@@ -212,25 +218,92 @@ setup_tile_map:
 	sta u0H
 	jsr load_tiles
 
-	; fill the base map with dummy data
+	; fill the base map
 	+vset tile_map_vram_data | AUTO_INC_1
-	ldx #0
--	lda #0	; write zero for index (for testing)
+
+	; set the pallet offset
+	lda #(5 << 4)
+	sta u0
+
+	; write a corner peice
+	lda #0
 	sta veradat
-
-	; use x as the pallette offset (for testing)
-	txa
-	asl
-	asl
-	asl
-	asl
-	; here I'd normally ora with the v-flip, h-flip, and upper
-	; 2 bits of the tile index, but they are all 0 for testing
-
+	lda u0
+	sta veradat
+	
+	; write 30 edges
+	ldx #0
+-	lda #2
+	sta veradat
+	lda u0
 	sta veradat
 	inx
-	cpx #0
+	cpx #30
 	bne -
+
+	; write a corner peice
+	lda #0
+	sta veradat
+	lda u0
+	ora #%00000100	; h-flip
+	sta veradat
+
+	; write 30 rows of just side edges
+	ldy #0
+
+EMPTY_ROW:
+	; write an edge peice
+	lda #1
+	sta veradat
+	ora #%0000100	; h-flip
+	lda u0
+	sta veradat
+	
+	; write 30 empties
+	ldx #0
+-	lda #3
+	sta veradat
+	lda u0
+	sta veradat
+	inx
+	cpx #30
+	bne -
+
+	; write an edge peice
+	lda #1
+	sta veradat
+	lda u0
+	ora #%00000100	; h-flip
+	sta veradat
+
+	iny
+	cpy #30
+	bne EMPTY_ROW
+
+	; write a corner peice
+	lda #0
+	sta veradat
+	lda u0
+	ora #%00001000	; v-flip
+	sta veradat
+	
+	; write 30 edges
+	ldx #0
+-	lda #2
+	sta veradat
+	lda u0
+	ora #%00001000	; v-flip
+	sta veradat
+	inx
+	cpx #30
+	bne -
+
+	; write a corner peice
+	lda #0
+	sta veradat
+	lda u0
+	ora #%00001100	; v-flip, h-flip
+	sta veradat
 
 	rts
 
