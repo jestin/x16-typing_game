@@ -1,4 +1,5 @@
 !addr tile_vram_data  = $0e000
+!addr tile_map_vram_data  = $0f000
 NUM_TILES = 4
 
 tile_data:

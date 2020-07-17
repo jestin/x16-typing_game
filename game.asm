@@ -12,29 +12,20 @@ game_init:
 
 	lda #0	
 	sta zp_tick_counter
-	lda #$80
-	sec
-	jsr screen_set_mode
+	; lda #$80
+	; sec
+	; jsr screen_set_mode
 
-	+LoadW r0, 0
-	jsr GRAPH_init
-	jsr GRAPH_clear
+	; +LoadW r0, 0
+	; jsr GRAPH_init
+	; jsr GRAPH_clear
 
-	jsr draw_border
+	; set video mode
+	lda #%01010001		; sprites and l0 enabled
+	sta veradcvideo
+
 	jsr load_sprites
-
-	lda #0
-	sta u1L		; 8 pixel width
-	sta u1H		; 8 pixel height
-	lda #2
-	sta u2L		; 4bpp
-	lda #NUM_TILES
-	sta u2H		; number of tiles
-	lda #<(tile_data)
-	sta u0L
-	lda #>(tile_data)
-	sta u0H
-	jsr load_tiles
+	jsr setup_tile_map
 
 	ldx #0
 -	cpx #NUM_TARGETS
@@ -183,17 +174,71 @@ draw_border:
 end:
 	jmp *
 	rts
+;==================================================
+; setup_tile_map
+; Loads the tiles and tilemap into vram, and sets
+; the tile settings in the VERA.
+;==================================================
+setup_tile_map:
+	; set the tile mode	
+	lda #%00000010 	; height (2-bits) - 0
+					; width (2-bits) - 0
+					; T256C - 0
+					; bitmap mode - 0
+					; color depth (2-bits) - 2 (4bbp)
+	sta veral0config
+
+	; set the tile map base address
+	lda #<(tile_map_vram_data >> 9)
+	sta veral0mapbase
+
+	; set the tile base address
+	lda #(<(tile_vram_data >> 9) | %00000000 | %00000000)
+								;  height    |  width
+	sta veral0tilebase
+
+
+	; load the tiles
+	lda #0
+	sta u1L		; 8 pixel width
+	sta u1H		; 8 pixel height
+	lda #2
+	sta u2L		; 4bpp
+	lda #NUM_TILES
+	sta u2H		; number of tiles
+	lda #<(tile_data)
+	sta u0L
+	lda #>(tile_data)
+	sta u0H
+	jsr load_tiles
+
+	; fill the base map with dummy data
+	+vset tile_map_vram_data | AUTO_INC_1
+	ldx #0
+-	lda #0	; write zero for index (for testing)
+	sta veradat
+
+	; use x as the pallette offset (for testing)
+	txa
+	asl
+	asl
+	asl
+	asl
+	; here I'd normally ora with the v-flip, h-flip, and upper
+	; 2 bits of the tile index, but they are all 0 for testing
+
+	sta veradat
+	inx
+	cpx #0
+	bne -
+
+	rts
 
 ;==================================================
 ; load_sprites
 ; Loads the sprites into VRAM
 ;==================================================
 load_sprites:
-	; enable sprites
-	lda veradcvideo
-	ora #$70
-	sta veradcvideo
-	
 ; 	; load the sprite into vram
 	+vset sprite_vram_data | AUTO_INC_1
 	+LoadW u0, sprite_data
