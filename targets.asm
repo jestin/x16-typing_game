@@ -92,11 +92,17 @@ update_target_pos:
 	iny
 	iny
 
+	; TODO: read the ticks per pixel values,
+	; and increment based on that.
+	; I may want to re-order the target data,
+	; since now I have to skip ahead and then
+	; skip back in order to adjust y.
+
 	; increment the lower byte
 	lda target_data,y
 	inc
 	sta target_data,y
-	bcc +
+	bne +				; when negative is set, it means rollover
 
 	; increment the high byte
 	iny
