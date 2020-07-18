@@ -38,26 +38,34 @@ game_init:
 ; This is the contents of the game's main loop
 ;==================================================
 game_tick:
-	+IncW zp_ypos
-	lda zp_ypos
-	cmp #200
-	bne +
-	+LoadW zp_ypos, 0
+	; update the tick counter
+	lda zp_tick_counter
+	inc
+	sta zp_tick_counter
 
-+ 	nop
-; 	ldx #0
-; -	lda zp_ypos
-; 	cpx #26
-; 	bpl +
-; 	clc
-; 	adc #-8
-; +	sta u0L
-; 	lda #0
-; 	sta u0H
-; 	jsr set_sprite_y_pos
-; 	inx
-; 	cpx #NUM_SPRITES
-; 	bne -
+	; loop through the targets
+	ldx #0
+
+-	txa
+	asl
+	asl
+	asl
+	tay
+
+	; load the x high byte
+	iny	; increment to get x high
+	lda target_data,y
+
+	; only update the position if the target exists
+	cmp #$ff
+	beq +
+	jsr update_target_pos
+	jsr set_target_pos
+
++	inx
+	cpx #8
+	bne -
+
 
 	rts
 
@@ -90,7 +98,7 @@ setup_bitmap:
 BITMAP_ROWS:
 
 	ldx #0
--	lda #(1 << 6 | 3 << 4 | 3 << 2 | 1)
+-	lda #(1 << 6 | 3 << 4 | 1 << 2 | 3)
 	sta veradat
 	inx
 	cpx #160	; two rows of 320 pixels at 2bpp
@@ -288,7 +296,7 @@ test_target:
 	jsr set_target_string
 	+LoadW u1, 75
 	+LoadW u2, 50
-	+LoadW u3, 20
+	+LoadW u3, 15
 	ldx #0
 	jsr set_target
 	jsr set_target_pos

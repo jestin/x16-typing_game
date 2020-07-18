@@ -32,7 +32,7 @@ set_sprite:
 	; set the sprite in the register
 -	lda #(0 << 6) | (0 << 4) | 0		; height/width/paloffset
 	+sprstore 7
-	lda #3 << 2          ; z-depth=3
+	lda #2 << 2          ; z-depth=2
 	+sprstore 6
 	tya
 	clc

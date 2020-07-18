@@ -73,6 +73,42 @@ set_target:
 	rts
 
 ;==================================================
+; update_target_pos
+; Update the target's x and y coordinates
+; void update_target_pos(byte target_index: x)
+;==================================================
+update_target_pos:
+	tya
+	pha
+
+	; set y to the correct offset for the target
+	txa
+	asl
+	asl
+	asl
+	tay
+
+	; skip past the x coordinate
+	iny
+	iny
+
+	; increment the lower byte
+	lda target_data,y
+	inc
+	sta target_data,y
+	bcc +
+
+	; increment the high byte
+	iny
+	lda target_data,y
+	inc
+	sta target_data,y
+
++	pla
+	tay
+	rts
+
+;==================================================
 ; set_target_pos
 ; Update the sprite positions of the target's string.
 ; void set_target_pos(byte target_index: x)
