@@ -14,3 +14,6 @@ run: clean type.prg
 
 clean:
 	-$(RM) -f *.o *.tmp $(PROGS) *~ core
+
+video:
+	./x16emu -bas utils/video_settings.bas -run -scale 2 -debug
