@@ -181,17 +181,17 @@ end:
 ;==================================================
 setup_tile_map:
 	; set the tile mode	
-	lda #%00000010 	; height (2-bits) - 0
-					; width (2-bits) - 0
+	lda #%01100010 	; height (2-bits) - 0
+					; width (2-bits) - 2
 					; T256C - 0
 					; bitmap mode - 0
 					; color depth (2-bits) - 2 (4bbp)
 	sta veral1config
 
 	; messing with scaling
-	; lda #51
+	; lda #128
 	; sta veradchscale
-	; lda #69
+	; lda #128
 	; sta veradcvscale
 
 	; set the tile map base address
@@ -231,14 +231,14 @@ setup_tile_map:
 	lda u0
 	sta veradat
 	
-	; write 30 edges
+	; write 78 edges
 	ldx #0
 -	lda #2
 	sta veradat
 	lda u0
 	sta veradat
 	inx
-	cpx #30
+	cpx #78
 	bne -
 
 	; write a corner peice
@@ -247,6 +247,16 @@ setup_tile_map:
 	lda u0
 	ora #%00000100	; h-flip
 	sta veradat
+
+	; write blank tiles to fill the full 128 width
+	ldx #0
+-	lda #3
+	sta veradat
+	lda u0
+	sta veradat
+	inx
+	cpx #48
+	bne -
 
 	; write 30 rows of just side edges
 	ldy #0
@@ -259,14 +269,14 @@ EMPTY_ROW:
 	lda u0
 	sta veradat
 	
-	; write 30 empties
+	; write 78 empties
 	ldx #0
 -	lda #3
 	sta veradat
 	lda u0
 	sta veradat
 	inx
-	cpx #30
+	cpx #78
 	bne -
 
 	; write an edge peice
@@ -276,8 +286,18 @@ EMPTY_ROW:
 	ora #%00000100	; h-flip
 	sta veradat
 
+	; write blank tiles to fill the full 128 width
+	ldx #0
+-	lda #3
+	sta veradat
+	lda u0
+	sta veradat
+	inx
+	cpx #48
+	bne -
+
 	iny
-	cpy #30
+	cpy #58
 	bne EMPTY_ROW
 
 	; write a corner peice
@@ -287,7 +307,7 @@ EMPTY_ROW:
 	ora #%00001000	; v-flip
 	sta veradat
 	
-	; write 30 edges
+	; write 78 edges
 	ldx #0
 -	lda #2
 	sta veradat
@@ -295,7 +315,7 @@ EMPTY_ROW:
 	ora #%00001000	; v-flip
 	sta veradat
 	inx
-	cpx #30
+	cpx #78
 	bne -
 
 	; write a corner peice
@@ -304,6 +324,16 @@ EMPTY_ROW:
 	lda u0
 	ora #%00001100	; v-flip, h-flip
 	sta veradat
+
+	; write blank tiles to fill the full 128 width
+	ldx #0
+-	lda #3
+	sta veradat
+	lda u0
+	sta veradat
+	inx
+	cpx #48
+	bne -
 
 	rts
 
