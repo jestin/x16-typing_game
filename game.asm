@@ -12,13 +12,6 @@ game_init:
 
 	lda #0	
 	sta zp_tick_counter
-	; lda #$80
-	; sec
-	; jsr screen_set_mode
-
-	; +LoadW r0, 0
-	; jsr GRAPH_init
-	; jsr GRAPH_clear
 
 	; set video mode
 	lda #%01100001		; sprites and l1 enabled
@@ -38,11 +31,6 @@ game_init:
 	; jsr test_sprites
 	jsr test_target
 
-	lda #0
-	ldx #0
-	ldy #1
-	jsr GRAPH_set_colors
-
 	rts
 
 ;==================================================
@@ -56,7 +44,8 @@ game_tick:
 	bne +
 	+LoadW zp_ypos, 0
 
-; +	ldx #0
++ 	nop
+; 	ldx #0
 ; -	lda zp_ypos
 ; 	cpx #26
 ; 	bpl +
@@ -72,108 +61,6 @@ game_tick:
 
 	rts
 
-;==================================================
-; draw_string
-; Draws a string to the screen at the specified xy
-; void draw_string(word x: u0, word y: u1, word addr: u2)
-;==================================================
-draw_string:
-	+MoveW u0, r0		; transfer x and y to the correct
-	+MoveW u1, r1       ; virtual registers for GRAPH_put_char
-
-	lda #0				; load 0 into loop counter variable
-	sta u3
-
--	ldy u3				; load our loop counter variable into y
-	lda (u2),y			; use zero page indirect with y addressing mode
-	beq +				; branch to end when a 0 is found
-	jsr GRAPH_put_char
-	inc u3				; increment our loop counter
-	jmp -				; loop back to loading y
-
-+	rts
-
-;==================================================
-; draw_border
-; Draws the border and sets the clipping window
-;==================================================
-draw_border:
-	lda #0
-	jsr GRAPH_set_colors
-
-	; get resolution
-	jsr FB_get_info			; loads width and height into r0 and r1
-	+MoveW r0, r2			; the width and height need to be in r2
-	+MoveW r1, r3			; and r3 for the GRAPH_draw_rect subroutine
-
-	; outer rect
-	+LoadW r4, 0			; don't use a corner radius
-	; To make the outer rectangle 2 pixels wide, we draw two rectanlges
-	+LoadW r0, 0
-	+LoadW r1, 0
-	jsr GRAPH_draw_rect
-	+IncW r0
-	+IncW r1
-	+DecW r2
-	+DecW r2
-	+DecW r3
-	+DecW r3
-	clc						; no reason to fill this rect
-	jsr GRAPH_draw_rect
-
-	; middle rect (fill)
-	+LoadB u1L, 0 			; loop counter
-	+LoadB u1H, 108			; color ( +/- 7 here will change color scheme of border)
--	lda u1H
-	jsr GRAPH_set_colors
-	+IncW r0
-	+IncW r1
-	+DecW r2
-	+DecW r2
-	+DecW r3
-	+DecW r3
-	clc						; no reason to fill this rect
-	jsr GRAPH_draw_rect
-	inc u1L
-	dec u1H
-	lda u1L
-	cmp #7
-	beq +
-	jmp -
-
-	; inner rect
-+	lda #0
-	jsr GRAPH_set_colors
-	+IncW r0
-	+IncW r1
-	+DecW r2
-	+DecW r2
-	+DecW r3
-	+DecW r3
-	clc						; no reason to fill this rect
-	jsr GRAPH_draw_rect
-	+IncW r0
-	+IncW r1
-	+DecW r2
-	+DecW r2
-	+DecW r3
-	+DecW r3
-	clc
-	jsr GRAPH_draw_rect
-
-	+IncW r0
-	+IncW r1
-	+DecW r2
-	+DecW r2
-	+DecW r3
-	+DecW r3
-	jsr GRAPH_set_window
-
-	rts
-
-end:
-	jmp *
-	rts
 ;==================================================
 ; setup_tile_map
 ; Loads the tiles and tilemap into vram, and sets
