@@ -4,6 +4,7 @@ jmp main
 !src "vera.asm"
 !src "macros.asm"
 !src "memory.asm"
+!src "vram.asm"
 !src "x16.asm"
 !src "zp.asm"
 !src "strings.asm"

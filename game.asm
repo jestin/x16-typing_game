@@ -14,9 +14,10 @@ game_init:
 	sta zp_tick_counter
 
 	; set video mode
-	lda #%01100001		; sprites and l1 enabled
+	lda #%01110001		; sprites and l1 enabled
 	sta veradcvideo
 
+	jsr setup_bitmap
 	jsr load_sprites
 	jsr setup_tile_map
 
@@ -62,6 +63,47 @@ game_tick:
 	rts
 
 ;==================================================
+; setup_bitmap
+; Load the bitmap screen background
+;==================================================
+setup_bitmap:
+	; set the tile mode	
+	lda #%00000101 	; height (2-bits) - 0
+					; width (2-bits) - 2
+					; T256C - 0
+					; bitmap mode - 0
+					; color depth (2-bits) - 1 (2bbp)
+	sta veral0config
+
+	; set the pallet offset
+	lda #12
+	sta veral0hscrollhi
+
+	; set the tile base address	(320 width)
+	lda #(<(bitmap_base_data >> 9) | (0 << 2) | 0)
+								;  height    |  width
+
+	sta veral0tilebase
+
+	+vset bitmap_base_data | AUTO_INC_1
+
+	ldy #0
+BITMAP_ROWS:
+
+	ldx #0
+-	lda #(1 << 6 | 3 << 4 | 3 << 2 | 1)
+	sta veradat
+	inx
+	cpx #160	; two rows of 320 pixels at 2bpp
+	bne -
+
+	iny
+	cpy #240	; number of rows / 2
+	bne BITMAP_ROWS
+
+	rts
+
+;==================================================
 ; setup_tile_map
 ; Loads the tiles and tilemap into vram, and sets
 ; the tile settings in the VERA.
@@ -74,12 +116,6 @@ setup_tile_map:
 					; bitmap mode - 0
 					; color depth (2-bits) - 2 (4bbp)
 	sta veral1config
-
-	; messing with scaling
-	; lda #128
-	; sta veradchscale
-	; lda #128
-	; sta veradcvscale
 
 	; set the tile map base address
 	lda #<(tile_map_vram_data >> 9)

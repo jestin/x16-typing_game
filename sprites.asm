@@ -1,4 +1,3 @@
-!addr sprite_vram_data  = $0d000
 NUM_SPRITES = 52
 
 sprite_data:
