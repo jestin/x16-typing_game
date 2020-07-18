@@ -29,7 +29,6 @@ game_init:
 	jmp -
 
 +	nop
-	; jsr test_sprites
 	jsr test_target
 
 	rts
@@ -279,39 +278,6 @@ load_sprites:
 
 	rts
 
-;==================================================
-; test_sprites
-; Displays all the sprites for testing purposes
-;==================================================
-test_sprites:
-	; set the sprite in the sprite registers
-	ldx #0
--	txa				; transfer x to y, for simplicy
-	tay
-	jsr set_sprite
-
-	; Calculate the X position based on the sprite index
-	txa
-	cmp #26
-	bmi +
-	clc
-	adc #-26
-+	asl
-	asl
-	asl
-	clc
-	adc #50 							; X of 50
-	sta u0L
-	lda #0
-	sta u0H
-	+LoadW u1, 0
-	jsr set_sprite_pos
-
-	inx
-	cpx #NUM_SPRITES
-	bne -
-
-	rts
 
 ;==================================================
 ; test_target
