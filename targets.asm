@@ -78,19 +78,20 @@ set_target:
 ; void update_target_pos(byte target_index: x)
 ;==================================================
 update_target_pos:
-	tya
-	pha
+	phy
+	phx
 
-	; set y to the correct offset for the target
-	txa
-	asl
-	asl
-	asl
-	tay
-
-	; skip past the x coordinate
-	iny
-	iny
+	; First, we need to set zp_cur_target_addr
+	; We do this by successively adding two bytes to
+	; to target_data, one time for each index past 0.
+	; We push X first, so that we don't lose it.
+	+LoadW zp_cur_target_addr, target_data
+-	cpx #0
+	beq +
+	+AddW zp_cur_target_addr, 8
+	dex
+	jmp -
++	nop			; meh, I'll waste a couple cycles for readability
 
 	; TODO: read the ticks per pixel values,
 	; and increment based on that.
@@ -98,20 +99,35 @@ update_target_pos:
 	; since now I have to skip ahead and then
 	; skip back in order to adjust y.
 
+	ldy #4
+	lda (zp_cur_target_addr),y
+	sta u0L
+	iny
+	lda (zp_cur_target_addr),y
+	sta u0H
+
+	; at this point, u0 has the ticks per pixel
+
+	ldy #2
+
+	; below is just temporary code to incrment the position by 1 each tick
 	; increment the lower byte
-	lda target_data,y
+	lda (zp_cur_target_addr),y
 	inc
-	sta target_data,y
+	sta (zp_cur_target_addr),y
 	bne +				; when negative is set, it means rollover
 
 	; increment the high byte
 	iny
-	lda target_data,y
+	lda (zp_cur_target_addr),y
 	inc
-	sta target_data,y
+	sta (zp_cur_target_addr),y
 
-+	pla
++	nop
+	plx
+	ply
 	tay
+
 	rts
 
 ;==================================================
@@ -120,12 +136,13 @@ update_target_pos:
 ; void set_target_pos(byte target_index: x)
 ;==================================================
 set_target_pos:
+	phx
+
 	; First, we need to set zp_cur_target_addr
 	; We do this by successively adding two bytes to
 	; to target_data, one time for each index past 0.
 	; We push X first, so that we don't lose it.
 	+LoadW zp_cur_target_addr, target_data
-	phx
 -	cpx #0
 	beq +
 	+AddW zp_cur_target_addr, 8

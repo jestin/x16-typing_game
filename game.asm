@@ -310,4 +310,22 @@ test_target:
 	jsr set_target
 	jsr set_target_pos
 
+	ldx #2
+	jsr set_target_string
+	+LoadW u1, 200
+	+LoadW u2, 10
+	+LoadW u3, 20
+	ldx #2
+	jsr set_target
+	jsr set_target_pos
+
+	ldx #3
+	jsr set_target_string
+	+LoadW u1, 256
+	+LoadW u2, 10
+	+LoadW u3, 20
+	ldx #3
+	jsr set_target
+	jsr set_target_pos
+
 	rts
