@@ -12,8 +12,8 @@ NUM_TARGETS = 8
 ; |01| High byte of X coordinate                 |
 ; |02| Low byte of Y coordinate                  |
 ; |03| High byte of Y coordinate                 |
-; |04| Low byte of ticks-per-pixel speed         |
-; |05| High byte of ticks-per-pixel speed        |
+; |04| Ticks-per-pixel speed			         |
+; |05| Current ticks                             |
 ; |06| Low byte of string address                |
 ; |07| High byte of string address               |
 ; ------------------------------------------------
@@ -26,7 +26,7 @@ NUM_TARGETS = 8
 ;					word string_addr: u0,
 ;					word x_position: u1,
 ;					word y_position: u2,
-;					word ticks_per_pixel: u3)
+;					word ticks_per_pixel: u3L)
 ;==================================================
 set_target:
 	; Multiply x by 8 and store in y since
@@ -59,7 +59,9 @@ set_target:
 	lda u3L
 	sta target_data,y
 	iny
-	lda u3H
+
+	; initialize current ticks to zero
+	lda #0
 	sta target_data,y
 	iny
 
@@ -93,29 +95,34 @@ update_target_pos:
 	jmp -
 +	nop			; meh, I'll waste a couple cycles for readability
 
-	; TODO: read the ticks per pixel values,
-	; and increment based on that.
-	; I may want to re-order the target data,
-	; since now I have to skip ahead and then
-	; skip back in order to adjust y.
-
+	; read ticks per pixel
 	ldy #4
 	lda (zp_cur_target_addr),y
 	sta u0L
-	iny
+
+	; at this point, u0L has the ticks per pixel
+
+	; load current ticks
+	ldy #5
 	lda (zp_cur_target_addr),y
+	sta u0H			; store the current tick count
+
+	cmp u0L
+	bne + 			; if not equal, do not update position
+
+	; first set the current tick count so that the next inc
+	; will be zero
+	lda #$ff
 	sta u0H
 
-	; at this point, u0 has the ticks per pixel
-
+	; update the position
 	ldy #2
 
-	; below is just temporary code to incrment the position by 1 each tick
 	; increment the lower byte
 	lda (zp_cur_target_addr),y
 	inc
 	sta (zp_cur_target_addr),y
-	bne +				; when negative is set, it means rollover
+	bne +				; when zero is set, it means rollover
 
 	; increment the high byte
 	iny
@@ -123,7 +130,12 @@ update_target_pos:
 	inc
 	sta (zp_cur_target_addr),y
 
-+	nop
++	lda u0H			; load the temp var for tick count,
+					; regardless of whether it was reset or not
+	inc
+	ldy #5
+	sta (zp_cur_target_addr),y
+
 	plx
 	ply
 	tay

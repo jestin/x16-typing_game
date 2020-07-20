@@ -296,7 +296,7 @@ test_target:
 	jsr set_target_string
 	+LoadW u1, 75
 	+LoadW u2, 50
-	+LoadW u3, 15
+	+LoadW u3L, 0
 	ldx #0
 	jsr set_target
 	jsr set_target_pos
@@ -305,7 +305,7 @@ test_target:
 	jsr set_target_string
 	+LoadW u1, 85
 	+LoadW u2, 60
-	+LoadW u3, 20
+	+LoadW u3L, 1
 	ldx #1
 	jsr set_target
 	jsr set_target_pos
@@ -314,7 +314,7 @@ test_target:
 	jsr set_target_string
 	+LoadW u1, 200
 	+LoadW u2, 10
-	+LoadW u3, 20
+	+LoadW u3L, 2
 	ldx #2
 	jsr set_target
 	jsr set_target_pos
@@ -323,7 +323,7 @@ test_target:
 	jsr set_target_string
 	+LoadW u1, 256
 	+LoadW u2, 10
-	+LoadW u3, 20
+	+LoadW u3L, 3
 	ldx #3
 	jsr set_target
 	jsr set_target_pos
