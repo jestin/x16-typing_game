@@ -365,12 +365,15 @@ test_target:
 	jsr set_target_pos
 
 	; this is to test re-allocation of targets and sprites
+	; and should cause the first string to disappear
 	ldx #7
 	jsr set_target_string
 	+LoadW u1, 200
 	+LoadW u2, 100
 	+LoadW u3L, 3
 	ldx #0
+	jsr clear_target_sprites
+	jsr clear_target
 	jsr set_target
 	jsr set_target_pos
 

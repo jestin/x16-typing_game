@@ -203,27 +203,77 @@ set_target_pos:
 	rts
 
 ;==================================================
+; clear_target_sprites
+; Clears the target's sprites.
+; void clear_target_sprites(byte target_index: x)
+;==================================================
+clear_target_sprites:
+	phx
+
+	; First, we need to set zp_cur_target_addr
+	; We do this by successively adding two bytes to
+	; to target_data, one time for each index past 0.
+	; We push X first, so that we don't lose it.
+	+LoadW zp_cur_target_addr, target_data
+-	cpx #0
+	beq +
+	+AddW zp_cur_target_addr, 8
+	dex
+	jmp -
++	nop			; meh, I'll waste a couple cycles for readability
+
+	; At this point, zp_cur_target_addr is set to the correct address
+	; and we can check if it is already null
+
+	ldy #6
+	lda (zp_cur_target_addr),y
+	sta zp_cur_target_string_addr
+	iny
+	lda (zp_cur_target_addr),y
+	sta zp_cur_target_string_addr+1
+
+	ldy #1			; the sprite indices start at byte 1
+-	lda (zp_cur_target_string_addr),y
+	cmp #255		; compare to sentinel value
+	beq +
+	tax
+	jsr clear_sprite
+	iny
+	jmp -
+
++	nop
+
+	plx
+	rts
+
+;==================================================
 ; clear_target
 ; Clears a target, by setting the string address
 ; to a sentinel value.
 ; void clear_target(byte target_index: x)
 ;==================================================
 clear_target:
-	; Multiply x by 8 and store in y since
-	; that's how many bytes a target is.
-	; This allows us to use ($zp),y 
-	; addressing.
-	txa
-	asl
-	asl
-	asl
-	tay
+	phx
+
+	; First, we need to set zp_cur_target_addr
+	; We do this by successively adding two bytes to
+	; to target_data, one time for each index past 0.
+	; We push X first, so that we don't lose it.
+	+LoadW zp_cur_target_addr, target_data
+-	cpx #0
+	beq +
+	+AddW zp_cur_target_addr, 8
+	dex
+	jmp -
++	nop			; meh, I'll waste a couple cycles for readability
 
 	; set the X value to $FFFF, which we will interpret as null
+	ldy #0
 	lda #255
-	sta target_data,y
+	sta (zp_cur_target_addr),y
 	iny
-	sta target_data,y
+	sta (zp_cur_target_addr),y
 
+	plx
 	rts
 

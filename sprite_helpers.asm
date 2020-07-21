@@ -94,6 +94,17 @@ set_sprite_y_pos:
 	rts
 
 ;==================================================
+; clear_sprite
+; Disables the sprite so that it does not draw
+; void clear_sprite(byte sprite_index: x)
+;==================================================
+clear_sprite:
+	lda #0
+	+sprstore 6
+
+	rts
+
+;==================================================
 ; inc_next_sprite_index
 ; Increments the zp_next_sprite_index register
 ; void inc_next_sprite_index()
