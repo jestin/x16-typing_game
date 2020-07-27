@@ -1,6 +1,6 @@
 string_map:
 
-; Capital Letters
+; Uppercase Letters
 !word .str_A
 !word .str_B
 !word .str_C
@@ -28,6 +28,34 @@ string_map:
 !word .str_Y
 !word .str_Z
 
+; Lowercase Letters
+!word .str_a
+!word .str_b
+!word .str_c
+!word .str_d
+!word .str_e
+!word .str_f
+!word .str_g
+!word .str_h
+!word .str_i
+!word .str_j
+!word .str_k
+!word .str_l
+!word .str_m
+!word .str_n
+!word .str_o
+!word .str_p
+!word .str_q
+!word .str_r
+!word .str_s
+!word .str_t
+!word .str_u
+!word .str_v
+!word .str_w
+!word .str_x
+!word .str_y
+!word .str_Z
+
 ; Test words
 !word .str_hello
 !word .str_world
@@ -50,7 +78,7 @@ string_map:
 .str_chicken 			 !raw "CHICKEN",0
 .str_snake 				 !raw "SNAKE",0
 
-; Capital Letters
+; Uppercase Letters
 
 .str_A	!raw "A",0
 .str_B	!raw "B",0
@@ -78,3 +106,32 @@ string_map:
 .str_X	!raw "X",0
 .str_Y	!raw "Y",0
 .str_Z	!raw "Z",0
+
+; Lowercase Letters
+
+.str_a	!raw "a",0
+.str_b	!raw "b",0
+.str_c	!raw "c",0
+.str_d	!raw "d",0
+.str_e	!raw "e",0
+.str_f	!raw "f",0
+.str_g	!raw "g",0
+.str_h	!raw "h",0
+.str_i	!raw "i",0
+.str_j	!raw "j",0
+.str_k	!raw "k",0
+.str_l	!raw "l",0
+.str_m	!raw "m",0
+.str_n	!raw "n",0
+.str_o	!raw "o",0
+.str_p	!raw "p",0
+.str_q	!raw "q",0
+.str_r	!raw "r",0
+.str_s	!raw "s",0
+.str_t	!raw "t",0
+.str_u	!raw "u",0
+.str_v	!raw "v",0
+.str_w	!raw "w",0
+.str_x	!raw "x",0
+.str_y	!raw "y",0
+.str_z	!raw "z",0
