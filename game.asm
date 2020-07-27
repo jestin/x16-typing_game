@@ -292,7 +292,7 @@ load_sprites:
 ; Creates a test target
 ;==================================================
 test_target:
-	ldx #0
+	ldx #26
 	jsr set_target_string
 	+LoadW u1, 75
 	+LoadW u2, 50
@@ -301,7 +301,7 @@ test_target:
 	jsr set_target
 	jsr set_target_pos
 
-	ldx #1
+	ldx #27
 	jsr set_target_string
 	+LoadW u1, 85
 	+LoadW u2, 60
@@ -310,7 +310,7 @@ test_target:
 	jsr set_target
 	jsr set_target_pos
 
-	ldx #2
+	ldx #28
 	jsr set_target_string
 	+LoadW u1, 200
 	+LoadW u2, 10
@@ -319,7 +319,7 @@ test_target:
 	jsr set_target
 	jsr set_target_pos
 
-	ldx #3
+	ldx #29
 	jsr set_target_string
 	+LoadW u1, 256
 	+LoadW u2, 10
@@ -328,7 +328,7 @@ test_target:
 	jsr set_target
 	jsr set_target_pos
 
-	ldx #4
+	ldx #30
 	jsr set_target_string
 	+LoadW u1, 400
 	+LoadW u2, 0
@@ -337,7 +337,7 @@ test_target:
 	jsr set_target
 	jsr set_target_pos
 
-	ldx #5
+	ldx #31
 	jsr set_target_string
 	+LoadW u1, 500
 	+LoadW u2, 0
@@ -346,7 +346,7 @@ test_target:
 	jsr set_target
 	jsr set_target_pos
 
-	ldx #6
+	ldx #32
 	jsr set_target_string
 	+LoadW u1, 300
 	+LoadW u2, 100
@@ -355,7 +355,7 @@ test_target:
 	jsr set_target
 	jsr set_target_pos
 
-	ldx #7
+	ldx #33
 	jsr set_target_string
 	+LoadW u1, 200
 	+LoadW u2, 200
@@ -366,7 +366,7 @@ test_target:
 
 	; this is to test re-allocation of targets and sprites
 	; and should cause the first string to disappear
-	ldx #7
+	ldx #26
 	jsr set_target_string
 	+LoadW u1, 200
 	+LoadW u2, 100
