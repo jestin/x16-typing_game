@@ -13,3 +13,17 @@ TARGET_MARCROS = 1
 	jmp -
 +	nop			; meh, I'll waste a couple cycles for readability
 }
+
+!macro SetZpCurTargetStringAddr {
+	+SetZpCurTargetAddr
+
+	; At this point, zp_cur_target_addr is set to the correct address,
+	; so we should set zp_cur_target_string_addr.
+
+	ldy #6
+	lda (zp_cur_target_addr),y
+	sta zp_cur_target_string_addr
+	iny
+	lda (zp_cur_target_addr),y
+	sta zp_cur_target_string_addr+1
+}

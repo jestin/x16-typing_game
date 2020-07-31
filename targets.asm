@@ -140,17 +140,7 @@ update_target_pos:
 set_target_pos:
 	phx
 
-	+SetZpCurTargetAddr
-
-	; At this point, zp_cur_target_addr is set to the correct address,
-	; so we should set zp_cur_target_string_addr.
-
-	ldy #6
-	lda (zp_cur_target_addr),y
-	sta zp_cur_target_string_addr
-	iny
-	lda (zp_cur_target_addr),y
-	sta zp_cur_target_string_addr+1
+	+SetZpCurTargetStringAddr
 
 	; Now we read the x and y position from the data, and set the sprites
 
@@ -190,17 +180,7 @@ set_target_pos:
 clear_target_sprites:
 	phx
 
-	+SetZpCurTargetAddr
-
-	; At this point, zp_cur_target_addr is set to the correct address
-	; and we can check if it is already null
-
-	ldy #6
-	lda (zp_cur_target_addr),y
-	sta zp_cur_target_string_addr
-	iny
-	lda (zp_cur_target_addr),y
-	sta zp_cur_target_string_addr+1
+	+SetZpCurTargetStringAddr
 
 	ldy #1			; the sprite indices start at byte 1
 -	lda (zp_cur_target_string_addr),y
