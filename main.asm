@@ -12,6 +12,7 @@ jmp main
 !src "sprite_helpers.asm"
 !src "tiles.asm"
 !src "tile_helpers.asm"
+!src "target_macros.asm"
 !src "targets.asm"
 !src "target_strings.asm"
 !src "game.asm"

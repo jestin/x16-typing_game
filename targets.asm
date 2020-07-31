@@ -83,17 +83,7 @@ update_target_pos:
 	phy
 	phx
 
-	; First, we need to set zp_cur_target_addr
-	; We do this by successively adding two bytes to
-	; to target_data, one time for each index past 0.
-	; We push X first, so that we don't lose it.
-	+LoadW zp_cur_target_addr, target_data
--	cpx #0
-	beq +
-	+AddW zp_cur_target_addr, 8
-	dex
-	jmp -
-+	nop			; meh, I'll waste a couple cycles for readability
+	+SetZpCurTargetAddr
 
 	; read ticks per pixel
 	ldy #4
@@ -150,17 +140,7 @@ update_target_pos:
 set_target_pos:
 	phx
 
-	; First, we need to set zp_cur_target_addr
-	; We do this by successively adding two bytes to
-	; to target_data, one time for each index past 0.
-	; We push X first, so that we don't lose it.
-	+LoadW zp_cur_target_addr, target_data
--	cpx #0
-	beq +
-	+AddW zp_cur_target_addr, 8
-	dex
-	jmp -
-+	nop			; meh, I'll waste a couple cycles for readability
+	+SetZpCurTargetAddr
 
 	; At this point, zp_cur_target_addr is set to the correct address,
 	; so we should set zp_cur_target_string_addr.
@@ -210,17 +190,7 @@ set_target_pos:
 clear_target_sprites:
 	phx
 
-	; First, we need to set zp_cur_target_addr
-	; We do this by successively adding two bytes to
-	; to target_data, one time for each index past 0.
-	; We push X first, so that we don't lose it.
-	+LoadW zp_cur_target_addr, target_data
--	cpx #0
-	beq +
-	+AddW zp_cur_target_addr, 8
-	dex
-	jmp -
-+	nop			; meh, I'll waste a couple cycles for readability
+	+SetZpCurTargetAddr
 
 	; At this point, zp_cur_target_addr is set to the correct address
 	; and we can check if it is already null
@@ -255,17 +225,7 @@ clear_target_sprites:
 clear_target:
 	phx
 
-	; First, we need to set zp_cur_target_addr
-	; We do this by successively adding two bytes to
-	; to target_data, one time for each index past 0.
-	; We push X first, so that we don't lose it.
-	+LoadW zp_cur_target_addr, target_data
--	cpx #0
-	beq +
-	+AddW zp_cur_target_addr, 8
-	dex
-	jmp -
-+	nop			; meh, I'll waste a couple cycles for readability
+	+SetZpCurTargetAddr
 
 	; set the X value to $FFFF, which we will interpret as null
 	ldy #0
