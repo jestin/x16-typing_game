@@ -1,6 +1,12 @@
 !ifdef TARGET_MARCROS !eof
 TARGET_MARCROS = 1
 
+;==================================================
+; SetZpCurTargetAddr
+; Sets the zp_cur_target_addr pseudo-register
+; based on the the current x register.
+; void SetZpCurTargetAddr(byte target_index: x)
+;==================================================
 !macro SetZpCurTargetAddr {
 	; First, we need to set zp_cur_target_addr
 	; We do this by successively adding two bytes to
@@ -14,6 +20,13 @@ TARGET_MARCROS = 1
 +	nop			; meh, I'll waste a couple cycles for readability
 }
 
+;==================================================
+; SetZpCurTargetStringAddr
+; Sets the zp_cur_target_addr and
+; zp_cur_target_string_addr pseudo-registers
+; based on the the current x register.
+; void SetZpCurTargetStringAddr(byte target_index: x)
+;==================================================
 !macro SetZpCurTargetStringAddr {
 	+SetZpCurTargetAddr
 
