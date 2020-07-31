@@ -67,6 +67,11 @@ game_tick:
 	asl
 	tay
 
+	; at this point, y is the offset that takes us to the
+	; beginning of the target selected by x
+	
+	jsr update_target_chars
+
 	; load the x high byte
 	iny	; increment to get x high
 	lda target_data,y

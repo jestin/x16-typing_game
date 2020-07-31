@@ -133,6 +133,76 @@ update_target_pos:
 	rts
 
 ;==================================================
+; update_target_chars
+; Update the target's typed characters
+; void update_target_chars(byte target_index: x)
+;==================================================
+update_target_chars:
+	phy
+	phx
+
+	+SetZpCurTargetStringAddr
+
+	; determine if the buffer matches.  If so,
+	; change the pallete of the first
+	; zp_key_buffer_length sprites in the string
+
+	; the first byte of the target string
+	; is the index into the string map
+	lda (zp_cur_target_string_addr)
+
+	; multiply by 2 since each address in the
+	; string map is 2 bytes
+	asl
+	tax		; x is now the offset into the string map
+	lda string_map,x
+	sta zp_string_addr
+
+	; zp_string_addr now points to the program memory that
+	; holds the actual string
+
+	; store 0 for false in u0L
+	lda #0
+	sta u0L
+
+	; loop through the buffer and compare against current char
+	ldy #$ff
+-	iny
+	cpy zp_key_buffer_length
+	beq +
+	lda #1		; at least one key has been pressed
+	sta u0L
+	lda zp_key_buffer,y	
+	cmp (zp_string_addr),y
+	beq -
+
+	; if we make it here, it means the string doesn't match
+	lda #0
+	sta u0L
+
++	lda u0L	; compare against our boolean variable
+	cmp #0
+	beq +		; when zero, just exit the subroutine
+
+	; loop through the sprites and change the pallete offset
+	ldy #1			; the sprite indices start at byte 1
+-	lda (zp_cur_target_string_addr),y
+	cmp #255		; compare to sentinel value
+	beq +
+	tax
+	lda #(0 << 6) | (0 << 4) | 3		; height/width/paloffset
+	+sprstore 7
+	cpy zp_key_buffer_length
+	beq +
+	iny
+	jmp -
+
++	plx
+	ply
+
+	rts
+
+;==================================================
 ; set_target_pos
 ; Update the sprite positions of the target's string.
 ; void set_target_pos(byte target_index: x)
