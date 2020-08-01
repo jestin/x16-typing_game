@@ -17,10 +17,14 @@ ZP = 1
 !addr zp_cur_target_addr			= $3a
 !addr zp_string_addr				= $3c
 !addr zp_string_buffer_addr			= $3e
-!addr zp_key_buffer_length			= $40
+!addr zp_num_matched_targets		= $40
+
+
+
+!addr zp_key_buffer_length			= $41
 
 ; The key buffer is where we keep the typed input
 ; because we have $60 alocated for other user
 ; pseudo registers (which can be reduced if needed)
 ; we only have 31 characters max in the keyboard buffer
-!addr zp_key_buffer					= $41
+!addr zp_key_buffer					= $42

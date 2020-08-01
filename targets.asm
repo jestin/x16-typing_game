@@ -180,7 +180,6 @@ update_target_chars:
 	lda #0
 	sta u0L
 
-
 	; loop through the sprites and change the pallete offset
 +	ldy #1			; the sprite indices start at byte 1
 -	lda (zp_cur_target_string_addr),y
@@ -194,6 +193,16 @@ update_target_chars:
 	beq +
 	iny
 	jmp -
+
+	; check if anything was highlighted
++	lda u0L
+	cmp #0				; non-highlighted paloffset
+	beq +
+
+	; increment the matched target count
+	lda zp_num_matched_targets
+	inc
+	sta zp_num_matched_targets
 
 +	plx
 	ply

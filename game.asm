@@ -47,6 +47,10 @@ game_tick:
 	sta zp_tick_counter
 
 	jsr get_keyboard_input
+	
+	; clear the matched target count
+	lda #0
+	sta zp_num_matched_targets
 
 	; loop through the targets
 	ldx #0
@@ -76,8 +80,14 @@ game_tick:
 	cpx #8
 	bne -
 
+	; clear key buffer if no matches
+	lda zp_num_matched_targets
+	cmp #0
+	bne +
+	lda #0
+	sta zp_key_buffer_length
 
-	rts
++	rts
 
 ;==================================================
 ; setup_bitmap
