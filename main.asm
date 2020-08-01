@@ -15,6 +15,7 @@ jmp main
 !src "target_macros.asm"
 !src "targets.asm"
 !src "target_strings.asm"
+!src "key_buffer.asm"
 !src "game.asm"
 
 !addr def_irq = $0000

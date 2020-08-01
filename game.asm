@@ -46,20 +46,10 @@ game_tick:
 	inc
 	sta zp_tick_counter
 
-	; get keyboard input
-	jsr GETIN
-	cmp #0
-	beq +
-
-	; add the pressed key to the buffer
-	ldx zp_key_buffer_length
-	sta zp_key_buffer,x
-	inx
-	txa
-	sta zp_key_buffer_length
+	jsr get_keyboard_input
 
 	; loop through the targets
-+	ldx #0
+	ldx #0
 
 -	txa
 	asl
