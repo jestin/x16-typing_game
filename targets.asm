@@ -162,7 +162,7 @@ update_target_chars:
 	; holds the actual string
 
 	; store 0 for false in u0L
-	lda #0
+	lda #(SPRITE_SIZE_8 << 6) | (SPRITE_SIZE_8 << 4) | 0		; height/width/paloffset
 	sta u0L
 
 	; loop through the buffer and compare against current char
@@ -170,27 +170,24 @@ update_target_chars:
 -	iny
 	cpy zp_key_buffer_length
 	beq +
-	lda #1		; at least one key has been pressed
+	lda #(SPRITE_SIZE_8 << 6) | (SPRITE_SIZE_8 << 4) | 3		; height/width/paloffset
 	sta u0L
 	lda zp_key_buffer,y	
 	cmp (zp_string_addr),y
 	beq -
 
 	; if we make it here, it means the string doesn't match
-	lda #0
+	lda #(SPRITE_SIZE_8 << 6) | (SPRITE_SIZE_8 << 4) | 0		; height/width/paloffset
 	sta u0L
 
-+	lda u0L	; compare against our boolean variable
-	cmp #0
-	beq +		; when zero, just exit the subroutine
 
 	; loop through the sprites and change the pallete offset
-	ldy #1			; the sprite indices start at byte 1
++	ldy #1			; the sprite indices start at byte 1
 -	lda (zp_cur_target_string_addr),y
 	cmp #255		; compare to sentinel value
 	beq +
 	tax
-	lda #(0 << 6) | (0 << 4) | 3		; height/width/paloffset
+	lda u0L
 	+sprstore 7
 	cpy zp_key_buffer_length
 	beq +

@@ -71,6 +71,11 @@ AUTO_INC_160	= $C00000
 AUTO_INC_320	= $E00000
 AUTO_INC_640	= $F00000
 
+SPRITE_SIZE_8	= $0
+SPRITE_SIZE_16	= $1
+SPRITE_SIZE_32	= $2
+SPRITE_SIZE_64	= $3
+
 !macro vset .addr {
 	lda #0
 	sta veractl
