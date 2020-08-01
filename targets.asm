@@ -161,8 +161,8 @@ update_target_chars:
 	; zp_string_addr now points to the program memory that
 	; holds the actual string
 
-	; store 0 for false in u0L
-	lda #(SPRITE_SIZE_8 << 6) | (SPRITE_SIZE_8 << 4) | 0		; height/width/paloffset
+	; store the paloffset to use, defaulting to 0
+	lda #0
 	sta u0L
 
 	; loop through the buffer and compare against current char
@@ -170,14 +170,14 @@ update_target_chars:
 -	iny
 	cpy zp_key_buffer_length
 	beq +
-	lda #(SPRITE_SIZE_8 << 6) | (SPRITE_SIZE_8 << 4) | 3		; height/width/paloffset
+	lda #3		; paloffset
 	sta u0L
 	lda zp_key_buffer,y	
 	cmp (zp_string_addr),y
 	beq -
 
 	; if we make it here, it means the string doesn't match
-	lda #(SPRITE_SIZE_8 << 6) | (SPRITE_SIZE_8 << 4) | 0		; height/width/paloffset
+	lda #0
 	sta u0L
 
 
@@ -187,7 +187,8 @@ update_target_chars:
 	cmp #255		; compare to sentinel value
 	beq +
 	tax
-	lda u0L
+	lda #(SPRITE_SIZE_8 << 6) | (SPRITE_SIZE_8 << 4) | 0		; height/width/paloffset
+	ora u0L														; OR with paloffset
 	+sprstore 7
 	cpy zp_key_buffer_length
 	beq +
