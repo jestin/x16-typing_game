@@ -4,6 +4,9 @@
 # symbolic link to emulator
 x16emu
 
+# dumps
+dump*.bin
+
 # vim stuff
 *.swp
 *.un~
