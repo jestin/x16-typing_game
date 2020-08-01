@@ -166,14 +166,19 @@ update_target_chars:
 	sta u0L
 
 	; loop through the buffer and compare against current char
-	ldy #$ff
+	ldy #$ff	; because we start with an increment, we initialize to $ff
 -	iny
 	cpy zp_key_buffer_length
 	beq +
 	lda #3		; paloffset
 	sta u0L
-	lda zp_key_buffer,y	
-	cmp (zp_string_addr),y
+	iny										; check next char for end of string
+	lda (zp_string_addr),y
+	dey										; put y back to where it was
+	cmp #0									; null-terminated string
+	beq UPDATE_TARGET_CHARS_COMPLETE_MATCH
+	lda (zp_string_addr),y
+	cmp zp_key_buffer,y	
 	beq -
 
 	; if we make it here, it means the string doesn't match
@@ -194,17 +199,27 @@ update_target_chars:
 	iny
 	jmp -
 
+UPDATE_TARGET_CHARS_COMPLETE_MATCH:
+	; this is for when the full string has been matched
+	
+	plx
+	jsr clear_target
+	jsr clear_target_sprites
+	ply
+	rts
+
 	; check if anything was highlighted
 +	lda u0L
 	cmp #0				; non-highlighted paloffset
-	beq +
+	beq UPDATE_TARGET_CHARS_END
 
 	; increment the matched target count
 	lda zp_num_matched_targets
 	inc
 	sta zp_num_matched_targets
 
-+	plx
+UPDATE_TARGET_CHARS_END:
+	plx
 	ply
 
 	rts
@@ -280,6 +295,7 @@ clear_target_sprites:
 ; void clear_target(byte target_index: x)
 ;==================================================
 clear_target:
+	phy
 	phx
 
 	+SetZpCurTargetAddr
@@ -292,5 +308,6 @@ clear_target:
 	sta (zp_cur_target_addr),y
 
 	plx
+	ply
 	rts
 
