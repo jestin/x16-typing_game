@@ -63,8 +63,6 @@ game_tick:
 
 	; at this point, y is the offset that takes us to the
 	; beginning of the target selected by x
-	
-	jsr update_target_chars
 
 	; load the x high byte
 	iny	; increment to get x high
@@ -73,6 +71,7 @@ game_tick:
 	; only update the position if the target exists
 	cmp #$ff
 	beq +
+	jsr update_target_chars
 	jsr update_target_pos
 	jsr set_target_pos
 

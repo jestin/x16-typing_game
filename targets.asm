@@ -205,6 +205,8 @@ UPDATE_TARGET_CHARS_COMPLETE_MATCH:
 	plx
 	jsr clear_target
 	jsr clear_target_sprites
+	lda #0
+	sta zp_key_buffer_length
 	ply
 	rts
 
