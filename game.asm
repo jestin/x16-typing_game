@@ -93,7 +93,7 @@ game_tick:
 ; Load the bitmap screen background
 ;==================================================
 setup_bitmap:
-	; set the tile mode	
+	; set the bitmap mode	
 	lda #%00000101 	; height (2-bits) - 0
 					; width (2-bits) - 2
 					; T256C - 0
@@ -170,119 +170,20 @@ setup_tile_map:
 	; fill the base map
 	+vset tile_map_vram_data | AUTO_INC_1
 
-	; set the pallet offset
-	lda #(9 << 4)
-	sta u0
+	+LoadW u0, basic_map
 
-	; write a corner peice
-	lda #0
-	sta veradat
-	lda u0
-	sta veradat
-	
-	; write 78 edges
 	ldx #0
--	lda #2
-	sta veradat
-	lda u0
-	sta veradat
-	inx
-	cpx #78
-	bne -
-
-	; write a corner peice
-	lda #0
-	sta veradat
-	lda u0
-	ora #%00000100	; h-flip
-	sta veradat
-
-	; write blank tiles to fill the full 128 width
-	ldx #0
--	lda #3
-	sta veradat
-	lda u0
-	sta veradat
-	inx
-	cpx #48
-	bne -
-
-	; write 30 rows of just side edges
+TILE_ROW_LOOP:
 	ldy #0
-
-EMPTY_ROW:
-	; write an edge peice
-	lda #1
+-	lda (u0),y
 	sta veradat
-	ora #%0000100	; h-flip
-	lda u0
-	sta veradat
-	
-	; write 78 empties
-	ldx #0
--	lda #3
-	sta veradat
-	lda u0
-	sta veradat
-	inx
-	cpx #78
-	bne -
-
-	; write an edge peice
-	lda #1
-	sta veradat
-	lda u0
-	ora #%00000100	; h-flip
-	sta veradat
-
-	; write blank tiles to fill the full 128 width
-	ldx #0
--	lda #3
-	sta veradat
-	lda u0
-	sta veradat
-	inx
-	cpx #48
-	bne -
-
 	iny
-	cpy #58
-	bne EMPTY_ROW
-
-	; write a corner peice
-	lda #0
-	sta veradat
-	lda u0
-	ora #%00001000	; v-flip
-	sta veradat
-	
-	; write 78 edges
-	ldx #0
--	lda #2
-	sta veradat
-	lda u0
-	ora #%00001000	; v-flip
-	sta veradat
-	inx
-	cpx #78
+	cpy #0	; let it loop full circle
 	bne -
-
-	; write a corner peice
-	lda #0
-	sta veradat
-	lda u0
-	ora #%00001100	; v-flip, h-flip
-	sta veradat
-
-	; write blank tiles to fill the full 128 width
-	ldx #0
--	lda #3
-	sta veradat
-	lda u0
-	sta veradat
+	+AddW u0, 160		; only increment 80 tiles x 2 bytes per tile
 	inx
-	cpx #48
-	bne -
+	cpx #60
+	bne TILE_ROW_LOOP
 
 	rts
 
