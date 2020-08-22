@@ -1,3 +1,4 @@
+!align 7, 0
 string_map:
 
 ; Uppercase Letters
@@ -57,6 +58,7 @@ string_map:
 !word .str_Z
 
 ; Test words
+!align 7, 0
 !word .str_cow
 !word .str_cat
 !word .str_dog
@@ -79,12 +81,6 @@ string_map:
 ;============================================================
 
 ; store the strings in !raw so that they are stored in ascii
-.str_hello				!raw "HELLO",0
-.str_world				!raw "WORLD",0
-.str_jestin				!raw "JESTIN",0
-.str_stoffel			!raw "STOFFEL",0
-.str_hello_world		!raw "HELLO WORLD",0 
-.str_another_string		!raw "THIS IS ANOTHER STRING",0 
 .str_cat				!raw "CAT",0
 .str_dog				!raw "DOG",0
 .str_chicken 			!raw "CHICKEN",0
