@@ -301,10 +301,6 @@ clear_target:
 	phy
 	phx
 
-	; before messing with x, store it as the next target index
-	txa
-	sta zp_next_target_index
-
 	+SetZpCurTargetAddr
 
 	; set the X value to $FFFF, which we will interpret as null
@@ -327,6 +323,35 @@ clear_target:
 ; void add_random_target()
 ;==================================================
 add_random_target:
+	; loop through the targets to find the next available index
+	ldx #$ff	; increment first
+
+-	inx
+	txa
+	asl
+	asl
+	asl
+	tay
+
+	; at this point, y is the offset that takes us to the
+	; beginning of the target selected by x
+
+	; load the x high byte
+	iny	; increment to get x high
+	lda target_data,y
+
+	; if not $ff, try the next one
+	cmp #$ff
+	bne -
+
+	; compare x to make sure we didn't go through all the targets without finding any
+	cpx #8
+	bmi +
+	rts		; if here, we just return without adding
+
++	txa
+	sta zp_next_target_index
+
 	jsr get_random_nibble
 
 	clc
