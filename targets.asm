@@ -157,6 +157,9 @@ update_target_chars:
 	tax		; x is now the offset into the string map
 	lda string_map,x
 	sta zp_string_addr
+	inx
+	lda string_map,x
+	sta zp_string_addr+1
 
 	; zp_string_addr now points to the program memory that
 	; holds the actual string
@@ -339,7 +342,7 @@ add_random_target:
 	lsr
 	lsr
 	clc
-	adc #16					; add enough pixels to ensure it's not on the left edge
+	adc #32					; add enough pixels to ensure it's not on the left edge
 	sta u1H					; high byte is either $00 or $01
 
 	+LoadW u2, 0	; y of 0

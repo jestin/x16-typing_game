@@ -26,8 +26,9 @@ game_init:
 	jsr clear_target
 	inx
 	jmp -
++	nop
 
-+	lda #0
+	lda #0
 	sta zp_next_target_index
 	sta zp_active_targets
 

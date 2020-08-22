@@ -100,7 +100,14 @@ set_sprite_y_pos:
 ;==================================================
 clear_sprite:
 	lda #0
+	+sprstore 0
+	+sprstore 1
+	+sprstore 2
+	+sprstore 3
+	+sprstore 4
+	+sprstore 5
 	+sprstore 6
+	+sprstore 7
 
 	rts
 
@@ -111,9 +118,9 @@ clear_sprite:
 ;==================================================
 inc_next_sprite_index:
 	inc zp_next_sprite_index
-	lda #128
-	cmp zp_next_sprite_index
-	bne +
+	lda zp_next_sprite_index
+	cmp #128
+	bmi +
 	lda #0
 	sta zp_next_sprite_index
 +	rts
