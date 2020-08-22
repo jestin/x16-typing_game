@@ -301,6 +301,10 @@ clear_target:
 	phy
 	phx
 
+	; before messing with x, store it as the next target index
+	txa
+	sta zp_next_target_index
+
 	+SetZpCurTargetAddr
 
 	; set the X value to $FFFF, which we will interpret as null
@@ -346,20 +350,11 @@ add_random_target:
 	sta u1H					; high byte is either $00 or $01
 
 	+LoadW u2, 0	; y of 0
-	lda #0
+	lda #2
 	sta u3L
 	ldx zp_next_target_index
 	jsr set_target
 	jsr set_target_pos
-
-	; increment the next target index
-	inc zp_next_target_index
-	lda zp_next_target_index
-	cmp #8
-	bcc +
-
-	lda #0
-	sta zp_next_target_index
 
 	; increment active targets
 +	inc zp_active_targets
