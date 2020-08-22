@@ -3,7 +3,6 @@
 ; Initializes everything needed to run the game
 ;==================================================
 game_init:
-	+LoadW zp_ypos, 0
 	+LoadW zp_next_target_string_addr, target_string_data
 	+LoadW zp_string_buffer_addr, string_buffer
 
@@ -28,8 +27,9 @@ game_init:
 	inx
 	jmp -
 
-+	nop
-	jsr test_target
++	lda #0
+	sta zp_next_target_index
+	sta zp_active_targets
 
 	lda #0
 	sta zp_key_buffer_length
@@ -85,6 +85,12 @@ game_tick:
 	bne +
 	lda #0
 	sta zp_key_buffer_length
+
+	; add new target if needed
++	lda zp_active_targets
+	cmp #8
+	bpl +
+	jsr add_random_target
 
 +	rts
 
@@ -171,7 +177,7 @@ setup_tile_map:
 	+vset tile_map_vram_data | AUTO_INC_1
 
 	+LoadW u0, basic_map
-	lda #(9 << 4)				; palette offset
+	lda #($9 << 4)				; palette offset
 	sta u1L
 
 	ldx #0
@@ -209,98 +215,5 @@ load_sprites:
 	inx
 	cpx #NUM_SPRITES
 	bne -
-
-	rts
-
-
-;==================================================
-; test_target
-; Creates a test target
-;==================================================
-test_target:
-	ldx #52
-	jsr set_target_string
-	+LoadW u1, 75
-	+LoadW u2, 50
-	+LoadW u3L, 0
-	ldx #0
-	jsr set_target
-	jsr set_target_pos
-
-	ldx #53
-	jsr set_target_string
-	+LoadW u1, 85
-	+LoadW u2, 60
-	+LoadW u3L, 1
-	ldx #1
-	jsr set_target
-	jsr set_target_pos
-
-	ldx #54
-	jsr set_target_string
-	+LoadW u1, 200
-	+LoadW u2, 10
-	+LoadW u3L, 2
-	ldx #2
-	jsr set_target
-	jsr set_target_pos
-
-	ldx #55
-	jsr set_target_string
-	+LoadW u1, 256
-	+LoadW u2, 10
-	+LoadW u3L, 3
-	ldx #3
-	jsr set_target
-	jsr set_target_pos
-
-	ldx #56
-	jsr set_target_string
-	+LoadW u1, 400
-	+LoadW u2, 0
-	+LoadW u3L, 1
-	ldx #4
-	jsr set_target
-	jsr set_target_pos
-
-	ldx #57
-	jsr set_target_string
-	+LoadW u1, 500
-	+LoadW u2, 0
-	+LoadW u3L, 0
-	ldx #5
-	jsr set_target
-	jsr set_target_pos
-
-	ldx #58
-	jsr set_target_string
-	+LoadW u1, 300
-	+LoadW u2, 100
-	+LoadW u3L, 1
-	ldx #6
-	jsr set_target
-	jsr set_target_pos
-
-	ldx #59
-	jsr set_target_string
-	+LoadW u1, 200
-	+LoadW u2, 200
-	+LoadW u3L, 2
-	ldx #7
-	jsr set_target
-	jsr set_target_pos
-
-	; this is to test re-allocation of targets and sprites
-	; and should cause the first string to disappear
-	ldx #52
-	jsr set_target_string
-	+LoadW u1, 200
-	+LoadW u2, 100
-	+LoadW u3L, 3
-	ldx #0
-	jsr clear_target_sprites
-	jsr clear_target
-	jsr set_target
-	jsr set_target_pos
 
 	rts

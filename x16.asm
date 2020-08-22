@@ -124,6 +124,7 @@ X16 = 1
 !addr memory_copy 				= $FEE7 ; copy memory region 
 !addr memory_crc 				= $FEEA ; calculate CRC16 of memory region 
 !addr memory_decompress 		= $FEED ; decompress LZSA2 block 
+!addr entropy_get				= $FECF ; Get 24 random bits
 !addr monitor 					= $FF44 ; enter machine language monitor 
 !addr restore_basic 			= $FF47 ; enter BASIC 
 !addr screen_set_mode 			= $FF5F ; set screen mode 

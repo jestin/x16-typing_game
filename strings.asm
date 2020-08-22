@@ -57,17 +57,26 @@ string_map:
 !word .str_Z
 
 ; Test words
+!word .str_cow
 !word .str_cat
 !word .str_dog
-!word .str_chicken
-!word .str_snake
 !word .str_ant
+!word .str_pig
+!word .str_jellyfish
 !word .str_anteater
-!word .str_aardvark
-!word .str_hello
-!word .str_world
-!word .str_jestin
-!word .str_stoffel
+!word .str_chicken
+!word .str_seastar
+!word .str_bobcat
+!word .str_cougar
+!word .str_jaguar
+!word .str_snake
+!word .str_shark
+!word .str_squid
+!word .str_horse
+
+;============================================================
+; Strings
+;============================================================
 
 ; store the strings in !raw so that they are stored in ascii
 .str_hello				!raw "HELLO",0
@@ -83,6 +92,16 @@ string_map:
 .str_aardvark			!raw "AARDVARK",0
 .str_ant				!raw "ANT",0
 .str_anteater			!raw "ANTEATER",0
+.str_bobcat				!raw "BOBCAT",0
+.str_cougar				!raw "COUGAR",0
+.str_shark				!raw "SHARK",0
+.str_squid				!raw "SQUID",0
+.str_jaguar				!raw "JAGUAR",0
+.str_jellyfish			!raw "JELLYFISH",0
+.str_seastar			!raw "SEASTAR",0
+.str_pig				!raw "PIG",0
+.str_horse				!raw "HORSE",0
+.str_cow				!raw "COW",0
 
 ; Uppercase Letters
 

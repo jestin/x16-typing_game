@@ -307,7 +307,58 @@ clear_target:
 	iny
 	sta (zp_cur_target_addr),y
 
+	; decrement active targets
+	dec zp_active_targets
+
 	plx
 	ply
 	rts
 
+;==================================================
+; add_random_target
+; Adds a random target
+; void add_random_target()
+;==================================================
+add_random_target:
+	jsr get_random_nibble
+
+	clc
+	adc #52
+	tax
+	jsr set_target_string
+
+	; y contains the string's length knowing that each character is 8 pixels,
+	; we need to choose a reasonable random x value such that the string doesn't
+	; go off the screen
+
+	; random x coordinate
+	jsr get_random_byte		; low byte is full byte
+	sta u1L
+	jsr get_random_nibble
+	lsr
+	lsr
+	lsr
+	clc
+	adc #16					; add enough pixels to ensure it's not on the left edge
+	sta u1H					; high byte is either $00 or $01
+
+	+LoadW u2, 0	; y of 0
+	lda #0
+	sta u3L
+	ldx zp_next_target_index
+	jsr set_target
+	jsr set_target_pos
+
+	; increment the next target index
+	inc zp_next_target_index
+	lda zp_next_target_index
+	cmp #8
+	bcc +
+
+	lda #0
+	sta zp_next_target_index
+
+	; increment active targets
++	inc zp_active_targets
+
+	rts

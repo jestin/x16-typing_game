@@ -7,7 +7,6 @@ jmp main
 !src "vram.asm"
 !src "x16.asm"
 !src "zp.asm"
-!src "strings.asm"
 !src "sprites.asm"
 !src "sprite_helpers.asm"
 !src "tiles.asm"
@@ -17,7 +16,9 @@ jmp main
 !src "targets.asm"
 !src "target_strings.asm"
 !src "key_buffer.asm"
+!src "random.asm"
 !src "game.asm"
+!src "strings.asm"
 
 !addr def_irq = $0000
 

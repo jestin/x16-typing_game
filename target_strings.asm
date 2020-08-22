@@ -37,6 +37,7 @@
 ; stores the newly created sprite indexes in memory
 ; in a new target string structure.
 ; void set_target_string(out word target_string_address: u0,
+;							out byte string_length: y,
 ;							byte string_index: x)
 ;==================================================
 set_target_string:
@@ -64,8 +65,7 @@ set_target_string:
 	; now use zp indirect y addressing to read
 	; individual bytes.
 
-	lda #0		; zero out the y register
-	tay
+	ldy #0		; zero out the y register
 
 READ_STRING_LOOP:
 -	lda (zp_string_addr),y
