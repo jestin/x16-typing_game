@@ -168,15 +168,13 @@ update_target_chars:
 	; loop through the buffer and compare against current char
 	ldy #$ff	; because we start with an increment, we initialize to $ff
 -	iny
+	lda (zp_string_addr),y
+	cmp #0									; null-terminated string
+	beq UPDATE_TARGET_CHARS_COMPLETE_MATCH
 	cpy zp_key_buffer_length
 	beq +
 	lda #3		; paloffset
 	sta u0L
-	iny										; check next char for end of string
-	lda (zp_string_addr),y
-	dey										; put y back to where it was
-	cmp #0									; null-terminated string
-	beq UPDATE_TARGET_CHARS_COMPLETE_MATCH
 	lda (zp_string_addr),y
 	cmp zp_key_buffer,y	
 	beq -
