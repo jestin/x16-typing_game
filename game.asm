@@ -159,8 +159,6 @@ setup_tile_map:
 	+vset tile_map_vram_data | AUTO_INC_1
 
 	+LoadW u0, basic_map
-	lda #($9 << 4)				; palette offset
-	sta u1L
 
 	ldx #0
 TILE_ROW_LOOP:
@@ -169,7 +167,6 @@ TILE_ROW_LOOP:
 	sta veradat
 	iny
 	lda (u0),y		; second byte contains paloffset
-	ora u1L			; or with paloffset
 	sta veradat
 	iny
 	cpy #0	; let it loop full circle
