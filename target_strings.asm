@@ -147,14 +147,20 @@ END_READ_STRING_LOOP:
 +	sta u2L
 
 -	cpy u1L
-	bcs +
+	bcs WRITE_TARGET_STRING_SENTINEL
 	lda u2L
 	iny
 	sta (zp_cur_target_string_addr),y
 	inc u2L
-	jmp -
+	lda u2L
+	cmp #128		; just like with zp_next_sprite_index, we need to cap at 127
+	bmi +
+	lda #0
+	sta u2L
++	jmp -
 
-+	lda #255		; sentinel value
+WRITE_TARGET_STRING_SENTINEL
+	lda #255		; sentinel value
 	iny
 	sta (zp_cur_target_string_addr),y
 
