@@ -204,6 +204,7 @@ allocate_target_string
 	lda u1L
 	clc
 	adc #2		; add 2 for the string index and sentital bytes
+	adc #0		; for the carry to be added
 	cmp u0L		; remain space should never be >256
 	bcc +		; this means remaining spaces is sufficient
 	+LoadW zp_next_target_string_addr, target_string_data
@@ -211,11 +212,13 @@ allocate_target_string
 	+MoveW zp_next_target_string_addr, u2	; use u2 as temp var
 
 	; add the string length, store in u2
-	; no reason to worry about the high byte
 	lda u2L
 	clc
 	adc u1L
 	sta u2L
+	lda u2H
+	adc u1H
+	sta u2H
 
 	+AddW u2, 2						; add extra bytes
 	+MoveW u2, zp_next_target_string_addr	; update next address pointer
