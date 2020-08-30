@@ -104,7 +104,7 @@ update_target:
 	bne +
 	dey ; decrement to get y low
 	lda target_data,y
-	cmp #$d0				; clear targets at 464
+	cmp #$a0				; clear targets at 416
 	bcc +
 
 	; At this point, the player has missed the target
@@ -418,8 +418,8 @@ add_random_target:
 	lsr
 	lsr
 	clc
-	adc #32					; add enough pixels to ensure it's not on the left edge
 	sta u1H					; high byte is either $00 or $01
+	+AddW u1, 16			; add enough to make sure it's off the left edge
 
 	+LoadW u2, 0	; y of 0
 	lda #2

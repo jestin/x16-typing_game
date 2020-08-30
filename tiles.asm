@@ -1,4 +1,4 @@
-NUM_TILES = 4
+NUM_TILES = 7
 
 tile_data:
 	!byte $00, $00, $00, $00
@@ -36,3 +36,30 @@ tile_data:
 	!byte $55, $55, $55, $55
 	!byte $66, $66, $66, $66
 	!byte $77, $77, $77, $77
+
+	!byte $cc, $cc, $cc, $cc
+	!byte $c5, $55, $55, $51
+	!byte $c5, $55, $55, $51
+	!byte $c1, $11, $11, $11
+	!byte $cc, $cc, $cc, $cc
+	!byte $55, $51, $c5, $55
+	!byte $55, $51, $c5, $55
+	!byte $11, $11, $c1, $11
+
+	!byte $cc, $cc, $cc, $cc
+	!byte $c5, $55, $55, $51
+	!byte $c5, $55, $55, $51
+	!byte $c1, $11, $11, $11
+	!byte $cc, $cc, $cc, $cc
+	!byte $55, $51, $c5, $51
+	!byte $55, $51, $c5, $51
+	!byte $11, $11, $11, $11
+
+	!byte $cc, $cc, $cc, $cc
+	!byte $c5, $55, $55, $51
+	!byte $c5, $55, $55, $51
+	!byte $11, $11, $11, $11
+	!byte $cc, $cc, $cc, $cc
+	!byte $c5, $51, $c5, $55
+	!byte $c5, $51, $c5, $55
+	!byte $11, $11, $c1, $11
