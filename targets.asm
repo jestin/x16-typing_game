@@ -75,6 +75,53 @@ set_target:
 	rts
 
 ;==================================================
+; update_target
+; Updates the target
+; void update_targe(byte target_index: x)
+;==================================================
+update_target:
+	txa
+	asl
+	asl
+	asl
+	tay
+
+	; at this point, y is the offset that takes us to the
+	; beginning of the target selected by x
+
+	; load the x high byte
+	iny	; increment to get x high
+	lda target_data,y
+
+	; only update the position if the target exists
+	cmp #$ff
+	beq UPDATE_TARGET_END
+
+	iny	; increment twice to get y high
+	iny
+	lda target_data,y
+	cmp #$01
+	bne +
+	dey ; decrement to get y low
+	lda target_data,y
+	cmp #$d0				; clear targets at 464
+	bcc +
+
+	; At this point, the player has missed the target
+	; TODO: apply whatever penalty occurs
+
+	jsr clear_target
+	jsr clear_target_sprites
+	jmp UPDATE_TARGET_END
+
++	jsr update_target_chars
+	jsr update_target_pos
+	jsr set_target_pos
+
+UPDATE_TARGET_END:
+	rts
+
+;==================================================
 ; update_target_pos
 ; Update the target's x and y coordinates
 ; void update_target_pos(byte target_index: x)

@@ -56,26 +56,7 @@ game_tick:
 	; loop through the targets
 	ldx #0
 
--	txa
-	asl
-	asl
-	asl
-	tay
-
-	; at this point, y is the offset that takes us to the
-	; beginning of the target selected by x
-
-	; load the x high byte
-	iny	; increment to get x high
-	lda target_data,y
-
-	; only update the position if the target exists
-	cmp #$ff
-	beq +
-	jsr update_target_chars
-	jsr update_target_pos
-	jsr set_target_pos
-
+-	jsr update_target
 +	inx
 	cpx #8
 	bne -
