@@ -41,3 +41,48 @@ get_random_word:
 	sta u0H
 
 	rts
+
+;==================================================
+; get_random_fast_speed
+; Gets a random fast speed (really just 0 or 1)
+; byte: a get_random_fast_speed()
+;==================================================
+get_random_fast_speed:
+	jsr get_random_nibble
+	lsr
+	lsr
+	lsr
+	rts
+
+;==================================================
+; get_random_medium_speed
+; Gets a random medium speed (really just 0 or 1)
+; byte: a get_random_medium_speed()
+;==================================================
+get_random_medium_speed:
+	jsr get_random_nibble
+	lsr
+	lsr
+	rts
+
+;==================================================
+; get_random_slow_speed
+; Gets a random medium speed (really just 0 or 1)
+; byte: a get_random_slow_speed()
+;==================================================
+get_random_slow_speed:
+	jsr get_random_nibble
+	lsr
+	rts
+
+;==================================================
+; get_random_very_slow_speed
+; Gets a random very slow speed (really just 0 or 1)
+; byte: a get_random_very_slow_speed()
+;==================================================
+get_random_very_slow_speed:
+	jsr get_random_nibble
+	lsr
+	clc
+	adc #2		; add one just for good measure
+	rts

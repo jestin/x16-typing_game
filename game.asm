@@ -1,4 +1,4 @@
-SPAWN_DELAY = 200
+SPAWN_DELAY = 100
 
 ;==================================================
 ; game_init
@@ -73,12 +73,12 @@ game_tick:
 +	lda zp_active_targets
 	cmp #8
 	bpl +
-	lda zp_tick_counter
-	cmp #<SPAWN_DELAY
-	bne +
 	lda zp_tick_counter+1
 	cmp #>SPAWN_DELAY
-	bne +
+	bmi +					; >zp_tick_counter is lower than >SPAWN_DELAY, skip the add
+	lda zp_tick_counter
+	cmp #<SPAWN_DELAY
+	bmi +
 	jsr add_random_target
 
 	+LoadW zp_tick_counter, 0

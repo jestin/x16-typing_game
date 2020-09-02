@@ -422,7 +422,7 @@ add_random_target:
 	+AddW u1, 16			; add enough to make sure it's off the left edge
 
 	+LoadW u2, 0	; y of 0
-	lda #2
+	jsr get_random_medium_speed
 	sta u3L
 	ldx zp_next_target_index
 	jsr set_target
