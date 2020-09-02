@@ -1,3 +1,5 @@
+SPAWN_DELAY = 200
+
 ;==================================================
 ; game_init
 ; Initializes everything needed to run the game
@@ -9,8 +11,9 @@ game_init:
 	lda #0
 	sta zp_next_sprite_index
 
-	lda #0	
-	sta zp_tick_counter
+	; set the tick counter so that a spawn happens
+	; on the first tick
+	+LoadW zp_tick_counter, SPAWN_DELAY - 1
 
 	; set video mode
 	lda #%01110001		; sprites and l1 enabled
@@ -43,9 +46,7 @@ game_init:
 ;==================================================
 game_tick:
 	; update the tick counter
-	lda zp_tick_counter
-	inc
-	sta zp_tick_counter
+	+IncW zp_tick_counter
 
 	jsr get_keyboard_input
 	
@@ -72,7 +73,15 @@ game_tick:
 +	lda zp_active_targets
 	cmp #8
 	bpl +
+	lda zp_tick_counter
+	cmp #<SPAWN_DELAY
+	bne +
+	lda zp_tick_counter+1
+	cmp #>SPAWN_DELAY
+	bne +
 	jsr add_random_target
+
+	+LoadW zp_tick_counter, 0
 
 +	rts
 

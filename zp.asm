@@ -7,11 +7,10 @@ ZP = 1
 ; consider reducing the u* registers defined in
 ; x16.asm.
 
-!addr zp_color_addr					= $30
-!addr zp_vsync_trig					= $31
-!addr zp_next_target_index			= $32
-!addr zp_active_targets				= $33
-!addr zp_tick_counter				= $34
+!addr zp_vsync_trig					= $30
+!addr zp_next_target_index			= $31
+!addr zp_tick_counter				= $32
+!addr zp_active_targets				= $34
 !addr zp_next_sprite_index			= $35
 !addr zp_next_target_string_addr	= $36
 !addr zp_cur_target_string_addr		= $38
