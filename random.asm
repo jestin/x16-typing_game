@@ -2,7 +2,7 @@
 ; get_random_byte
 ; Gathers entropy from the machine and combines
 ; it into a single pseudo-random byte.
-; byte: u0L get_random_byte()
+; byte: a get_random_byte()
 ;==================================================
 get_random_byte:
 	jsr entropy_get
@@ -17,7 +17,7 @@ get_random_byte:
 ; get_random_nibble
 ; Gathers entropy from the machine and combines
 ; it into a single pseudo-random nibble ($0X).
-; byte: u0L get_random_byte()
+; byte: a get_random_byte()
 ;==================================================
 get_random_nibble:
 	jsr get_random_byte
@@ -29,16 +29,15 @@ get_random_nibble:
 	rts
 
 ;==================================================
-; get_random_bit
+; get_random_word
 ; Gathers entropy from the machine and combines
-; it into a single pseudo-random bit ($00 or $01).
-; byte: u0L get_random_byte()
+; it into a single pseudo-random word
+; byte: u0 get_random_word()
 ;==================================================
-get_random_bit:
+get_random_word:
 	jsr get_random_byte
-	lsr
-	lsr
-	lsr
-	lsr
+	sta u0L
+	jsr get_random_byte
+	sta u0H
 
 	rts
