@@ -20,9 +20,9 @@ game_init:
 	lda #%01110001		; sprites and l1 enabled
 	sta veradcvideo
 
-	jsr setup_bitmap
-	jsr load_sprites
-	jsr setup_tile_map
+	jsr setup_game_bitmap
+	jsr load_game_sprites
+	jsr setup_game_tile_map
 
 	ldx #0
 -	cpx #NUM_TARGETS
@@ -87,10 +87,10 @@ game_tick:
 +	rts
 
 ;==================================================
-; setup_bitmap
+; setup_game_bitmap
 ; Load the bitmap screen background
 ;==================================================
-setup_bitmap:
+setup_game_bitmap:
 	; set the bitmap mode	
 	lda #%00000101 	; height (2-bits) - 0
 					; width (2-bits) - 2
@@ -128,11 +128,11 @@ BITMAP_ROWS:
 	rts
 
 ;==================================================
-; setup_tile_map
+; setup_game_tile_map
 ; Loads the tiles and tilemap into vram, and sets
 ; the tile settings in the VERA.
 ;==================================================
-setup_tile_map:
+setup_game_tile_map:
 	; set the tile mode	
 	lda #%01100010 	; height (2-bits) - 0
 					; width (2-bits) - 2
@@ -168,10 +168,10 @@ setup_tile_map:
 	; fill the base map
 	+vset tile_map_vram_data | AUTO_INC_1
 
-	+LoadW u0, basic_map
+	+LoadW u0, game_map
 
 	ldx #0
-TILE_ROW_LOOP:
+GAME_TILE_ROW_LOOP:
 	ldy #0
 -	lda (u0),y		; first byte is lower 8 bits of tile index
 	sta veradat
@@ -184,15 +184,15 @@ TILE_ROW_LOOP:
 	+AddW u0, 160		; only increment 80 tiles x 2 bytes per tile
 	inx
 	cpx #60
-	bne TILE_ROW_LOOP
+	bne GAME_TILE_ROW_LOOP
 
 	rts
 
 ;==================================================
-; load_sprites
+; load_game_sprites
 ; Loads the sprites into VRAM
 ;==================================================
-load_sprites:
+load_game_sprites:
 ; 	; load the sprite into vram
 	+vset sprite_vram_data | AUTO_INC_1
 	+LoadW u0, sprite_data
