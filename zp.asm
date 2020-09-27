@@ -7,6 +7,7 @@ ZP = 1
 ; consider reducing the u* registers defined in
 ; x16.asm.
 
+!addr zp_screen						= $29
 !addr zp_vsync_trig					= $30
 !addr zp_next_target_index			= $31
 !addr zp_tick_counter				= $32

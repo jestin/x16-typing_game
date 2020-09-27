@@ -16,6 +16,7 @@ jmp main
 !src "tile_helpers.asm"
 !src "key_buffer.asm"
 !src "random.asm"
+!src "title.asm"
 !src "game.asm"
 !src "strings.asm"
 !src "sprites.asm"
@@ -23,7 +24,10 @@ jmp main
 !addr def_irq = $0000
 
 main:
-	jsr game_init
+	; load title screen
+	lda #TITLE_SCREEN
+	sta zp_screen
+	jsr title_init
 
 	jsr init_irq
 
@@ -70,10 +74,18 @@ handle_irq:
 ;==================================================
 check_vsync:
 	lda zp_vsync_trig
-	beq +
+	beq CHECK_VSYNC_END
 
 	; VSYNC has occurred, handle
-	jsr game_tick
 
+	lda zp_screen
+	cmp #0
+	bne + 
+	jsr title_tick
+	jmp CHECK_VSYNC_END
+
++	jsr game_tick
+
+CHECK_VSYNC_END:
 	stz zp_vsync_trig
-+	rts
+	rts
