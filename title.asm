@@ -23,15 +23,22 @@ title_tick:
 	jsr GETIN
 	cmp #0
 	beq GET_KEYBOARD_INPUT_END
-	cmp #$0d			; RETURN
-	bne +
 
+	cmp #$0d			; RETURN
+	beq TITLE_TICK_START_GAME
+
+	cmp #$20			; SPACE
+	beq TITLE_TICK_START_GAME
+
+	rts
+
+TITLE_TICK_START_GAME:
 	; if RETURN is hit, load the game
 	lda #GAME_SCREEN
 	sta zp_screen
 	jsr game_init
 
-+	rts
+	rts
 
 ;==================================================
 ; setup_title_tile_map
