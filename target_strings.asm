@@ -190,43 +190,46 @@ allocate_target_string
 	; 112 characters will be spaces in a typing
 	; game).
 
-	; check if there is enough space left for the
-	; target string
-	lda #<(target_string_data_end+1)
-	sec
-	sbc zp_next_target_string_addr
-	sta u0L
-	lda #>(target_string_data_end+1)
-	sbc zp_next_target_string_addr+1
-	sta u0H
+	+MoveW zp_next_target_string_addr, u0	; store current in out variable
+	+MoveW zp_next_target_string_addr, u2	; use u2 to compute new next
 
-	; At this point, u0 contains the size of the
-	; remaining space.  If the string's size
-	; plus the index and sentinel bytes is larger,
-	; then we need to return the start of the
-	; memory block.  Otherwise, we are safe to
-	; return zp_next_target_string_addr.
-	
-	lda u1L
-	clc
-	adc #2		; add 2 for the string index and sentital bytes
-	adc #0		; for the carry to be added
-	cmp u0L		; remain space should never be >256
-	bcc +		; this means remaining spaces is sufficient
-	+LoadW zp_next_target_string_addr, target_string_data
-+	+MoveW zp_next_target_string_addr, u0	; store current in out variable
-	+MoveW zp_next_target_string_addr, u2	; use u2 as temp var
+	; this will account for the index and sentinel
+	+AddW u2, 2
 
-	; add the string length, store in u2
+	; calculate new next
 	lda u2L
 	clc
 	adc u1L
 	sta u2L
 	lda u2H
-	adc u1H
+	adc #0		; carry
 	sta u2H
 
-	+AddW u2, 2						; add extra bytes
-	+MoveW u2, zp_next_target_string_addr	; update next address pointer
+	+MoveW u2, zp_next_target_string_addr
 
-	rts
+	; the high byte is still in the accumulator
+	cmp #>target_string_data_end
+	bcc +		; the high byte of the new address is lower,
+				; so we are within range
+	
+	; if we are here, we need to check the low byte
+	lda u2L
+	cmp #<target_string_data_end
+	bmi +		; the low byte of the new address is lower,
+				; so we are within range
+
+	; if we are here, we need to return the start of the target string block
+	; and advance the next to the length plus two
+	+LoadW u0, target_string_data
+	+LoadW zp_next_target_string_addr, target_string_data
+	+AddW zp_next_target_string_addr, 2			; for sentinel and index
+
+	lda zp_next_target_string_addr
+	clc
+	adc u1L
+	sta zp_next_target_string_addr
+	lda zp_next_target_string_addr+1
+	adc #0	; carry
+	sta zp_next_target_string_addr+1
+
++	rts
