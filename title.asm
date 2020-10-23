@@ -26,11 +26,10 @@ title_tick:
 
 	cmp #$0d			; RETURN
 	beq TITLE_TICK_START_GAME
-
 	cmp #$20			; SPACE
 	beq TITLE_TICK_START_GAME
 
-	rts
+	rts					; return if no valid selection made
 
 TITLE_TICK_START_GAME:
 	; if RETURN is hit, load the game
