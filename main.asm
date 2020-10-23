@@ -79,7 +79,7 @@ check_vsync:
 	; VSYNC has occurred, handle
 
 	lda zp_screen
-	cmp #0
+	cmp #TITLE_SCREEN
 	bne + 
 	jsr title_tick
 	jmp CHECK_VSYNC_END

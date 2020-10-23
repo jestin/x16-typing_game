@@ -1,5 +1,6 @@
 GAME_SCREEN = 1
 SPAWN_DELAY = 100
+END_ON_MISEED = 3
 
 ;==================================================
 ; game_init
@@ -17,6 +18,13 @@ game_init:
 	; set the tick counter so that a spawn happens
 	; on the first tick
 	+LoadW zp_tick_counter, SPAWN_DELAY - 1
+
+	; clear sprites
+	ldx #0
+-	jsr clear_sprite
+	inx
+	cpx #$7f
+	bne -
 
 	; set video mode
 	lda #%01110001		; sprites and l1 enabled
@@ -65,8 +73,16 @@ game_tick:
 	cpx #8
 	bne -
 
+	; end game on too many missed targets
+	lda zp_missed
+	cmp #END_ON_MISEED
+	bcc +
+	lda #TITLE_SCREEN
+	sta zp_screen
+	jsr title_init
+
 	; clear key buffer if no matches
-	lda zp_num_matched_targets
++	lda zp_num_matched_targets
 	cmp #0
 	bne +
 	lda #0
