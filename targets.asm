@@ -109,6 +109,7 @@ update_target:
 
 	; At this point, the player has missed the target
 	; TODO: apply whatever penalty occurs
+	inc zp_missed
 
 	jsr clear_target
 	jsr clear_target_sprites
@@ -237,20 +238,28 @@ update_target_chars:
 +	ldy #1			; the sprite indices start at byte 1
 -	lda (zp_cur_target_string_addr),y
 	cmp #255		; compare to sentinel value
-	beq +
+	beq UPDATE_TARGET_MATCH_CHECK
 	tax
 	lda #(SPRITE_SIZE_8 << 6) | (SPRITE_SIZE_8 << 4) | 0		; height/width/paloffset
 	ora u0L														; OR with paloffset
 	+sprstore 7
 	cpy zp_key_buffer_length
-	beq +
+	beq UPDATE_TARGET_MATCH_CHECK
 	iny
 	jmp -
 
 UPDATE_TARGET_CHARS_COMPLETE_MATCH:
 	; this is for when the full string has been matched
+
+	; update score
+	clc
+	lda zp_score
+	adc zp_key_buffer_length
+	sta zp_score
+	bcc +
+	inc zp_score+1				; on carry increment high byte
 	
-	plx
++	plx
 	jsr clear_target
 	jsr clear_target_sprites
 	lda #0
@@ -258,6 +267,7 @@ UPDATE_TARGET_CHARS_COMPLETE_MATCH:
 	ply
 	rts
 
+UPDATE_TARGET_MATCH_CHECK:
 	; check if anything was highlighted
 +	lda u0L
 	cmp #0				; non-highlighted paloffset

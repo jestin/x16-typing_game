@@ -7,6 +7,13 @@ ZP = 1
 ; consider reducing the u* registers defined in
 ; x16.asm.
 
+; the score needs to be a word, since we want larger values
+!addr zp_score						= $22
+
+; the number of missed can be a byte, because I don't
+; anticipate needing even 255 allowed missed targets
+!addr zp_missed						= $24
+
 !addr zp_screen						= $29
 !addr zp_vsync_trig					= $30
 !addr zp_next_target_index			= $31

@@ -11,6 +11,8 @@ game_init:
 
 	lda #0
 	sta zp_next_sprite_index
+	sta zp_score
+	sta zp_missed
 
 	; set the tick counter so that a spawn happens
 	; on the first tick
@@ -59,7 +61,7 @@ game_tick:
 	ldx #0
 
 -	jsr update_target
-+	inx
+	inx
 	cpx #8
 	bne -
 
