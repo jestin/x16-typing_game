@@ -110,37 +110,46 @@ game_tick:
 ;==================================================
 setup_game_bitmap:
 	; set the bitmap mode	
-	lda #%00000101 	; height (2-bits) - 0
-					; width (2-bits) - 2
+	lda #%00000110 	; height (2-bits) - 0
+					; width (2-bits) - 0
 					; T256C - 0
-					; bitmap mode - 0
-					; color depth (2-bits) - 1 (2bbp)
+					; bitmap mode - 1
+					; color depth (2-bits) - 2 (4bbp)
 	sta veral0config
 
 	; set the pallet offset
-	lda #12
+	lda #0
 	sta veral0hscrollhi
 
 	; set the tile base address	(320 width)
 	lda #(<(bitmap_base_data >> 9) | (0 << 2) | 0)
 								;  height    |  width
-
 	sta veral0tilebase
 
 	+vset bitmap_base_data | AUTO_INC_1
 
 	ldy #0
 BITMAP_ROWS:
+	+LoadW u0, 0		; x
 
-	ldx #0
--	lda #(1 << 6 | 3 << 4 | 1 << 2 | 3)
-	sta veradat
-	inx
-	cpx #160	; two rows of 320 pixels at 2bpp
+-	lda #$06			; black|blue
+
+	; check whether to use white background
+	cpy #210
+	bcc + 	
+	lda #$11			; white|white
+
++	sta veradat
+	+IncW u0
+	lda u0L
+	cmp #<320
+	bne -
+	lda u0H
+	cmp #>320
 	bne -
 
 	iny
-	cpy #240	; number of rows / 2
+	cpy #240
 	bne BITMAP_ROWS
 
 	rts
