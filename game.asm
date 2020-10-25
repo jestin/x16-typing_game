@@ -190,9 +190,14 @@ setup_game_tile_map:
 	sta u0L
 	lda #>(tile_data)
 	sta u0H
+	lda #<(tile_vram_data >> 16) | $10
+	sta u4L
+	lda #<(tile_vram_data >> 8)
+	sta u3H
+	lda #<(tile_vram_data)
+	sta u3L
 	jsr load_tiles
 
-	; fill the base map
 	+vset tile_map_vram_data | AUTO_INC_1
 
 	+LoadW u0, game_map

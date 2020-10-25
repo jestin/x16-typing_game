@@ -119,7 +119,7 @@ clear_sprite:
 inc_next_sprite_index:
 	inc zp_next_sprite_index
 	lda zp_next_sprite_index
-	cmp #128
+	cmp #(128 - NUM_SCOREBOARD_SPRITES)				; some sprites display the missed and score
 	bmi +
 	lda #0
 	sta zp_next_sprite_index

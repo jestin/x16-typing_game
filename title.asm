@@ -75,6 +75,12 @@ setup_title_tile_map:
 	sta u0L
 	lda #>(tile_data)
 	sta u0H
+	lda #<(tile_vram_data >> 16) | $10
+	sta u4L
+	lda #<(tile_vram_data >> 8)
+	sta u3H
+	lda #<(tile_vram_data)
+	sta u3L
 	jsr load_tiles
 
 	; fill the base map

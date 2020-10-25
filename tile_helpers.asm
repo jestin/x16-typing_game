@@ -5,7 +5,9 @@
 ;					byte tile_width: u1L,
 ;					byte tile_height: u1H
 ;					byte bpp: u2L,
-;					byte tile_count: u2H)
+;					byte tile_count: u2H,
+;					word vram_lomid: u3,
+;					byte vram_hi: u4L)
 ; tile_width and tile_height are specified as the
 ; VERA does, so 0 means 8 pixels and 1 means 16.
 ;==================================================
@@ -14,7 +16,15 @@ load_tiles:
 	sta u1L		; now that we know the size, we don't
 				; need the values that were in u1
 
-	+vset tile_vram_data
+	lda #0
+	sta veractl
+	lda u4L
+	sta verahi
+	lda u3H
+	sta veramid
+	lda u3L
+	sta veralo
+
 	ldx #0
 -	jsr load_vram
 

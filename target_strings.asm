@@ -65,6 +65,10 @@ set_target_string:
 	; now use zp indirect y addressing to read
 	; individual bytes.
 
+	; store previous next sprite index, before changing it by allocating
+	lda zp_next_sprite_index
+	sta u6L
+
 	ldy #0		; zero out the y register
 
 READ_STRING_LOOP:
@@ -138,25 +142,25 @@ END_READ_STRING_LOOP:
 	; subtract the length of the string from the current
 	; counter, and increment it as we write.
 
-	lda zp_next_sprite_index
-	sec
-	sbc u1L
-	bcs +
-	clc				; if carry is clear, it means we rolled over, so
-	adc #128		; add 128 to put us back in the 0-127 range
-+	sta u2L
+; 	lda zp_next_sprite_index
+; 	sec
+; 	sbc u1L
+; 	bcs +
+; 	clc				; if carry is clear, it means we rolled over, so
+; 	adc #128		; add 128 to put us back in the 0-127 range
+; +	sta u2L
 
 -	cpy u1L
 	bcs WRITE_TARGET_STRING_SENTINEL
-	lda u2L
+	lda u6L
 	iny
 	sta (zp_cur_target_string_addr),y
-	inc u2L
-	lda u2L
-	cmp #128		; just like with zp_next_sprite_index, we need to cap at 127
+	inc u6L
+	lda u6L
+	cmp #(128 - NUM_SCOREBOARD_SPRITES)		; just like with zp_next_sprite_index, we need to cap at 127
 	bmi +
 	lda #0
-	sta u2L
+	sta u6L
 +	jmp -
 
 WRITE_TARGET_STRING_SENTINEL
