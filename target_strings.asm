@@ -101,8 +101,9 @@ READ_STRING_LOOP:
 	lda (zp_string_buffer_addr),y
 	tay
 	; load the next vera sprite index into x
-	lda zp_next_sprite_index
-	tax
+	ldx zp_next_sprite_index
+	lda #0
+	sta u0L
 	jsr set_sprite
 	
 	lda u1			; restore the loop counter

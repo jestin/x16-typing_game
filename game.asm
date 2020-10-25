@@ -1,6 +1,6 @@
 GAME_SCREEN = 1
 SPAWN_DELAY = 100
-END_ON_MISEED = 3
+END_ON_MISEED = 15
 
 ;==================================================
 ; game_init
@@ -58,6 +58,8 @@ game_init:
 game_tick:
 	; update the tick counter
 	+IncW zp_tick_counter
+
+	jsr set_scoreboard
 
 	jsr get_keyboard_input
 	
@@ -236,5 +238,44 @@ load_game_sprites:
 	inx
 	cpx #NUM_SPRITES
 	bne -
+
+	; initialize scoreboard sprites
+
+	; missed lo digit
+	ldx #(128 - NUM_SCOREBOARD_SPRITES)
+	ldy #52
+	lda #1				; paloffset
+	sta u0L
+	jsr set_sprite
+	+LoadW u0, 176
+	+LoadW u1, 440
+	jsr set_sprite_pos
+
+	; missed hi digit
+	ldx #(128 - NUM_SCOREBOARD_SPRITES) + 1
+	lda #1				; paloffset
+	sta u0L
+	jsr set_sprite
+	+LoadW u0, 168
+	+LoadW u1, 440
+	jsr set_sprite_pos
+
+	rts
+
+;==================================================
+; set_scoreboard
+; Sets the sprites for the scoreboard
+;==================================================
+set_scoreboard:
+
+	; missed uses sprites 126 for lo digit and 127 for hi digit
+	ldx #(128 - NUM_SCOREBOARD_SPRITES)
+	lda #52
+	clc
+	adc zp_missed
+	tay
+	lda #1				; paloffset
+	sta u0L
+	jsr set_sprite
 
 	rts
