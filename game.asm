@@ -1,6 +1,6 @@
 GAME_SCREEN = 1
 SPAWN_DELAY = 100
-END_ON_MISEED = 150
+END_ON_MISEED = 15
 
 ;==================================================
 ; game_init
@@ -278,6 +278,13 @@ load_game_sprites:
 set_scoreboard:
 
 	+LoadW u0, missed_target_digits
+
+	; clear old data
+	lda #0
+	sta missed_target_digits
+	sta missed_target_digits+1
+	sta missed_target_digits+2
+
 	lda zp_missed
 	jsr decimal_chars_8
 	tya
