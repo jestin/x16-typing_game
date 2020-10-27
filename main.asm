@@ -11,6 +11,7 @@ jmp main
 !src "target_macros.asm"
 !src "targets.asm"
 !src "target_strings.asm"
+!src "math.asm"
 !src "tiles.asm"
 !src "tile_maps.asm"
 !src "tile_helpers.asm"

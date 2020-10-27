@@ -268,6 +268,15 @@ load_game_sprites:
 ;==================================================
 set_scoreboard:
 
+	+LoadW u0, $0600
+	lda zp_missed
+	jsr decimal_chars_8
+
+-	pla
+	dey
+	bne -
+
+
 	; missed uses sprites 126 for lo digit and 127 for hi digit
 	ldx #(128 - NUM_SCOREBOARD_SPRITES)
 	lda #52
