@@ -19,3 +19,7 @@ MEMORY = 1
 ; This is a buffer for reading string data from program memory
 !addr string_buffer				= $0540
 !addr string_buffer_end			= $055f
+
+; digit storage for scoreboard
+!addr missed_target_digits		= $0600		; can only be at most 3 bytes
+!addr score_digits				= $0604		; can be at most 5 bytes

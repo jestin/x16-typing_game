@@ -1,6 +1,6 @@
 !addr sprit1_vram_data  = $0d000
 NUM_SPRITES = 62
-NUM_SCOREBOARD_SPRITES = 2
+NUM_SCOREBOARD_SPRITES = 3
 
 sprite_data:
 ; 0 - A
@@ -540,8 +540,8 @@ sprite_data:
 	!byte $00, $01, $10, $00
 	!byte $00, $01, $10, $00
 	!byte $00, $01, $10, $00
-	!byte $00, $01, $10, $00
 	!byte $01, $11, $11, $10
+	!byte $00, $00, $00, $00
 
 ; 54 - 2
 	!byte $00, $11, $11, $00

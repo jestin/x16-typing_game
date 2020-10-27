@@ -1,6 +1,6 @@
 GAME_SCREEN = 1
 SPAWN_DELAY = 100
-END_ON_MISEED = 15
+END_ON_MISEED = 150
 
 ;==================================================
 ; game_init
@@ -247,16 +247,25 @@ load_game_sprites:
 	lda #1				; paloffset
 	sta u0L
 	jsr set_sprite
-	+LoadW u0, 176
+	+LoadW u0, 180
 	+LoadW u1, 440
 	jsr set_sprite_pos
 
-	; missed hi digit
+	; missed mid digit
 	ldx #(128 - NUM_SCOREBOARD_SPRITES) + 1
 	lda #1				; paloffset
 	sta u0L
 	jsr set_sprite
-	+LoadW u0, 168
+	+LoadW u0, 172
+	+LoadW u1, 440
+	jsr set_sprite_pos
+
+	; missed hi digit
+	ldx #(128 - NUM_SCOREBOARD_SPRITES) + 2
+	lda #1				; paloffset
+	sta u0L
+	jsr set_sprite
+	+LoadW u0, 164
 	+LoadW u1, 440
 	jsr set_sprite_pos
 
@@ -268,23 +277,31 @@ load_game_sprites:
 ;==================================================
 set_scoreboard:
 
-	+LoadW u0, $0600
+	+LoadW u0, missed_target_digits
 	lda zp_missed
 	jsr decimal_chars_8
+	tya
+	sta u2L				; number of digits
 
--	pla
-	dey
-	bne -
+	+LoadW u1, missed_target_digits			; since u0 is needed for set_sprite, load u1 with the same address
 
-
+	; number of missed
+	ldy #0
 	; missed uses sprites 126 for lo digit and 127 for hi digit
 	ldx #(128 - NUM_SCOREBOARD_SPRITES)
-	lda #52
+
+-	lda (u1),y
+	phy					; save the current y, since set_sprite uses it
 	clc
-	adc zp_missed
+	adc #52				; the start of the number sprites
 	tay
 	lda #1				; paloffset
 	sta u0L
 	jsr set_sprite
+	ply					; restore y
+	iny
+	inx
+	cpx #128
+	bne -
 
 	rts
