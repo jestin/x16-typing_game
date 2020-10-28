@@ -22,4 +22,4 @@ MEMORY = 1
 
 ; digit storage for scoreboard
 !addr missed_target_digits		= $0600		; can only be at most 3 bytes
-!addr score_digits				= $0604		; can be at most 5 bytes
+!addr score_digits				= $0603		; can be at most 5 bytes

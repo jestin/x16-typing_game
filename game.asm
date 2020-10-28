@@ -1,6 +1,6 @@
 GAME_SCREEN = 1
 SPAWN_DELAY = 100
-END_ON_MISEED = 15
+END_ON_MISEED = 11
 
 ;==================================================
 ; game_init
@@ -269,6 +269,51 @@ load_game_sprites:
 	+LoadW u1, 440
 	jsr set_sprite_pos
 
+	; score lo digit
+	ldx #(128 - NUM_SCOREBOARD_SPRITES) + 3
+	lda #1				; paloffset
+	sta u0L
+	jsr set_sprite
+	+LoadW u0, 476
+	+LoadW u1, 440
+	jsr set_sprite_pos
+
+	; score second lowest digit
+	ldx #(128 - NUM_SCOREBOARD_SPRITES) + 4
+	lda #1				; paloffset
+	sta u0L
+	jsr set_sprite
+	+LoadW u0, 468
+	+LoadW u1, 440
+	jsr set_sprite_pos
+
+	; score mid digit
+	ldx #(128 - NUM_SCOREBOARD_SPRITES) + 5
+	lda #1				; paloffset
+	sta u0L
+	jsr set_sprite
+	+LoadW u0, 460
+	+LoadW u1, 440
+	jsr set_sprite_pos
+
+	; score second highest digit
+	ldx #(128 - NUM_SCOREBOARD_SPRITES) + 6
+	lda #1				; paloffset
+	sta u0L
+	jsr set_sprite
+	+LoadW u0, 452
+	+LoadW u1, 440
+	jsr set_sprite_pos
+
+	; score hi digit
+	ldx #(128 - NUM_SCOREBOARD_SPRITES) + 7
+	lda #1				; paloffset
+	sta u0L
+	jsr set_sprite
+	+LoadW u0, 444
+	+LoadW u1, 440
+	jsr set_sprite_pos
+
 	rts
 
 ;==================================================
@@ -280,21 +325,30 @@ set_scoreboard:
 	+LoadW u0, missed_target_digits
 
 	; clear old data
-	lda #0
-	sta missed_target_digits
-	sta missed_target_digits+1
-	sta missed_target_digits+2
+	ldx #NUM_SCOREBOARD_SPRITES
+-	lda #0
+	sta missed_target_digits,x
+	dex
+	bne -
 
 	lda zp_missed
 	jsr decimal_chars_8
 	tya
 	sta u2L				; number of digits
 
+	+LoadW u0, score_digits
+	lda zp_score
+	sta u1L
+	lda zp_score+1
+	sta u1H
+	jsr decimal_chars_16
+	tya
+	sta u2H				; number of digits
+
 	+LoadW u1, missed_target_digits			; since u0 is needed for set_sprite, load u1 with the same address
 
-	; number of missed
 	ldy #0
-	; missed uses sprites 126 for lo digit and 127 for hi digit
+	; scoreboard uses the last 8 sprites
 	ldx #(128 - NUM_SCOREBOARD_SPRITES)
 
 -	lda (u1),y
