@@ -13,6 +13,7 @@ game_init:
 	lda #0
 	sta zp_next_sprite_index
 	sta zp_score
+	sta zp_score+1
 	sta zp_missed
 
 	; set the tick counter so that a spawn happens
