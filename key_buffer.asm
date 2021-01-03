@@ -17,8 +17,19 @@ get_keyboard_input:
 	sta zp_key_buffer_length
 	jmp GET_KEYBOARD_INPUT_END
 
+	; Translate to ASCII
++	cmp #$80				; anything less than 128 means it was hit without SHIFT
+	bmi +
+	; lowercase was typed
+	sec
+	sbc #$80				; converts to lowercase ascii
+	jmp GET_KEYBOARD_INPUT_ADD_BUFFER
++	clc
+	adc #$20				; converts to uppercase ascii
+
+GET_KEYBOARD_INPUT_ADD_BUFFER:
 	; add the pressed key to the buffer
-+	ldx zp_key_buffer_length
+	ldx zp_key_buffer_length
 	sta zp_key_buffer,x
 	inx
 	txa

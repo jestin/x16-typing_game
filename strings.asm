@@ -81,23 +81,23 @@ string_map:
 ;============================================================
 
 ; store the strings in !raw so that they are stored in ascii
-.str_cat				!raw "CAT",0
-.str_dog				!raw "DOG",0
-.str_chicken 			!raw "CHICKEN",0
-.str_snake 				!raw "SNAKE",0
-.str_aardvark			!raw "AARDVARK",0
-.str_ant				!raw "ANT",0
-.str_anteater			!raw "ANTEATER",0
-.str_bobcat				!raw "BOBCAT",0
-.str_cougar				!raw "COUGAR",0
-.str_shark				!raw "SHARK",0
-.str_squid				!raw "SQUID",0
-.str_jaguar				!raw "JAGUAR",0
-.str_jellyfish			!raw "JELLYFISH",0
-.str_seastar			!raw "SEASTAR",0
-.str_pig				!raw "PIG",0
-.str_horse				!raw "HORSE",0
-.str_cow				!raw "COW",0
+.str_cat				!raw "Cat",0
+.str_dog				!raw "Dog",0
+.str_chicken 			!raw "Chicken",0
+.str_snake 				!raw "Snake",0
+.str_aardvark			!raw "Aardvark",0
+.str_ant				!raw "Ant",0
+.str_anteater			!raw "Anteater",0
+.str_bobcat				!raw "Bobcat",0
+.str_cougar				!raw "Cougar",0
+.str_shark				!raw "Shark",0
+.str_squid				!raw "Squid",0
+.str_jaguar				!raw "Jaguar",0
+.str_jellyfish			!raw "Jellyfish",0
+.str_seastar			!raw "Seastar",0
+.str_pig				!raw "Pig",0
+.str_horse				!raw "Horse",0
+.str_cow				!raw "Cow",0
 
 ; Uppercase Letters
 
