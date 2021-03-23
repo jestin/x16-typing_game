@@ -1,5 +1,8 @@
 # assembled binaries
 *.prg
+*.PRG
+*.bin
+*.BIN
 
 # symbolic link to emulator
 x16emu

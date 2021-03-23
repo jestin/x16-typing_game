@@ -1,6 +1,11 @@
 GAME_SCREEN = 1
 SPAWN_DELAY = 100
 END_ON_MISEED = 11
+MAX_FILE_SIZE = 1000
+.file_buffer !word MAX_FILE_SIZE
+filename: !raw "STR.BIN"
+end_filename:
+
 
 ;==================================================
 ; game_init
@@ -49,6 +54,20 @@ game_init:
 
 	lda #0
 	sta zp_key_buffer_length
+
+	; read string file into memory
+	lda #1
+	ldx #8
+	ldy #0
+	jsr SETLFS
+	lda #(end_filename-filename)
+	ldx #<filename
+	ldy #>filename
+	jsr SETNAM
+	lda #0
+	ldx #<string_map
+	ldy #>string_map
+	jsr LOAD
 
 	rts
 

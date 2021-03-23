@@ -19,7 +19,6 @@ jmp main
 !src "random.asm"
 !src "title.asm"
 !src "game.asm"
-!src "strings.asm"
 !src "sprites.asm"
 
 !addr def_irq = $0000

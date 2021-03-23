@@ -411,8 +411,6 @@ add_random_target:
 
 	jsr get_random_nibble
 
-	clc
-	adc #52
 	tax
 	jsr set_target_string
 
