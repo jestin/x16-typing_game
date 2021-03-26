@@ -10,7 +10,7 @@ MEMORY = 1
 !addr target_data_end			= $043f
 
 ; These addresses are used for storing target strings,
-; which consiste of an index to a string in program
+; which consist of an index to a string in program
 ; memory, and array of sprite indexes, and a sentinel
 ; value.
 !addr target_string_data		= $0440
@@ -23,5 +23,8 @@ MEMORY = 1
 ; digit storage for scoreboard
 !addr missed_target_digits		= $0600		; can only be at most 3 bytes
 !addr score_digits				= $0603		; can be at most 5 bytes
+
+; original IRQ vector address
+!addr def_irq					= $8000		; single byte
 
 !addr string_map				= $0700		; strings from files are loaded here

@@ -21,8 +21,6 @@ jmp main
 !src "game.asm"
 !src "sprites.asm"
 
-!addr def_irq = $0000
-
 main:
 	; load title screen
 	lda #TITLE_SCREEN
