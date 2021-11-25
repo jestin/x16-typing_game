@@ -26,7 +26,6 @@
 .str_dog				!raw "Dog",0
 .str_chicken 			!raw "Chicken",0
 .str_snake 				!raw "Snake",0
-.str_aardvark			!raw "Aardvark",0
 .str_ant				!raw "Ant",0
 .str_anteater			!raw "Anteater",0
 .str_bobcat				!raw "Bobcat",0
