@@ -14,6 +14,21 @@ get_random_byte:
 	rts
 
 ;==================================================
+; get_random_byte_less_than
+; Gathers entropy from the machine and combines
+; it into a single pseudo-random byte.
+; byte: a get_random_byte_less_than(byte max: A)
+;==================================================
+get_random_byte_less_than:
+	sta u0L
+	; loop until the random is lower than the max
+-	jsr get_random_byte
+	cmp u0L
+	BCS -
+
+	rts
+
+;==================================================
 ; get_random_nibble
 ; Gathers entropy from the machine and combines
 ; it into a single pseudo-random nibble ($0X).

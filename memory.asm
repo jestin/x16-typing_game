@@ -27,4 +27,5 @@ MEMORY = 1
 ; original IRQ vector address
 !addr def_irq					= $8000		; single byte
 
+!addr string_map_size			= $06FF		; always one less than string_map
 !addr string_map				= $0700		; strings from files are loaded here

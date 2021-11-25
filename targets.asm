@@ -409,7 +409,9 @@ add_random_target:
 +	txa
 	sta zp_next_target_index
 
-	jsr get_random_nibble
+	; check the size of the the string map and get an appropriate random value
+	lda string_map_size
+	jsr get_random_byte_less_than
 
 	tax
 	jsr set_target_string

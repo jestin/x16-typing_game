@@ -3,7 +3,7 @@ SPAWN_DELAY = 100
 END_ON_MISEED = 11
 MAX_FILE_SIZE = 1000
 .file_buffer !word MAX_FILE_SIZE
-filename: !raw "STR.BIN"
+filename: !raw "HOMEROW.BIN"
 end_filename:
 
 
@@ -65,8 +65,8 @@ game_init:
 	ldy #>filename
 	jsr SETNAM
 	lda #0
-	ldx #<string_map
-	ldy #>string_map
+	ldx #<string_map_size
+	ldy #>string_map_size
 	jsr LOAD
 
 	rts
