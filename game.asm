@@ -3,7 +3,7 @@ SPAWN_DELAY = 100
 END_ON_MISEED = 11
 MAX_FILE_SIZE = 1000
 .file_buffer !word MAX_FILE_SIZE
-filename: !raw "HOMEROW.BIN"
+filename: !raw "ANI0.BIN"
 end_filename:
 
 

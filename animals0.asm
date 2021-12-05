@@ -2,7 +2,7 @@
 *=string_map_size
 
 ; first byte indicates the number of strings
-!byte 16
+!byte 24
 !word .str_cow
 !word .str_cat
 !word .str_dog
@@ -19,6 +19,14 @@
 !word .str_shark
 !word .str_squid
 !word .str_horse
+!word .str_salmon
+!word .str_iguana
+!word .str_octopus
+!word .str_elephant
+!word .str_turtle
+!word .str_woodpecker
+!word .str_orangutan
+!word .str_frog
 
 ;============================================================
 ; Strings
@@ -41,3 +49,11 @@
 .str_pig				!raw "pig",0
 .str_horse				!raw "horse",0
 .str_cow				!raw "cow",0
+.str_salmon				!raw "salmon",0
+.str_iguana				!raw "iguana",0
+.str_octopus			!raw "octopus",0
+.str_elephant			!raw "elephant",0
+.str_turtle				!raw "turtle",0
+.str_woodpecker			!raw "woodpecker",0
+.str_orangutan			!raw "orangutan",0
+.str_frog				!raw "frog",0
