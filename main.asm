@@ -12,7 +12,6 @@ jmp main
 !src "targets.asm"
 !src "target_strings.asm"
 !src "math.asm"
-; !src "tile_helpers.asm"
 !src "key_buffer.asm"
 !src "random.asm"
 !src "title.asm"
