@@ -1,5 +1,8 @@
 TITLE_SCREEN = 0
 
+titlemapfilename: !raw "TITLEMAP.BIN"
+end_titlemapfilename:
+
 ;==================================================
 ; title_init
 ; Initializes the title screen
@@ -62,46 +65,32 @@ setup_title_tile_map:
 								;  height    |  width
 	sta veral1tilebase
 
-
-	; load the tiles
-	lda #0
-	sta u1L		; 8 pixel width
-	sta u1H		; 8 pixel height
-	lda #2
-	sta u2L		; 4bpp
-	lda #NUM_TILES
-	sta u2H		; number of tiles
-	lda #<(tile_data)
-	sta u0L
-	lda #>(tile_data)
-	sta u0H
-	lda #<(tile_vram_data >> 16) | $10
-	sta u4L
-	lda #<(tile_vram_data >> 8)
-	sta u3H
-	lda #<(tile_vram_data)
-	sta u3L
-	jsr load_tiles
-
-	; fill the base map
-	+vset tile_map_vram_data | AUTO_INC_1
-
-	+LoadW u0, title_map
-
-	ldx #0
-TITLE_TILE_ROW_LOOP:
+	; read tile file into memory
+	lda #1
+	ldx #8
 	ldy #0
--	lda (u0),y		; first byte is lower 8 bits of tile index
-	sta veradat
-	iny
-	lda (u0),y		; second byte contains paloffset
-	sta veradat
-	iny
-	cpy #0	; let it loop full circle
-	bne -
-	+AddW u0, 160		; only increment 80 tiles x 2 bytes per tile
-	inx
-	cpx #60
-	bne TITLE_TILE_ROW_LOOP
+	jsr SETLFS
+	lda #(end_tilefilename-tilefilename)
+	ldx #<tilefilename
+	ldy #>tilefilename
+	jsr SETNAM
+	lda #2
+	ldx #<tile_vram_data
+	ldy #>tile_vram_data
+	jsr LOAD
+
+	; read tile map file into memory
+	lda #1
+	ldx #8
+	ldy #0
+	jsr SETLFS
+	lda #(end_titlemapfilename-titlemapfilename)
+	ldx #<titlemapfilename
+	ldy #>titlemapfilename
+	jsr SETNAM
+	lda #2
+	ldx #<tile_map_vram_data
+	ldy #>tile_map_vram_data
+	jsr LOAD
 
 	rts

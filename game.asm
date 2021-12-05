@@ -3,9 +3,15 @@ SPAWN_DELAY = 100
 END_ON_MISEED = 11
 MAX_FILE_SIZE = 1000
 .file_buffer !word MAX_FILE_SIZE
-filename: !raw "ANI0.BIN"
-end_filename:
 
+stringfilename: !raw "ANI0.BIN"
+end_stringfilename:
+
+tilefilename: !raw "TILES.BIN"
+end_tilefilename:
+
+gamemapfilename: !raw "GAMEMAP.BIN"
+end_gamemapfilename:
 
 ;==================================================
 ; game_init
@@ -60,9 +66,9 @@ game_init:
 	ldx #8
 	ldy #0
 	jsr SETLFS
-	lda #(end_filename-filename)
-	ldx #<filename
-	ldy #>filename
+	lda #(end_stringfilename-stringfilename)
+	ldx #<stringfilename
+	ldy #>stringfilename
 	jsr SETNAM
 	lda #0
 	ldx #<string_map_size
@@ -143,7 +149,7 @@ setup_game_bitmap:
 	lda #0
 	sta veral0hscrollhi
 
-	; set the tile base address	(320 width)
+	; set the bitmap base address	(320 width)
 	lda #(<(bitmap_base_data >> 9) | (0 << 2) | 0)
 								;  height    |  width
 	sta veral0tilebase
@@ -190,55 +196,42 @@ setup_game_tile_map:
 					; color depth (2-bits) - 2 (4bbp)
 	sta veral1config
 
-	; set the tile map base address
-	lda #<(tile_map_vram_data >> 9)
-	sta veral1mapbase
-
-	; set the tile base address
+ 	; set the tile base address
 	lda #(<(tile_vram_data >> 9) | %00000000 | %00000000)
 								;  height    |  width
 	sta veral1tilebase
 
-
-	; load the tiles
-	lda #0
-	sta u1L		; 8 pixel width
-	sta u1H		; 8 pixel height
-	lda #2
-	sta u2L		; 4bpp
-	lda #NUM_TILES
-	sta u2H		; number of tiles
-	lda #<(tile_data)
-	sta u0L
-	lda #>(tile_data)
-	sta u0H
-	lda #<(tile_vram_data >> 16) | $10
-	sta u4L
-	lda #<(tile_vram_data >> 8)
-	sta u3H
-	lda #<(tile_vram_data)
-	sta u3L
-	jsr load_tiles
-
-	+vset tile_map_vram_data | AUTO_INC_1
-
-	+LoadW u0, game_map
-
-	ldx #0
-GAME_TILE_ROW_LOOP:
+	; read tile file into memory
+	lda #1
+	ldx #8
 	ldy #0
--	lda (u0),y		; first byte is lower 8 bits of tile index
-	sta veradat
-	iny
-	lda (u0),y		; second byte contains paloffset
-	sta veradat
-	iny
-	cpy #0	; let it loop full circle
-	bne -
-	+AddW u0, 160		; only increment 80 tiles x 2 bytes per tile
-	inx
-	cpx #60
-	bne GAME_TILE_ROW_LOOP
+	jsr SETLFS
+	lda #(end_tilefilename-tilefilename)
+	ldx #<tilefilename
+	ldy #>tilefilename
+	jsr SETNAM
+	lda #2
+	ldx #<tile_vram_data
+	ldy #>tile_vram_data
+	jsr LOAD
+
+	; set the tile map base address
+	lda #<(tile_map_vram_data >> 9)
+	sta veral1mapbase
+
+	; read tile map file into memory
+	lda #1
+	ldx #8
+	ldy #0
+	jsr SETLFS
+	lda #(end_gamemapfilename-gamemapfilename)
+	ldx #<gamemapfilename
+	ldy #>gamemapfilename
+	jsr SETNAM
+	lda #2
+	ldx #<tile_map_vram_data
+	ldy #>tile_map_vram_data
+	jsr LOAD
 
 	rts
 
