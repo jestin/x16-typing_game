@@ -53,7 +53,7 @@ setup_title_tile_map:
 					; width (2-bits) - 2
 					; T256C - 0
 					; bitmap mode - 0
-					; color depth (2-bits) - 2 (4bbp)
+					; color depth (2-bits) - 2 (4bpp)
 	sta veral1config
 
 	; set the tile map base address

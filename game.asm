@@ -142,7 +142,7 @@ setup_game_bitmap:
 					; width (2-bits) - 0
 					; T256C - 0
 					; bitmap mode - 1
-					; color depth (2-bits) - 2 (4bbp)
+					; color depth (2-bits) - 2 (4bpp)
 	sta veral0config
 
 	; set the pallet offset
@@ -193,7 +193,7 @@ setup_game_tile_map:
 					; width (2-bits) - 2
 					; T256C - 0
 					; bitmap mode - 0
-					; color depth (2-bits) - 2 (4bbp)
+					; color depth (2-bits) - 2 (4bpp)
 	sta veral1config
 
  	; set the tile base address
