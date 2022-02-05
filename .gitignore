@@ -3,6 +3,7 @@
 *.PRG
 *.bin
 *.BIN
+*.BIN.PAL
 
 # symbolic link to emulator
 x16emu
