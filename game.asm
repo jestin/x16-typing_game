@@ -7,10 +7,10 @@ MAX_FILE_SIZE = 1000
 stringfilename: !raw "ANI0.BIN"
 end_stringfilename:
 
-tilefilename: !raw "TILES.BIN"
+tilefilename: !raw "GAMETILES.BIN"
 end_tilefilename:
 
-gamemapfilename: !raw "GAMEMAP.BIN"
+gamemapfilename: !raw "GAMEMAP.0.BIN"
 end_gamemapfilename:
 
 ;==================================================
@@ -189,11 +189,11 @@ BITMAP_ROWS:
 ;==================================================
 setup_game_tile_map:
 	; set the tile mode	
-	lda #%01100010 	; height (2-bits) - 0
+	lda #%01100011 	; height (2-bits) - 0
 					; width (2-bits) - 2
 					; T256C - 0
 					; bitmap mode - 0
-					; color depth (2-bits) - 2 (4bpp)
+					; color depth (2-bits) - 3 (8bpp)
 	sta veral1config
 
  	; set the tile base address

@@ -49,11 +49,11 @@ TITLE_TICK_START_GAME:
 ;==================================================
 setup_title_tile_map:
 	; set the tile mode	
-	lda #%01100010 	; height (2-bits) - 0
+	lda #%01100011 	; height (2-bits) - 0
 					; width (2-bits) - 2
 					; T256C - 0
 					; bitmap mode - 0
-					; color depth (2-bits) - 2 (4bpp)
+					; color depth (2-bits) - 3 (8bpp)
 	sta veral1config
 
 	; set the tile map base address
