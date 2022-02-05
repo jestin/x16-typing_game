@@ -13,6 +13,9 @@ end_tilefilename:
 gamemapfilename: !raw "GAMEMAP.0.BIN"
 end_gamemapfilename:
 
+palettefilename: !raw "GAMETILES.BIN.PAL"
+end_palettefilename:
+
 ;==================================================
 ; game_init
 ; Initializes everything needed to run the game
@@ -70,7 +73,7 @@ game_init:
 	ldx #<stringfilename
 	ldy #>stringfilename
 	jsr SETNAM
-	lda #0
+	lda #0 ; load into regular memory
 	ldx #<string_map_size
 	ldy #>string_map_size
 	jsr LOAD
@@ -201,6 +204,20 @@ setup_game_tile_map:
 								;  height    |  width
 	sta veral1tilebase
 
+	; read palette file into memory
+	lda #1
+	ldx #8
+	ldy #0
+	jsr SETLFS
+	lda #(end_palettefilename-palettefilename)
+	ldx #<palettefilename
+	ldy #>palettefilename
+	jsr SETNAM
+	lda #3	;load into VRAM greater than $0FFFF
+	ldx #<palette_vram_data
+	ldy #>palette_vram_data
+	jsr LOAD
+
 	; read tile file into memory
 	lda #1
 	ldx #8
@@ -210,7 +227,7 @@ setup_game_tile_map:
 	ldx #<tilefilename
 	ldy #>tilefilename
 	jsr SETNAM
-	lda #2
+	lda #2	;load into VRAM less than $10000
 	ldx #<tile_vram_data
 	ldy #>tile_vram_data
 	jsr LOAD
@@ -228,7 +245,7 @@ setup_game_tile_map:
 	ldx #<gamemapfilename
 	ldy #>gamemapfilename
 	jsr SETNAM
-	lda #2
+	lda #2	;load into VRAM less than $10000
 	ldx #<tile_map_vram_data
 	ldy #>tile_map_vram_data
 	jsr LOAD
