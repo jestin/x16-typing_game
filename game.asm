@@ -189,8 +189,8 @@ BITMAP_ROWS:
 ;==================================================
 setup_game_tile_map:
 	; set the tile mode	
-	lda #%01100011 	; height (2-bits) - 0
-					; width (2-bits) - 2
+	lda #%01100011 	; height (2-bits) - 1 (64 tiles)
+					; width (2-bits) - 2 (128 tiles
 					; T256C - 0
 					; bitmap mode - 0
 					; color depth (2-bits) - 3 (8bpp)
