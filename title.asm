@@ -1,7 +1,10 @@
 TITLE_SCREEN = 0
 
-titlemapfilename: !raw "TITLEMAP.BIN"
+titlemapfilename: !raw "TITLEMAP.0.BIN"
 end_titlemapfilename:
+
+titlebitmapfilename: !raw "BACKGROUND.BIN"
+end_titlebitmapfilename:
 
 ;==================================================
 ; title_init
@@ -10,9 +13,15 @@ end_titlemapfilename:
 title_init:
 
 	; set video mode
-	lda #%01110001		; sprites and l1 enabled
+	lda #%00110001		; l0 and l1 enabled
 	sta veradcvideo
 
+	; set double scale
+	lda #64
+	sta veradchscale
+	sta veradcvscale
+
+	jsr setup_title_bitmap
 	jsr setup_title_tile_map
 
 	rts
@@ -91,6 +100,45 @@ setup_title_tile_map:
 	lda #2
 	ldx #<tile_map_vram_data
 	ldy #>tile_map_vram_data
+	jsr LOAD
+
+	rts
+
+;==================================================
+; setup_title_bitmap
+; Loads the bitmap into vram, and sets the tile
+; bitmap settings in the VERA.
+;==================================================
+setup_title_bitmap:
+	; set the video mode	
+	lda #%00000111 	; height (2-bits) - 0
+					; width (2-bits) - 2
+					; T256C - 0
+					; bitmap mode - 1
+					; color depth (2-bits) - 3 (8bpp)
+	sta veral0config
+
+	; set the pallet offset
+	lda #0
+	sta veral0hscrollhi
+
+	; set the bitmap base address	(320 width)
+	lda #(<(bitmap_base_data >> 9) | (0 << 1) | 0)
+								;  height    |  width
+	sta veral0tilebase
+
+	; read bitmap file into memory
+	lda #1
+	ldx #8
+	ldy #0
+	jsr SETLFS
+	lda #(end_titlebitmapfilename-titlebitmapfilename)
+	ldx #<titlebitmapfilename
+	ldy #>titlebitmapfilename
+	jsr SETNAM
+	lda #2
+	ldx #<bitmap_base_data
+	ldy #>bitmap_base_data
 	jsr LOAD
 
 	rts

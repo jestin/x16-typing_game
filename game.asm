@@ -42,12 +42,21 @@ game_init:
 	bne -
 
 	; set video mode
-	lda #%01110001		; sprites and l1 enabled
+	lda #%00100001		; turn off video
 	sta veradcvideo
 
 	jsr setup_game_bitmap
 	jsr load_game_sprites
 	jsr setup_game_tile_map
+
+	; set full scale
+	lda #128
+	sta veradchscale
+	sta veradcvscale
+
+	; set video mode
+	lda #%01110001		; sprites and l1 enabled
+	sta veradcvideo
 
 	ldx #0
 -	cpx #NUM_TARGETS
