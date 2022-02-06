@@ -153,7 +153,7 @@ setup_game_bitmap:
 	sta veral0hscrollhi
 
 	; set the bitmap base address	(320 width)
-	lda #(<(bitmap_base_data >> 9) | (0 << 2) | 0)
+	lda #(<(bitmap_base_data >> 9) | (0 << 1) | 0)
 								;  height    |  width
 	sta veral0tilebase
 
