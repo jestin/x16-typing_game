@@ -4,7 +4,6 @@ RM				= rm
 
 PROGS			= TYPE.PRG
 WORD_FILES		= ANI0.BIN HOMEROW.BIN
-TILE_FILES		= TILES.BIN TITLEMAP.BIN
 
 all: $(PROGS)
 
@@ -14,8 +13,6 @@ ANI0.BIN:
 HOMEROW.BIN:
 	$(ASSEMBLER6502) $(AS_FLAGS) --outfile HOMEROW.BIN homerow.asm
 
-TILES.BIN:
-	$(ASSEMBLER6502) $(AS_FLAGS) --outfile TILES.BIN tiles.asm
 
 GAMEMAP.BIN:
 	$(ASSEMBLER6502) $(AS_FLAGS) --outfile GAMEMAP.BIN game_map.asm
@@ -25,16 +22,15 @@ TITLEMAP.BIN:
 
 WORDS: $(WORD_FILES)
 
-TILES: $(TILE_FILES)
 
-TYPE.PRG: WORDS TILES
+TYPE.PRG: WORDS
 	$(ASSEMBLER6502) $(AS_FLAGS) --outfile TYPE.PRG main.asm
 
 run: clean TYPE.PRG
 	./x16emu -prg TYPE.PRG -run -scale 2 -debug
 
 clean:
-	$(RM) -f *.o *.tmp $(PROGS) $(WORD_FILES) $(TILE_FILES) *~ core
+	$(RM) -f *.o *.tmp $(PROGS) $(WORD_FILES) *~ core
 
 video:
 	./x16emu -bas utils/video_settings.bas -run -scale 2 -debug
