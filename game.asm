@@ -10,7 +10,7 @@ end_stringfilename:
 tilefilename: !raw "GAMETILES.BIN"
 end_tilefilename:
 
-gamemapfilename: !raw "GAMEMAP.0.BIN"
+gamemapfilename: !raw "GAMEMAP.BIN"
 end_gamemapfilename:
 
 palettefilename: !raw "GAMETILES.BIN.PAL"
