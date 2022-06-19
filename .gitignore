@@ -4,9 +4,16 @@
 *.bin
 *.BIN
 *.BIN.PAL
+*.zsm
+*.ZSM
+*.list
+*.img
 
 # symbolic link to emulator
 x16emu
+
+# other files
+*.tiled-session
 
 # dumps
 dump*.bin
