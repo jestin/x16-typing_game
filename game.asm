@@ -40,7 +40,7 @@ game_init:
 	bne :-
 
 	; set video mode
-	lda #%00100001		; turn off video
+	lda #%00000001		; turn off video
 	sta veradcvideo
 
 	jsr setup_game_bitmap
@@ -51,10 +51,6 @@ game_init:
 	lda #128
 	sta veradchscale
 	sta veradcvscale
-
-	; set video mode
-	lda #%01110001		; sprites and l1 enabled
-	sta veradcvideo
 
 	ldx #0
 :	cpx #NUM_TARGETS
@@ -84,6 +80,10 @@ game_init:
 	ldx #<string_map_size
 	ldy #>string_map_size
 	jsr LOAD
+
+	; set video mode
+	lda #%01110001		; sprites and l1 enabled
+	sta veradcvideo
 
 	rts
 

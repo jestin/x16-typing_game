@@ -16,7 +16,7 @@ WORD_FILES		= ANI0.BIN HOMEROW.BIN
 TILEMAPS		= GAMEMAP.BIN \
 				  TITLEMAP.BIN
 
-all: $(PROG)
+all: clean $(PROG)
 
 tilemaps: $(TILEMAPS)
 

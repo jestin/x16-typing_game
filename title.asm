@@ -12,8 +12,8 @@ end_titlebitmapfilename:
 ;==================================================
 title_init:
 
-	; set video mode
-	lda #%00110001		; l0 and l1 enabled
+	; turn off video
+	lda #%00000001		; l0 enabled
 	sta veradcvideo
 
 	; set double scale
@@ -23,6 +23,10 @@ title_init:
 
 	jsr setup_title_bitmap
 	jsr setup_title_tile_map
+
+	; set video mode
+	lda #%00110001		; l0 and l1 enabled
+	sta veradcvideo
 
 	rts
 
