@@ -159,7 +159,7 @@ setup_game_bitmap:
 	lda #0
 	sta veral0hscrollhi
 
-	; set the bitmap base address	(320 width)
+	; set the bitmap base address	(640 width)
 	lda #(<(bitmap_base_data >> 9) | (0 << 1) | 0)
 								;  height    |  width
 	sta veral0tilebase
@@ -167,28 +167,42 @@ setup_game_bitmap:
 	vset bitmap_base_data | AUTO_INC_1
 
 	ldy #0
-BITMAP_ROWS:
+	LoadW u1, 0
+@row_loop:
 	LoadW u0, 0		; x
 
-	lda #$06			; black|blue
+@col_loop:
 
 	; check whether to use white background
-	cpy #210
-	bcc :+ 	
+	lda u1H
+	cmp #1
+	bne @write_pattern
+	lda u1L
+	cmp #104
+	bcc @write_pattern
 	lda #$11			; white|white
+	bra @write_byte
 
-:	sta veradat
+@write_pattern:
+	lda #$06			; black|blue
+
+@write_byte:
+	sta veradat
 	IncW u0
-	lda u0L
-	cmp #<320
-	bne :-
 	lda u0H
 	cmp #>320
-	bne :-
+	bne @col_loop
+	lda u0L
+	cmp #<320
+	bne @col_loop
 
-	iny
-	cpy #240
-	bne BITMAP_ROWS
+	IncW u1
+	lda u1H
+	cmp #>480
+	bne @row_loop
+	lda u1L
+	cmp #<480
+	bne @row_loop
 
 	rts
 
