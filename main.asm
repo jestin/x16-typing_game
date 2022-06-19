@@ -73,7 +73,7 @@ handle_irq:
 ;==================================================
 check_vsync:
 	lda zp_vsync_trig
-	beq CHECK_VSYNC_END
+	beq @check_vsync_end
 
 	; VSYNC has occurred, handle
 
@@ -81,10 +81,10 @@ check_vsync:
 	cmp #TITLE_SCREEN
 	bne :+ 
 	jsr title_tick
-	jmp CHECK_VSYNC_END
+	jmp @check_vsync_end
 
 :	jsr game_tick
 
-CHECK_VSYNC_END:
+@check_vsync_end:
 	stz zp_vsync_trig
 	rts

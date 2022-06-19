@@ -71,10 +71,10 @@ set_target_string:
 
 	ldy #0		; zero out the y register
 
-READ_STRING_LOOP:
+@read_string_loop:
 	lda (zp_string_addr),y
 	cmp #0
-	beq END_READ_STRING_LOOP	; end of string
+	beq @end_read_string_loop	; end of string
 	
 	; At this point we have an ascii code to allocate
 	; a sprite for.  The sprites are allocated as
@@ -117,9 +117,9 @@ READ_STRING_LOOP:
 	iny
 	jsr inc_next_sprite_index
 	
-	jmp READ_STRING_LOOP
+	jmp @read_string_loop
 
-END_READ_STRING_LOOP:
+@end_read_string_loop:
 
 	; We need to allocate the next target string.
 	; This puts the address in u0, which is where
@@ -151,8 +151,9 @@ END_READ_STRING_LOOP:
 ; 	adc #128		; add 128 to put us back in the 0-127 range
 ; +	sta u2L
 
+@write_target_string_loop:
 	cpy u1L
-	bcs WRITE_TARGET_STRING_SENTINEL
+	bcs @write_target_string_sentinel
 	lda u6L
 	iny
 	sta (zp_cur_target_string_addr),y
@@ -162,9 +163,9 @@ END_READ_STRING_LOOP:
 	bmi :+
 	lda #0
 	sta u6L
-:	jmp :-
+:	jmp @write_target_string_loop
 
-WRITE_TARGET_STRING_SENTINEL:
+@write_target_string_sentinel:
 	lda #255		; sentinel value
 	iny
 	sta (zp_cur_target_string_addr),y
