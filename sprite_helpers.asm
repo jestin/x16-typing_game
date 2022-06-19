@@ -11,11 +11,11 @@ load_vram:
 	pha
 
 	ldy #0
--	lda (u0),y
+:	lda (u0),y
 	sta veradat
 	iny
 	cpy u1L
-	bne -
+	bne :-
 
 	pla
 	tay
@@ -31,17 +31,17 @@ load_vram:
 ;==================================================
 set_sprite:
 	; set the sprite in the register
--	lda #(SPRITE_SIZE_8 << 6) | (SPRITE_SIZE_8 << 4) | 0		; height/width/paloffset
+	lda #(SPRITE_SIZE_8 << 6) | (SPRITE_SIZE_8 << 4) | 0		; height/width/paloffset
 	ora u0L
-	+sprstore 7
+	sprstore 7
 	lda #2 << 2          ; z-depth=2
-	+sprstore 6
+	sprstore 6
 	tya
 	clc
 	adc #<(sprite_vram_data >> 5)
-	+sprstore 0
+	sprstore 0
 	lda #>(sprite_vram_data >> 5) | 0 << 7 ; mode=0
-	+sprstore 1
+	sprstore 1
 
 	rts
 
@@ -56,13 +56,13 @@ set_sprite:
 ;==================================================
 set_sprite_pos:
 	lda u0L
-	+sprstore 2
+	sprstore 2
 	lda u0H
-	+sprstore 3
+	sprstore 3
 	lda u1L
-	+sprstore 4
+	sprstore 4
 	lda u1H
-	+sprstore 5
+	sprstore 5
 	rts
 
 ;==================================================
@@ -75,9 +75,9 @@ set_sprite_pos:
 ;==================================================
 set_sprite_x_pos:
 	lda u0L
-	+sprstore 2
+	sprstore 2
 	lda u0H
-	+sprstore 3
+	sprstore 3
 	rts
 
 ;==================================================
@@ -90,9 +90,9 @@ set_sprite_x_pos:
 ;==================================================
 set_sprite_y_pos:
 	lda u0L
-	+sprstore 4
+	sprstore 4
 	lda u0H
-	+sprstore 5
+	sprstore 5
 	rts
 
 ;==================================================
@@ -102,14 +102,14 @@ set_sprite_y_pos:
 ;==================================================
 clear_sprite:
 	lda #0
-	+sprstore 0
-	+sprstore 1
-	+sprstore 2
-	+sprstore 3
-	+sprstore 4
-	+sprstore 5
-	+sprstore 6
-	+sprstore 7
+	sprstore 0
+	sprstore 1
+	sprstore 2
+	sprstore 3
+	sprstore 4
+	sprstore 5
+	sprstore 6
+	sprstore 7
 
 	rts
 
@@ -122,7 +122,7 @@ inc_next_sprite_index:
 	inc zp_next_sprite_index
 	lda zp_next_sprite_index
 	cmp #(128 - NUM_SCOREBOARD_SPRITES)				; some sprites display the missed and score
-	bmi +
+	bmi :+
 	lda #0
 	sta zp_next_sprite_index
-+	rts
+:	rts

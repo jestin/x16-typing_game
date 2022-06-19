@@ -1,4 +1,4 @@
-!ifdef TARGET_MARCROS !eof
+.ifndef TARGET_MARCROS_ASM
 TARGET_MARCROS = 1
 
 ;==================================================
@@ -7,18 +7,18 @@ TARGET_MARCROS = 1
 ; based on the the current x register.
 ; void SetZpCurTargetAddr(byte target_index: x)
 ;==================================================
-!macro SetZpCurTargetAddr {
+.macro SetZpCurTargetAddr
 	; First, we need to set zp_cur_target_addr
 	; We do this by successively adding two bytes to
 	; to target_data, one time for each index past 0.
-	+LoadW zp_cur_target_addr, target_data
--	cpx #0
-	beq +
-	+AddW zp_cur_target_addr, 8
+	LoadW zp_cur_target_addr, target_data
+:	cpx #0
+	beq :+
+	AddW zp_cur_target_addr, 8
 	dex
-	jmp -
-+	nop			; meh, I'll waste a couple cycles for readability
-}
+	jmp :-
+:	nop			; meh, I'll waste a couple cycles for readability
+.endmacro
 
 ;==================================================
 ; SetZpCurTargetStringAddr
@@ -27,8 +27,8 @@ TARGET_MARCROS = 1
 ; based on the the current x register.
 ; void SetZpCurTargetStringAddr(byte target_index: x)
 ;==================================================
-!macro SetZpCurTargetStringAddr {
-	+SetZpCurTargetAddr
+.macro SetZpCurTargetStringAddr
+	SetZpCurTargetAddr
 
 	; At this point, zp_cur_target_addr is set to the correct address,
 	; so we should set zp_cur_target_string_addr.
@@ -39,4 +39,6 @@ TARGET_MARCROS = 1
 	iny
 	lda (zp_cur_target_addr),y
 	sta zp_cur_target_string_addr+1
-}
+.endmacro
+
+.endif ; TARGET_MARCROS_ASM

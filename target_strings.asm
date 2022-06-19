@@ -72,7 +72,7 @@ set_target_string:
 	ldy #0		; zero out the y register
 
 READ_STRING_LOOP:
--	lda (zp_string_addr),y
+	lda (zp_string_addr),y
 	cmp #0
 	beq END_READ_STRING_LOOP	; end of string
 	
@@ -86,7 +86,7 @@ READ_STRING_LOOP:
 	sec
 	sbc #65			; subtract 65 no matter what
 	cmp #26			; anything above 25 is lowercase
-	bmi +			; branch to skip right to sprite allocation
+	bmi :+			; branch to skip right to sprite allocation
 	sec
 	sbc #6			; subtract an additional 6 for lowercase
 					; this represents the characters between
@@ -94,7 +94,7 @@ READ_STRING_LOOP:
 
 	; At this point A stores the sprite vram index.
 	
-+	sta (zp_string_buffer_addr),y		; store in the temp string buffer
+:	sta (zp_string_buffer_addr),y		; store in the temp string buffer
 	tya
 	sta u1			; stash loop counter in a pseudo register
 	; load sprite vram index into y
@@ -127,7 +127,7 @@ END_READ_STRING_LOOP:
 	tya			; should be the length of the string
 	sta u1L
 	jsr allocate_target_string
-	+MoveW u0, zp_cur_target_string_addr
+	MoveW u0, zp_cur_target_string_addr
 
 	pla			; pull the original x from the stack
 	tax
@@ -151,7 +151,7 @@ END_READ_STRING_LOOP:
 ; 	adc #128		; add 128 to put us back in the 0-127 range
 ; +	sta u2L
 
--	cpy u1L
+	cpy u1L
 	bcs WRITE_TARGET_STRING_SENTINEL
 	lda u6L
 	iny
@@ -159,12 +159,12 @@ END_READ_STRING_LOOP:
 	inc u6L
 	lda u6L
 	cmp #(128 - NUM_SCOREBOARD_SPRITES)		; just like with zp_next_sprite_index, we need to cap at 127
-	bmi +
+	bmi :+
 	lda #0
 	sta u6L
-+	jmp -
+:	jmp :-
 
-WRITE_TARGET_STRING_SENTINEL
+WRITE_TARGET_STRING_SENTINEL:
 	lda #255		; sentinel value
 	iny
 	sta (zp_cur_target_string_addr),y
@@ -181,9 +181,9 @@ WRITE_TARGET_STRING_SENTINEL
 ; void allocate_target_string(out addr: u0,
 ;								byte size: u1L)
 ;==================================================
-allocate_target_string
-	; Although this address is a word, we will
-	; never use the high byte.  Target strings are
+allocate_target_string:
+; Although this address is a word, we will:
+; never use the high byte.  Target strings are
 	; only N+2 bytes in memory, where N is the
 	; number of characters in the string.  Since
 	; each character requires one of the 128
@@ -195,11 +195,11 @@ allocate_target_string
 	; 112 characters will be spaces in a typing
 	; game).
 
-	+MoveW zp_next_target_string_addr, u0	; store current in out variable
-	+MoveW zp_next_target_string_addr, u2	; use u2 to compute new next
+	MoveW zp_next_target_string_addr, u0	; store current in out variable
+	MoveW zp_next_target_string_addr, u2	; use u2 to compute new next
 
 	; this will account for the index and sentinel
-	+AddW u2, 2
+	AddW u2, 2
 
 	; calculate new next
 	lda u2L
@@ -210,24 +210,24 @@ allocate_target_string
 	adc #0		; carry
 	sta u2H
 
-	+MoveW u2, zp_next_target_string_addr
+	MoveW u2, zp_next_target_string_addr
 
 	; the high byte is still in the accumulator
 	cmp #>target_string_data_end
-	bcc +		; the high byte of the new address is lower,
+	bcc :+		; the high byte of the new address is lower,
 				; so we are within range
 	
 	; if we are here, we need to check the low byte
 	lda u2L
 	cmp #<target_string_data_end
-	bmi +		; the low byte of the new address is lower,
+	bmi :+		; the low byte of the new address is lower,
 				; so we are within range
 
 	; if we are here, we need to return the start of the target string block
 	; and advance the next to the length plus two
-	+LoadW u0, target_string_data
-	+LoadW zp_next_target_string_addr, target_string_data
-	+AddW zp_next_target_string_addr, 2			; for sentinel and index
+	LoadW u0, target_string_data
+	LoadW zp_next_target_string_addr, target_string_data
+	AddW zp_next_target_string_addr, 2			; for sentinel and index
 
 	lda zp_next_target_string_addr
 	clc
@@ -237,4 +237,4 @@ allocate_target_string
 	adc #0	; carry
 	sta zp_next_target_string_addr+1
 
-+	rts
+:	rts

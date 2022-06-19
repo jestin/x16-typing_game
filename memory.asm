@@ -1,4 +1,4 @@
-!ifdef MEMORY !eof
+.ifndef MEMORY_ASM
 MEMORY = 1
 
 ; This file defines addresses for the game's memory map
@@ -6,27 +6,29 @@ MEMORY = 1
 ; These addresses are used for storing the targets (max
 ; of 8). Each of targets contains a coordinate, a
 ; speed, and an index to the string.
-!addr target_data				= $0400
-!addr target_data_end			= $043f
+target_data				= $0400
+target_data_end			= $043f
 
 ; These addresses are used for storing target strings,
 ; which consist of an index to a string in program
 ; memory, and array of sprite indexes, and a sentinel
 ; value.
-!addr target_string_data		= $0440
-!addr target_string_data_end	= $053f
+target_string_data		= $0440
+target_string_data_end	= $053f
 
 ; This is a buffer for reading string data from program memory
-!addr string_buffer				= $0540
-!addr string_buffer_end			= $055f
+string_buffer				= $0540
+string_buffer_end			= $055f
 
 ; digit storage for scoreboard
-!addr missed_target_digits		= $0600		; can only be at most 3 bytes
-!addr score_digits				= $0603		; can be at most 5 bytes
+missed_target_digits		= $0600		; can only be at most 3 bytes
+score_digits				= $0603		; can be at most 5 bytes
 
 ; original IRQ vector address
-!addr def_irq					= $8000		; single byte
+def_irq					= $8000		; single byte
 
-!addr string_map_size			= $06FF		; always one less than string_map to
+string_map_size			= $06FF		; always one less than string_map to
 											; account for the number of strings
-!addr string_map				= $0700		; strings from files are loaded here
+string_map				= $0700		; strings from files are loaded here
+
+.endif ; MEMORY_ASM

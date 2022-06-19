@@ -65,10 +65,10 @@ decimal_chars_16:
 	; zero y
 	ldy #0
 	; use u1 and u2 as the scratchpad
-	+LoadW u2, 0
+	LoadW u2, 0
 
 decimal_chars_16_initialize_remainder:
-	+LoadW u2, 0
+	LoadW u2, 0
 	clc
 
 	ldx #16

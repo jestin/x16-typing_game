@@ -22,9 +22,9 @@ get_random_byte:
 get_random_byte_less_than:
 	sta u0L
 	; loop until the random is lower than the max
--	jsr get_random_byte
+:	jsr get_random_byte
 	cmp u0L
-	BCS -
+	bcs :-
 
 	rts
 

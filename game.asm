@@ -1,19 +1,17 @@
 GAME_SCREEN = 1
 SPAWN_DELAY = 100
 END_ON_MISEED = 11
-MAX_FILE_SIZE = 1000
-.file_buffer !word MAX_FILE_SIZE
 
-stringfilename: !raw "ANI0.BIN"
+stringfilename: .literal "ANI0.BIN"
 end_stringfilename:
 
-tilefilename: !raw "GAMETILES.BIN"
+tilefilename: .literal "GAMETILES.BIN"
 end_tilefilename:
 
-gamemapfilename: !raw "GAMEMAP.BIN"
+gamemapfilename: .literal "GAMEMAP.BIN"
 end_gamemapfilename:
 
-palettefilename: !raw "GAMETILES.BIN.PAL"
+palettefilename: .literal "GAMETILES.BIN.PAL"
 end_palettefilename:
 
 ;==================================================
@@ -21,8 +19,8 @@ end_palettefilename:
 ; Initializes everything needed to run the game
 ;==================================================
 game_init:
-	+LoadW zp_next_target_string_addr, target_string_data
-	+LoadW zp_string_buffer_addr, string_buffer
+	LoadW zp_next_target_string_addr, target_string_data
+	LoadW zp_string_buffer_addr, string_buffer
 
 	lda #0
 	sta zp_next_sprite_index
@@ -32,14 +30,14 @@ game_init:
 
 	; set the tick counter so that a spawn happens
 	; on the first tick
-	+LoadW zp_tick_counter, SPAWN_DELAY - 1
+	LoadW zp_tick_counter, SPAWN_DELAY - 1
 
 	; clear sprites
 	ldx #0
--	jsr clear_sprite
+:	jsr clear_sprite
 	inx
 	cpx #$7f
-	bne -
+	bne :-
 
 	; set video mode
 	lda #%00100001		; turn off video
@@ -59,12 +57,12 @@ game_init:
 	sta veradcvideo
 
 	ldx #0
--	cpx #NUM_TARGETS
-	beq +
+:	cpx #NUM_TARGETS
+	beq :+
 	jsr clear_target
 	inx
-	jmp -
-+	nop
+	jmp :-
+:	nop
 
 	lda #0
 	sta zp_next_target_index
@@ -95,7 +93,7 @@ game_init:
 ;==================================================
 game_tick:
 	; update the tick counter
-	+IncW zp_tick_counter
+	IncW zp_tick_counter
 
 	jsr set_scoreboard
 
@@ -108,41 +106,41 @@ game_tick:
 	; loop through the targets
 	ldx #0
 
--	jsr update_target
+:	jsr update_target
 	inx
 	cpx #8
-	bne -
+	bne :-
 
 	; end game on too many missed targets
 	lda zp_missed
 	cmp #END_ON_MISEED
-	bcc +
+	bcc :+
 	lda #TITLE_SCREEN
 	sta zp_screen
 	jsr title_init
 
 	; clear key buffer if no matches
-+	lda zp_num_matched_targets
+:	lda zp_num_matched_targets
 	cmp #0
-	bne +
+	bne :+
 	lda #0
 	sta zp_key_buffer_length
 
 	; add new target if needed
-+	lda zp_active_targets
+:	lda zp_active_targets
 	cmp #8
-	bpl +
+	bpl :+
 	lda zp_tick_counter+1
 	cmp #>SPAWN_DELAY
-	bmi +					; >zp_tick_counter is lower than >SPAWN_DELAY, skip the add
+	bmi :+					; >zp_tick_counter is lower than >SPAWN_DELAY, skip the add
 	lda zp_tick_counter
 	cmp #<SPAWN_DELAY
-	bmi +
+	bmi :+
 	jsr add_random_target
 
-	+LoadW zp_tick_counter, 0
+	LoadW zp_tick_counter, 0
 
-+	rts
+:	rts
 
 ;==================================================
 ; setup_game_bitmap
@@ -166,27 +164,27 @@ setup_game_bitmap:
 								;  height    |  width
 	sta veral0tilebase
 
-	+vset bitmap_base_data | AUTO_INC_1
+	vset bitmap_base_data | AUTO_INC_1
 
 	ldy #0
 BITMAP_ROWS:
-	+LoadW u0, 0		; x
+	LoadW u0, 0		; x
 
--	lda #$06			; black|blue
+	lda #$06			; black|blue
 
 	; check whether to use white background
 	cpy #210
-	bcc + 	
+	bcc :+ 	
 	lda #$11			; white|white
 
-+	sta veradat
-	+IncW u0
+:	sta veradat
+	IncW u0
 	lda u0L
 	cmp #<320
-	bne -
+	bne :-
 	lda u0H
 	cmp #>320
-	bne -
+	bne :-
 
 	iny
 	cpy #240
@@ -267,16 +265,16 @@ setup_game_tile_map:
 ;==================================================
 load_game_sprites:
 ; 	; load the sprite into vram
-	+vset sprite_vram_data | AUTO_INC_1
-	+LoadW u0, sprite_data
+	vset sprite_vram_data | AUTO_INC_1
+	LoadW u0, sprite_data
 	lda #32
 	sta u1L
 	ldx #0
--	jsr load_vram
-	+AddW u0, 32
+:	jsr load_vram
+	AddW u0, 32
 	inx
 	cpx #NUM_SPRITES
-	bne -
+	bne :-
 
 	; initialize scoreboard sprites
 
@@ -286,8 +284,8 @@ load_game_sprites:
 	lda #1				; paloffset
 	sta u0L
 	jsr set_sprite
-	+LoadW u0, 180
-	+LoadW u1, 440
+	LoadW u0, 180
+	LoadW u1, 440
 	jsr set_sprite_pos
 
 	; missed mid digit
@@ -295,8 +293,8 @@ load_game_sprites:
 	lda #1				; paloffset
 	sta u0L
 	jsr set_sprite
-	+LoadW u0, 172
-	+LoadW u1, 440
+	LoadW u0, 172
+	LoadW u1, 440
 	jsr set_sprite_pos
 
 	; missed hi digit
@@ -304,8 +302,8 @@ load_game_sprites:
 	lda #1				; paloffset
 	sta u0L
 	jsr set_sprite
-	+LoadW u0, 164
-	+LoadW u1, 440
+	LoadW u0, 164
+	LoadW u1, 440
 	jsr set_sprite_pos
 
 	; score lo digit
@@ -313,8 +311,8 @@ load_game_sprites:
 	lda #1				; paloffset
 	sta u0L
 	jsr set_sprite
-	+LoadW u0, 476
-	+LoadW u1, 440
+	LoadW u0, 476
+	LoadW u1, 440
 	jsr set_sprite_pos
 
 	; score second lowest digit
@@ -322,8 +320,8 @@ load_game_sprites:
 	lda #1				; paloffset
 	sta u0L
 	jsr set_sprite
-	+LoadW u0, 468
-	+LoadW u1, 440
+	LoadW u0, 468
+	LoadW u1, 440
 	jsr set_sprite_pos
 
 	; score mid digit
@@ -331,8 +329,8 @@ load_game_sprites:
 	lda #1				; paloffset
 	sta u0L
 	jsr set_sprite
-	+LoadW u0, 460
-	+LoadW u1, 440
+	LoadW u0, 460
+	LoadW u1, 440
 	jsr set_sprite_pos
 
 	; score second highest digit
@@ -340,8 +338,8 @@ load_game_sprites:
 	lda #1				; paloffset
 	sta u0L
 	jsr set_sprite
-	+LoadW u0, 452
-	+LoadW u1, 440
+	LoadW u0, 452
+	LoadW u1, 440
 	jsr set_sprite_pos
 
 	; score hi digit
@@ -349,8 +347,8 @@ load_game_sprites:
 	lda #1				; paloffset
 	sta u0L
 	jsr set_sprite
-	+LoadW u0, 444
-	+LoadW u1, 440
+	LoadW u0, 444
+	LoadW u1, 440
 	jsr set_sprite_pos
 
 	rts
@@ -361,21 +359,21 @@ load_game_sprites:
 ;==================================================
 set_scoreboard:
 
-	+LoadW u0, missed_target_digits
+	LoadW u0, missed_target_digits
 
 	; clear old data
 	ldx #NUM_SCOREBOARD_SPRITES
--	lda #0
+:	lda #0
 	sta missed_target_digits,x
 	dex
-	bne -
+	bne :-
 
 	lda zp_missed
 	jsr decimal_chars_8
 	tya
 	sta u2L				; number of digits
 
-	+LoadW u0, score_digits
+	LoadW u0, score_digits
 	lda zp_score
 	sta u1L
 	lda zp_score+1
@@ -384,13 +382,13 @@ set_scoreboard:
 	tya
 	sta u2H				; number of digits
 
-	+LoadW u1, missed_target_digits			; since u0 is needed for set_sprite, load u1 with the same address
+	LoadW u1, missed_target_digits			; since u0 is needed for set_sprite, load u1 with the same address
 
 	ldy #0
 	; scoreboard uses the last 8 sprites
 	ldx #(128 - NUM_SCOREBOARD_SPRITES)
 
--	lda (u1),y
+:	lda (u1),y
 	phy					; save the current y, since set_sprite uses it
 	clc
 	adc #52				; the start of the number sprites
@@ -402,6 +400,6 @@ set_scoreboard:
 	iny
 	inx
 	cpx #128
-	bne -
+	bne :-
 
 	rts

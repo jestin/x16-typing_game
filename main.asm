@@ -1,22 +1,26 @@
-*=$1000
-jmp main
+.segment "STARTUP"
+.segment "INIT"
+.segment "ONCE"
+.segment "CODE"
 
-!src "vera.asm"
-!src "macros.asm"
-!src "memory.asm"
-!src "vram.asm"
-!src "x16.asm"
-!src "zp.asm"
-!src "sprite_helpers.asm"
-!src "target_macros.asm"
-!src "targets.asm"
-!src "target_strings.asm"
-!src "math.asm"
-!src "key_buffer.asm"
-!src "random.asm"
-!src "title.asm"
-!src "game.asm"
-!src "sprites.asm"
+	jmp main
+
+.include "x16.inc"
+.include "vera.inc"
+.include "macros.inc"
+.include "memory.asm"
+.include "vram.asm"
+.include "zp.asm"
+.include "sprite_helpers.asm"
+.include "target_macros.asm"
+.include "targets.asm"
+.include "target_strings.asm"
+.include "math.asm"
+.include "key_buffer.asm"
+.include "random.asm"
+.include "title.asm"
+.include "game.asm"
+.include "sprites.asm"
 
 main:
 	; load title screen
@@ -57,12 +61,12 @@ handle_irq:
 	; check for VSYNC
 	lda veraisr
 	and #$01
-	beq +
+	beq :+
 	sta zp_vsync_trig
 	; clear vera irq flag
 	sta veraisr
 
-+	jmp (def_irq)
+:	jmp (def_irq)
 
 ;==================================================
 ; check_vsync
@@ -75,11 +79,11 @@ check_vsync:
 
 	lda zp_screen
 	cmp #TITLE_SCREEN
-	bne + 
+	bne :+ 
 	jsr title_tick
 	jmp CHECK_VSYNC_END
 
-+	jsr game_tick
+:	jsr game_tick
 
 CHECK_VSYNC_END:
 	stz zp_vsync_trig

@@ -10,7 +10,7 @@ get_keyboard_input:
 	cmp #0
 	beq GET_KEYBOARD_INPUT_END
 	cmp #$3		; ESC
-	bne +
+	bne :+
 
 	; clear buffer on ESC
 	lda #0
@@ -18,13 +18,13 @@ get_keyboard_input:
 	jmp GET_KEYBOARD_INPUT_END
 
 	; Translate to ASCII
-+	cmp #$80				; anything less than 128 means it was hit without SHIFT
-	bmi +
+:	cmp #$80				; anything less than 128 means it was hit without SHIFT
+	bmi :+
 	; lowercase was typed
 	sec
 	sbc #$80				; converts to lowercase ascii
 	jmp GET_KEYBOARD_INPUT_ADD_BUFFER
-+	clc
+:	clc
 	adc #$20				; converts to uppercase ascii
 
 GET_KEYBOARD_INPUT_ADD_BUFFER:

@@ -1,9 +1,9 @@
 TITLE_SCREEN = 0
 
-titlemapfilename: !raw "TITLEMAP.BIN"
+titlemapfilename: .literal "TITLEMAP.BIN"
 end_titlemapfilename:
 
-titlebitmapfilename: !raw "BACKGROUND.BIN"
+titlebitmapfilename: .literal "BACKGROUND.BIN"
 end_titlebitmapfilename:
 
 ;==================================================

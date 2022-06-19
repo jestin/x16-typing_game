@@ -101,11 +101,11 @@ update_target:
 	iny
 	lda target_data,y
 	cmp #$01
-	bne +
+	bne :+
 	dey ; decrement to get y low
 	lda target_data,y
 	cmp #$a0				; clear targets at 416
-	bcc +
+	bcc :+
 
 	; At this point, the player has missed the target
 	; TODO: apply whatever penalty occurs
@@ -115,7 +115,7 @@ update_target:
 	jsr clear_target_sprites
 	jmp UPDATE_TARGET_END
 
-+	jsr update_target_chars
+:	jsr update_target_chars
 	jsr update_target_pos
 	jsr set_target_pos
 
@@ -131,7 +131,7 @@ update_target_pos:
 	phy
 	phx
 
-	+SetZpCurTargetAddr
+	SetZpCurTargetAddr
 
 	; read ticks per pixel
 	ldy #4
@@ -146,7 +146,7 @@ update_target_pos:
 	sta u0H			; store the current tick count
 
 	cmp u0L
-	bne + 			; if not equal, do not update position
+	bne :+ 			; if not equal, do not update position
 
 	; first set the current tick count so that the next inc
 	; will be zero
@@ -160,7 +160,7 @@ update_target_pos:
 	lda (zp_cur_target_addr),y
 	inc
 	sta (zp_cur_target_addr),y
-	bne +				; when zero is set, it means rollover
+	bne :+				; when zero is set, it means rollover
 
 	; increment the high byte
 	iny
@@ -168,7 +168,7 @@ update_target_pos:
 	inc
 	sta (zp_cur_target_addr),y
 
-+	lda u0H			; load the temp var for tick count,
+:	lda u0H			; load the temp var for tick count,
 					; regardless of whether it was reset or not
 	inc
 	ldy #5
@@ -189,7 +189,7 @@ update_target_chars:
 	phy
 	phx
 
-	+SetZpCurTargetStringAddr
+	SetZpCurTargetStringAddr
 
 	; determine if the buffer matches.  If so,
 	; change the pallete of the first
@@ -218,35 +218,35 @@ update_target_chars:
 
 	; loop through the buffer and compare against current char
 	ldy #$ff	; because we start with an increment, we initialize to $ff
--	iny
+:	iny
 	lda (zp_string_addr),y
 	cmp #0									; null-terminated string
 	beq UPDATE_TARGET_CHARS_COMPLETE_MATCH
 	cpy zp_key_buffer_length
-	beq +
+	beq :+
 	lda #3		; paloffset
 	sta u0L
 	lda (zp_string_addr),y
 	cmp zp_key_buffer,y	
-	beq -
+	beq :-
 
 	; if we make it here, it means the string doesn't match
 	lda #0
 	sta u0L
 
 	; loop through the sprites and change the pallete offset
-+	ldy #1			; the sprite indices start at byte 1
--	lda (zp_cur_target_string_addr),y
+:	ldy #1			; the sprite indices start at byte 1
+:	lda (zp_cur_target_string_addr),y
 	cmp #255		; compare to sentinel value
 	beq UPDATE_TARGET_MATCH_CHECK
 	tax
 	lda #(SPRITE_SIZE_8 << 6) | (SPRITE_SIZE_8 << 4) | 0		; height/width/paloffset
 	ora u0L														; OR with paloffset
-	+sprstore 7
+	sprstore 7
 	cpy zp_key_buffer_length
 	beq UPDATE_TARGET_MATCH_CHECK
 	iny
-	jmp -
+	jmp :-
 
 UPDATE_TARGET_CHARS_COMPLETE_MATCH:
 	; this is for when the full string has been matched
@@ -256,10 +256,10 @@ UPDATE_TARGET_CHARS_COMPLETE_MATCH:
 	lda zp_score
 	adc zp_key_buffer_length
 	sta zp_score
-	bcc +
+	bcc :+
 	inc zp_score+1				; on carry increment high byte
 	
-+	plx
+:	plx
 	jsr clear_target
 	jsr clear_target_sprites
 	lda #0
@@ -269,7 +269,7 @@ UPDATE_TARGET_CHARS_COMPLETE_MATCH:
 
 UPDATE_TARGET_MATCH_CHECK:
 	; check if anything was highlighted
-+	lda u0L
+	lda u0L
 	cmp #0				; non-highlighted paloffset
 	beq UPDATE_TARGET_CHARS_END
 
@@ -292,7 +292,7 @@ UPDATE_TARGET_CHARS_END:
 set_target_pos:
 	phx
 
-	+SetZpCurTargetStringAddr
+	SetZpCurTargetStringAddr
 
 	; Now we read the x and y position from the data, and set the sprites
 
@@ -312,16 +312,16 @@ set_target_pos:
 	sta u1H
 
 	ldy #1			; the sprite indices start at byte 1
--	lda (zp_cur_target_string_addr),y
+:	lda (zp_cur_target_string_addr),y
 	cmp #255		; compare to sentinel value
-	beq +
+	beq :+
 	tax
 	jsr set_sprite_pos
 	iny
-	+AddW u0, 8
-	jmp -
+	AddW u0, 8
+	jmp :-
 
-+	plx				; restore X
+:	plx				; restore X
 	rts
 
 ;==================================================
@@ -332,18 +332,18 @@ set_target_pos:
 clear_target_sprites:
 	phx
 
-	+SetZpCurTargetStringAddr
+	SetZpCurTargetStringAddr
 
 	ldy #1			; the sprite indices start at byte 1
--	lda (zp_cur_target_string_addr),y
+:	lda (zp_cur_target_string_addr),y
 	cmp #255		; compare to sentinel value
-	beq +
+	beq :+
 	tax
 	jsr clear_sprite
 	iny
-	jmp -
+	jmp :-
 
-+	nop
+:	nop
 
 	plx
 	rts
@@ -358,7 +358,7 @@ clear_target:
 	phy
 	phx
 
-	+SetZpCurTargetAddr
+	SetZpCurTargetAddr
 
 	; set the X value to $FFFF, which we will interpret as null
 	ldy #0
@@ -383,7 +383,7 @@ add_random_target:
 	; loop through the targets to find the next available index
 	ldx #$ff	; increment first
 
--	inx
+:	inx
 	txa
 	asl
 	asl
@@ -399,14 +399,14 @@ add_random_target:
 
 	; if not $ff, try the next one
 	cmp #$ff
-	bne -
+	bne :-
 
 	; compare x to make sure we didn't go through all the targets without finding any
 	cpx #8
-	bmi +
+	bmi :+
 	rts		; if here, we just return without adding
 
-+	txa
+:	txa
 	sta zp_next_target_index
 
 	; check the size of the the string map and get an appropriate random value
@@ -429,9 +429,9 @@ add_random_target:
 	lsr
 	clc
 	sta u1H					; high byte is either $00 or $01
-	+AddW u1, 16			; add enough to make sure it's off the left edge
+	AddW u1, 16			; add enough to make sure it's off the left edge
 
-	+LoadW u2, 0	; y of 0
+	LoadW u2, 0	; y of 0
 	jsr get_random_medium_speed
 	sta u3L
 	ldx zp_next_target_index
@@ -439,6 +439,6 @@ add_random_target:
 	jsr set_target_pos
 
 	; increment active targets
-+	inc zp_active_targets
+	inc zp_active_targets
 
 	rts
