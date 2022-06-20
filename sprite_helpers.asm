@@ -7,8 +7,7 @@
 ; NOTE: 0 should be use to represent a size of 256
 ;==================================================
 load_vram:
-	tya
-	pha
+	phy
 
 	ldy #0
 :	lda (u0),y
@@ -17,8 +16,7 @@ load_vram:
 	cpy u1L
 	bne :-
 
-	pla
-	tay
+	ply
 	rts
 	
 ;==================================================
@@ -122,7 +120,8 @@ inc_next_sprite_index:
 	inc zp_next_sprite_index
 	lda zp_next_sprite_index
 	cmp #(128 - NUM_SCOREBOARD_SPRITES)				; some sprites display the missed and score
-	bmi :+
+	bmi @return
 	lda #0
 	sta zp_next_sprite_index
-:	rts
+@return:
+	rts

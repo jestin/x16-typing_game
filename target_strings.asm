@@ -33,9 +33,11 @@
 
 ;==================================================
 ; set_target_string
+;
 ; Given a string index, creates the sprites and
 ; stores the newly created sprite indexes in memory
 ; in a new target string structure.
+;
 ; void set_target_string(out word target_string_address: u0,
 ;							out byte string_length: y,
 ;							byte string_index: x)
@@ -174,27 +176,30 @@ set_target_string:
 
 ;==================================================
 ; allocate_target_string
+;
 ; Increments the zp_next_target_string_addr
 ; register.  This function requires the size of the
 ; string (just the number of characters, without
 ; terminating 0) and will return the allocated
 ; address.
+;
 ; void allocate_target_string(out addr: u0,
 ;								byte size: u1L)
 ;==================================================
 allocate_target_string:
-; Although this address is a word, we will:
+
+; Although this address is a word, we will
 ; never use the high byte.  Target strings are
-	; only N+2 bytes in memory, where N is the
-	; number of characters in the string.  Since
-	; each character requires one of the 128
-	; sprites that the system supports, and we
-	; only allow 8 targets, the most memory this
-	; section will ever use is 144 bytes (unless
-	; there are spaces in the target strings, but
-	; even then it's a little absurd to think that
-	; 112 characters will be spaces in a typing
-	; game).
+; only N+2 bytes in memory, where N is the
+; number of characters in the string.  Since
+; each character requires one of the 128
+; sprites that the system supports, and we
+; only allow 8 targets, the most memory this
+; section will ever use is 144 bytes (unless
+; there are spaces in the target strings, but
+; even then it's a little absurd to think that
+; 112 characters will be spaces in a typing
+; game).
 
 	MoveW zp_next_target_string_addr, u0	; store current in out variable
 	MoveW zp_next_target_string_addr, u2	; use u2 to compute new next

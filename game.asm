@@ -82,7 +82,7 @@ game_init:
 	jsr LOAD
 
 	; set video mode
-	lda #%01110001		; sprites and l1 enabled
+	lda #%01110001		; sprites, l0, and l1 enabled
 	sta veradcvideo
 
 	rts
@@ -159,12 +159,12 @@ setup_game_bitmap:
 	lda #0
 	sta veral0hscrollhi
 
-	; set the bitmap base address	(640 width)
-	lda #(<(bitmap_base_data >> 9) | (0 << 1) | 0)
+	; set the bitmap base address	(320 width)
+	lda #(<(bitmap_base_data >> 9) | (0 << 0) | 0)
 								;  height    |  width
 	sta veral0tilebase
 
-	vset bitmap_base_data | AUTO_INC_1
+	vset (bitmap_base_data | AUTO_INC_1)
 
 	ldy #0
 	LoadW u1, 0
@@ -178,7 +178,7 @@ setup_game_bitmap:
 	cmp #1
 	bne @write_pattern
 	lda u1L
-	cmp #104
+	cmp #154
 	bcc @write_pattern
 	lda #$11			; white|white
 	bra @write_byte
@@ -189,11 +189,13 @@ setup_game_bitmap:
 @write_byte:
 	sta veradat
 	IncW u0
+	; each byte contains 2 pixels, so we only loop through 160 per row instead
+	; of 320
 	lda u0H
-	cmp #>320
+	cmp #>160
 	bne @col_loop
 	lda u0L
-	cmp #<320
+	cmp #<160
 	bne @col_loop
 
 	IncW u1
@@ -278,17 +280,18 @@ setup_game_tile_map:
 ; Loads the sprites into VRAM
 ;==================================================
 load_game_sprites:
-; 	; load the sprite into vram
-	vset sprite_vram_data | AUTO_INC_1
+	; load the sprite into vram
+	vset (sprite_vram_data | AUTO_INC_1)
 	LoadW u0, sprite_data
 	lda #32
 	sta u1L
 	ldx #0
-:	jsr load_vram
+@load_sprite_data_loop:
+	jsr load_vram
 	AddW u0, 32
 	inx
 	cpx #NUM_SPRITES
-	bne :-
+	bne @load_sprite_data_loop
 
 	; initialize scoreboard sprites
 
