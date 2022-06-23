@@ -30,14 +30,15 @@ game_init:
 
 	; set the tick counter so that a spawn happens
 	; on the first tick
-	LoadW zp_tick_counter, SPAWN_DELAY - 1
+	LoadW zp_tick_counter, (SPAWN_DELAY - 1)
 
 	; clear sprites
 	ldx #0
-:	jsr clear_sprite
+@clear_sprite_loop:
+	jsr clear_sprite
 	inx
 	cpx #$7f
-	bne :-
+	bne @clear_sprite_loop
 
 	; set video mode
 	lda #%00000001		; turn off video
@@ -53,12 +54,13 @@ game_init:
 	sta veradcvscale
 
 	ldx #0
-:	cpx #NUM_TARGETS
-	beq :+
+@clear_target_loop:
+	cpx #NUM_TARGETS
+	beq @clear_target_loop_end
 	jsr clear_target
 	inx
-	jmp :-
-:	nop
+	jmp @clear_target_loop
+@clear_target_loop_end:
 
 	lda #0
 	sta zp_next_target_index
@@ -293,11 +295,11 @@ load_game_sprites:
 	cpx #NUM_SPRITES
 	bne @load_sprite_data_loop
 
-	; initialize scoreboard sprites
+	; initialize scoreboard sprites to 0
+	ldy #52
 
 	; missed lo digit
 	ldx #(128 - NUM_SCOREBOARD_SPRITES)
-	ldy #52
 	lda #1				; paloffset
 	sta u0L
 	jsr set_sprite

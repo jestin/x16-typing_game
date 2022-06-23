@@ -240,7 +240,7 @@ update_target_chars:
 	cmp #255		; compare to sentinel value
 	beq UPDATE_TARGET_MATCH_CHECK
 	tax
-	lda #(SPRITE_SIZE_8 << 6) | (SPRITE_SIZE_8 << 4) | 0		; height/width/paloffset
+	lda #((SPRITE_SIZE_8 << 6) | (SPRITE_SIZE_8 << 4) | 0)		; height/width/paloffset
 	ora u0L														; OR with paloffset
 	sprstore 7
 	cpy zp_key_buffer_length

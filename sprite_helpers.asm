@@ -21,24 +21,26 @@ load_vram:
 	
 ;==================================================
 ; set_sprite
+;
 ; Sets the sprite register at the index given by x
 ; to the sprite data at the index given by y.
+;
 ; void set_sprite(byte sprite_index: x,
 ;					byte vram_index: y,
 ;					byte paloffset: u0L)
 ;==================================================
 set_sprite:
 	; set the sprite in the register
-	lda #(SPRITE_SIZE_8 << 6) | (SPRITE_SIZE_8 << 4) | 0		; height/width/paloffset
+	lda #((SPRITE_SIZE_8 << 6) | (SPRITE_SIZE_8 << 4) | 0)		; height/width/paloffset
 	ora u0L
 	sprstore 7
-	lda #2 << 2          ; z-depth=2
+	lda #(2 << 2)         ; z-depth=2
 	sprstore 6
 	tya
 	clc
 	adc #<(sprite_vram_data >> 5)
 	sprstore 0
-	lda #>(sprite_vram_data >> 5) | 0 << 7 ; mode=0
+	lda #>((sprite_vram_data >> 5) & %01111111) ; mode=0
 	sprstore 1
 
 	rts

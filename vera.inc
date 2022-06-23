@@ -131,7 +131,7 @@ SPRITE_SIZE_64	= $3
 	lsr
 	lsr
 	clc
-	adc #<(vram_sprd + offset >> 8)
+	adc #<((vram_sprd + offset) >> 8)
 	sta veramid
 	txa
 	asl
