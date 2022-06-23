@@ -40,7 +40,7 @@ set_sprite:
 	clc
 	adc #<(sprite_vram_data >> 5)
 	sprstore 0
-	lda #>((sprite_vram_data >> 5) & %01111111) ; mode=0
+	lda #(>(sprite_vram_data >> 5)) & %01111111 ; mode=0
 	sprstore 1
 
 	rts
