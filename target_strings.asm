@@ -1,3 +1,5 @@
+.segment "CODE"
+
 ;==================================================
 ; Target strings are how we store the strings of
 ; targets.  Because we use sprites to display

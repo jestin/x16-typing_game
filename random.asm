@@ -1,3 +1,5 @@
+.segment "CODE"
+
 ;==================================================
 ; get_random_byte
 ; Gathers entropy from the machine and combines

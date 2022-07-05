@@ -1,10 +1,14 @@
 TITLE_SCREEN = 0
 
+.segment "DATA"
+
 titlemapfilename: .literal "TITLEMAP.BIN"
 end_titlemapfilename:
 
 titlebitmapfilename: .literal "BACKGROUND.BIN"
 end_titlebitmapfilename:
+
+.segment "CODE"
 
 ;==================================================
 ; title_init

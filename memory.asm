@@ -1,6 +1,8 @@
 .ifndef MEMORY_ASM
 MEMORY = 1
 
+.segment "DATA"
+
 ; This file defines addresses for the game's memory map
 
 ; These addresses are used for storing the targets (max

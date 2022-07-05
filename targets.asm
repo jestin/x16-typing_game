@@ -1,4 +1,7 @@
 NUM_TARGETS = 8
+
+.segment "CODE"
+
 ;==================================================
 ; Targets represent the text that a player needs to
 ; type in order to play the game.  The targets will

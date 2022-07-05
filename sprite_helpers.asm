@@ -1,3 +1,5 @@
+.segment "CODE"
+
 ;==================================================
 ; load_vram
 ; Loads data into vram at current location of

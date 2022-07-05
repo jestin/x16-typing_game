@@ -2,6 +2,8 @@ GAME_SCREEN = 1
 SPAWN_DELAY = 100
 END_ON_MISEED = 11
 
+.segment "DATA"
+
 stringfilename: .literal "ANI0.BIN"
 end_stringfilename:
 
@@ -13,6 +15,8 @@ end_gamemapfilename:
 
 palettefilename: .literal "GAMETILES.BIN.PAL"
 end_palettefilename:
+
+.segment "CODE"
 
 ;==================================================
 ; game_init

@@ -1,3 +1,5 @@
+.segment "CODE"
+
 ;==================================================
 ; get_keyboard_input
 ; Gets the keyboard input and stores it in the

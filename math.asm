@@ -1,10 +1,12 @@
+.segment "CODE"
+
 ;==================================================
 ; decimal_chars_8
 ; Takes an 8-bit value and turns it into an array
 ; of lsb-first decimal values.  The A register passes
 ; in the value to be converted and the Y register
 ; returns how long the array is.
-
+;
 ; void decimal_chars_8(byte value: a,
 ;						word address: u0,
 ;						out num_digits: y)
