@@ -27,7 +27,8 @@ missed_target_digits		= $0600		; can only be at most 3 bytes
 score_digits				= $0603		; can be at most 5 bytes
 
 ; original IRQ vector address
-def_irq					= $8000		; single byte
+def_irq					= $8000		; single word
+last_random_byte		= $8002		; single byte
 
 string_map_size			= $06FF		; always one less than string_map to
 											; account for the number of strings

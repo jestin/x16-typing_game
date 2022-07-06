@@ -13,6 +13,10 @@ get_random_byte:
 	sty u15H
 	eor u15H
 
+	clc
+	adc last_random_byte
+	sta last_random_byte
+
 	rts
 
 ;==================================================
