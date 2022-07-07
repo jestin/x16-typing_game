@@ -73,6 +73,9 @@ game_init:
 	lda #0
 	sta zp_key_buffer_length
 
+	lda #string_bank
+	sta $00
+
 	; read string file into memory
 	lda #1
 	ldx #8

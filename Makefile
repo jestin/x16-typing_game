@@ -2,9 +2,6 @@ NAME = TYPE
 ASSEMBLER6502 = cl65
 ASFLAGS = -t cx16 -l $(NAME).list
 
-ACME	= acme
-ACME_FLAGS		= -f cbm -DMACHINE_C64=0 -Wtype-mismatch --cpu w65c02
-
 PROG = $(NAME).PRG
 LIST = $(NAME).list
 MAIN = main.asm
@@ -31,11 +28,17 @@ TITLEMAP.BIN: title.tmx
 
 words: $(WORD_FILES)
 
-ANI0.BIN:
-	$(ACME) $(ACME_FLAGS) --outfile ANI0.BIN animals0.asm
+ANI0.BIN: animals0.asm
+	$(ASSEMBLER6502) $(ASFLAGS) -o temp.bin animals0.asm -l ANI0.list
+	# cheap hack because I can't figure out how to remove a header from cl65 output
+	tail -c +13 temp.bin > ANI0.BIN
+	rm temp.bin
 
-HOMEROW.BIN:
-	$(ACME) $(ASSEMBLER6502) --outfile HOMEROW.BIN homerow.asm
+HOMEROW.BIN: homerow.asm
+	$(ASSEMBLER6502) $(ASFLAGS) -o temp.bin homerow.asm -l HOMEROW.list
+	# cheap hack because I can't figure out how to remove a header from cl65 output
+	tail -c +13 temp.bin > HOMEROW.BIN
+	rm temp.bin
 
 run: all tilemaps words
 	x16emu -prg $(PROG) -run -scale 2 -debug
@@ -46,4 +49,7 @@ clean:
 clean_tilemaps:
 	rm  -f $(TILEMAPS)
 
-cleanall: clean clean_tilemaps
+clean_wordfiles:
+	rm -f $(WORD_FILES)
+
+cleanall: clean clean_tilemaps clean_wordfiles

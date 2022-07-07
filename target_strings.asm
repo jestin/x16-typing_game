@@ -55,6 +55,10 @@ set_target_string:
 	asl
 	tax
 
+	; load bank 1
+	lda #string_bank
+	sta $00
+
 	; Now string_map,x is an address that points to
 	; program memory containing the string we want.
 	; We can use absolute addressing to read it.
