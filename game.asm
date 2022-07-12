@@ -4,7 +4,7 @@ END_ON_MISEED = 11
 
 .segment "DATA"
 
-stringfilename: .literal "ANI0.BIN"
+stringfilename: .literal "QUICKFOX.BIN"
 end_stringfilename:
 
 tilefilename: .literal "GAMETILES.BIN"

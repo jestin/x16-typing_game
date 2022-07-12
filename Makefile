@@ -9,7 +9,7 @@ SOURCES = $(MAIN) \
 		  x16.inc \
 		  vera.inc
 
-WORD_FILES		= ANI0.BIN HOMEROW.BIN
+WORD_FILES		= ANI0.BIN HOMEROW.BIN QUICKFOX.BIN
 TILEMAPS		= GAMEMAP.BIN \
 				  TITLEMAP.BIN
 
@@ -21,10 +21,10 @@ $(PROG): $(SOURCES)
 	$(ASSEMBLER6502) $(ASFLAGS) -o $(PROG) $(MAIN)
 
 GAMEMAP.BIN: tile_map.tmx
-	tmx2vera tile_map.tmx GAMEMAP.BIN -l main
+	tmx2vera tile_map.tmx GAMEMAP.BIN -l main -d
 
 TITLEMAP.BIN: title.tmx
-	tmx2vera title.tmx TITLEMAP.BIN -l main
+	tmx2vera title.tmx TITLEMAP.BIN -l main -d
 
 words: $(WORD_FILES)
 
@@ -32,6 +32,12 @@ ANI0.BIN: animals0.asm
 	$(ASSEMBLER6502) $(ASFLAGS) -o temp.bin animals0.asm -l ANI0.list
 	# cheap hack because I can't figure out how to remove a header from cl65 output
 	tail -c +13 temp.bin > ANI0.BIN
+	rm temp.bin
+
+QUICKFOX.BIN: quickfox.asm
+	$(ASSEMBLER6502) $(ASFLAGS) -o temp.bin quickfox.asm -l QUICKFOX.list
+	# cheap hack because I can't figure out how to remove a header from cl65 output
+	tail -c +13 temp.bin > QUICKFOX.BIN
 	rm temp.bin
 
 HOMEROW.BIN: homerow.asm
