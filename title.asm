@@ -42,13 +42,14 @@ title_tick:
 	; get keyboard input
 	jsr GETIN
 	cmp #0
-	beq GET_KEYBOARD_INPUT_END
+	beq @return
 
 	cmp #$0d			; RETURN
 	beq TITLE_TICK_START_GAME
 	cmp #$20			; SPACE
 	beq TITLE_TICK_START_GAME
 
+@return:
 	rts					; return if no valid selection made
 
 TITLE_TICK_START_GAME:
