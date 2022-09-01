@@ -8,8 +8,7 @@
 ;==================================================
 get_keyboard_input:
 	; get keyboard input
-	jsr GETIN
-	cmp #0
+	jsr GETIN			; sets Z flag if nothing is there
 	beq @return
 	cmp #$3		; ESC
 	bne :+
@@ -36,6 +35,9 @@ get_keyboard_input:
 	inx
 	txa
 	sta zp_key_buffer_length
+
+	; continue fetching until the X16's key buffer is empty
+	bra get_keyboard_input
 
 @return:
 	rts
