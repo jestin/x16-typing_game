@@ -45,19 +45,19 @@ title_tick:
 	beq @return
 
 	cmp #$0d			; RETURN
-	beq TITLE_TICK_START_GAME
+	beq @start_game
 	cmp #$20			; SPACE
-	beq TITLE_TICK_START_GAME
+	beq @start_game
 
-@return:
 	rts					; return if no valid selection made
 
-TITLE_TICK_START_GAME:
+@start_game:
 	; if RETURN is hit, load the game
 	lda #GAME_SCREEN
 	sta zp_screen
 	jsr game_init
 
+@return:
 	rts
 
 ;==================================================
