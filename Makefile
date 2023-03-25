@@ -1,4 +1,6 @@
 NAME = TYPE
+TITLE = X16-Typing-Tutor
+VERSION = 0.0.1
 ASSEMBLER6502 = cl65
 ASFLAGS = -t cx16 -l $(NAME).list
 
@@ -8,6 +10,8 @@ MAIN = main.asm
 SOURCES = $(MAIN) \
 		  x16.inc \
 		  vera.inc
+
+ZIPFILE = $(TITLE)_$(VERSION).zip
 
 WORD_FILES		= ANI0.BIN HOMEROW.BIN QUICKFOX.BIN
 TILEMAPS		= GAMEMAP.BIN \
@@ -49,13 +53,22 @@ HOMEROW.BIN: homerow.asm
 run: all tilemaps words
 	x16emu -prg $(PROG) -run -scale 2 -debug
 
+$(ZIPFILE): all tilemaps words clean_zip
+	zip $(ZIPFILE) *.PRG *.BIN
+
+zip: $(ZIPFILE)
+
+
 clean:
 	rm -f $(PROG) $(LIST)
 	
+clean_zip:
+	rm -f $(ZIPFILE)
+
 clean_tilemaps:
 	rm  -f $(TILEMAPS)
 
 clean_wordfiles:
 	rm -f $(WORD_FILES)
 
-cleanall: clean clean_tilemaps clean_wordfiles
+cleanall: clean clean_tilemaps clean_wordfiles clean_zip
